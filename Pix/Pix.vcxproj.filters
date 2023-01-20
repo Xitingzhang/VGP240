@@ -3,64 +3,13 @@
   <ItemGroup>
     <None Include="imgui.ini" />
     <None Include="xconfig.json" />
-    <None Include="Scripts\3d_cubes.pix">
+    <None Include="..\..\..\..\Desktop\新建文件夹\drawTriangles.pix">
       <Filter>Scripts</Filter>
     </None>
-    <None Include="Scripts\3d_lighting.pix">
+    <None Include="..\..\..\..\Desktop\新建文件夹\drawLine.pix">
       <Filter>Scripts</Filter>
     </None>
-    <None Include="Scripts\3d_pipeline.pix">
-      <Filter>Scripts</Filter>
-    </None>
-    <None Include="Scripts\3d_triangles.pix">
-      <Filter>Scripts</Filter>
-    </None>
-    <None Include="Scripts\clipping.pix">
-      <Filter>Scripts</Filter>
-    </None>
-    <None Include="Scripts\clipping2.pix">
-      <Filter>Scripts</Filter>
-    </None>
-    <None Include="Scripts\fillmode.pix">
-      <Filter>Scripts</Filter>
-    </None>
-    <None Include="Scripts\guile.pix">
-      <Filter>Scripts</Filter>
-    </None>
-    <None Include="Scripts\lines.pix">
-      <Filter>Scripts</Filter>
-    </None>
-    <None Include="Scripts\lines2.pix">
-      <Filter>Scripts</Filter>
-    </None>
-    <None Include="Scripts\quad.pix">
-      <Filter>Scripts</Filter>
-    </None>
-    <None Include="Scripts\test.pix">
-      <Filter>Scripts</Filter>
-    </None>
-    <None Include="Scripts\triangles.pix">
-      <Filter>Scripts</Filter>
-    </None>
-    <None Include="Scripts\triangles2.pix">
-      <Filter>Scripts</Filter>
-    </None>
-    <None Include="Scripts\3d_point_light.pix">
-      <Filter>Scripts</Filter>
-    </None>
-    <None Include="Scripts\3d_directional_light.pix">
-      <Filter>Scripts</Filter>
-    </None>
-    <None Include="Scripts\3d_spot_light.pix">
-      <Filter>Scripts</Filter>
-    </None>
-    <None Include="Scripts\quad2.pix">
-      <Filter>Scripts</Filter>
-    </None>
-    <None Include="Scripts\3d_texturing_cube.pix">
-      <Filter>Scripts</Filter>
-    </None>
-    <None Include="Scripts\3d_texturing_perspective.pix">
+    <None Include="..\..\..\..\Desktop\新建文件夹\drawPoints.pix">
       <Filter>Scripts</Filter>
     </None>
   </ItemGroup>
@@ -93,14 +42,32 @@
     <ClCompile Include="VariableCache.cpp">
       <Filter>Commands</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Rasterizer.cpp">
-      <Filter>Graphics</Filter>
+      <Filter>Gra</Filter>
     </ClCompile>
     <ClCompile Include="Viewport.cpp">
-      <Filter>Graphics</Filter>
+      <Filter>Gra</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics.cpp">
+      <Filter>Gra</Filter>
+    </ClCompile>
+    <ClCompile Include="MathHelper.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="CmdBeginDraw.cpp">
+      <Filter>Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="CmdEndDraw.cpp">
+      <Filter>Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="CmdVertex.cpp">
+      <Filter>Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="PrimitivesManager.cpp">
+      <Filter>Gra</Filter>
+    </ClCompile>
+    <ClCompile Include="CmdSetFillMode.cpp">
+      <Filter>Commands</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -134,14 +101,41 @@
     <ClInclude Include="VariableCache.h">
       <Filter>Commands</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Rasterizer.h">
-      <Filter>Graphics</Filter>
+      <Filter>Gra</Filter>
     </ClInclude>
     <ClInclude Include="Viewport.h">
-      <Filter>Graphics</Filter>
+      <Filter>Gra</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics.h">
+      <Filter>Gra</Filter>
+    </ClInclude>
+    <ClInclude Include="MathHelper.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector3.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="CmdBeginDraw.h">
+      <Filter>Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="CmdEndDraw.h">
+      <Filter>Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="CmdVertex.h">
+      <Filter>Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="PrimitivesManager.h">
+      <Filter>Gra</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertex.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="CmdSetFillMode.h">
+      <Filter>Commands</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -151,11 +145,14 @@
     <Filter Include="Commands">
       <UniqueIdentifier>{6cea0c79-da05-437d-9c46-23053463bce1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Graphics">
-      <UniqueIdentifier>{9c5dcac8-77bb-4c5e-ba5f-ae1557198d24}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Scripts">
       <UniqueIdentifier>{f4ee6086-a9c7-41f0-9695-19708a6954c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gra">
+      <UniqueIdentifier>{8de2ea8c-230d-434e-802b-c2dd8c4db673}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{1adff074-3e22-415c-b894-48effd2661d3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

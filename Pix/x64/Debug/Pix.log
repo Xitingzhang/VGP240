@@ -1,1 +1,5 @@
-﻿
+﻿  Rasterizer.cpp
+C:\Users\12365\source\repos\VGP240\Pix\Rasterizer.cpp(49,9): warning C4244: “初始化”: 从“float”转换到“int”，可能丢失数据
+C:\Users\12365\source\repos\VGP240\Pix\Rasterizer.cpp(50,9): warning C4244: “初始化”: 从“float”转换到“int”，可能丢失数据
+C:\Users\12365\source\repos\VGP240\Pix\Rasterizer.cpp(66,11): warning C4244: “初始化”: 从“int”转换到“float”，可能丢失数据
+  Pix.vcxproj -> C:\Users\12365\source\repos\VGP240\x64\Debug\Pix.exe
