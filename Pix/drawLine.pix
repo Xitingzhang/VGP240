@@ -2,10 +2,21 @@ SetResolution(20, 20, 20, true)
 
 BeginDraw(line)
 
-Vertex(19, 2, 1, 1, 0)
-Vertex(2, 15, 0, 0, 1)
+Vertex(1, 1, 1, 1, 0)
+Vertex(19, 19, 0, 0, 1)
 
 EndDraw()
+
+BeginDraw(line)
+
+Vertex(1, 19, 1, 1, 0)
+Vertex(19, 1, 0, 0, 1)
+
+EndDraw()
+
+
+
+
 
 
 
