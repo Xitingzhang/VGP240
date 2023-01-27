@@ -5,6 +5,7 @@
 
 namespace MathHelper
 {
+	bool CheckEqual(float a, float b);
 	float MagnitudeSquared(const Vector2& v);
 	float MagnitudeSquared(const Vector3& v);
 
@@ -18,4 +19,6 @@ namespace MathHelper
 	float Dot(const Vector3& a, const Vector3& b);
 
 	Vector3 Cross(const Vector3& a, const Vector3& b);
+
+	
 }
