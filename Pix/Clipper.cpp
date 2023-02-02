@@ -1,4 +1,3 @@
-#pragma once
 #include "Clipper.h"
 #include "Viewport.h"
 
@@ -31,7 +30,7 @@ short GetOutputCode(float x, float y)
 
 	if (y < Viewport::Get()->GetMinY())
 	{
-		code |= BIT_LEFT;
+		code |= BIT_TOP;
 	}
 
 	else if (y > Viewport::Get()->GetMaxY())
@@ -58,7 +57,7 @@ void Clipper::OnNewFrame()
 
 bool Clipper::ClipPoint(const Vertex& v)
 {
-	if (!mClipping)
+	if(!mClipping)
 	{
 		return false;
 	}
@@ -67,8 +66,9 @@ bool Clipper::ClipPoint(const Vertex& v)
 	float maxY = Viewport::Get()->GetMaxY();
 	float minX = Viewport::Get()->GetMinY();
 	float minY = Viewport::Get()->GetMinY();
-	return v.pos.x < minX ||v.pos.x > maxX
-		|| v.pos.y < minY ||v.pos.y > maxY;
+
+	return v.pos.x < minX || v.pos.x > maxX
+		|| v.pos.y < minY || v.pos.y > maxY;
 
 }
 bool Clipper::ClipLine(Vertex& v0, Vertex& v1)

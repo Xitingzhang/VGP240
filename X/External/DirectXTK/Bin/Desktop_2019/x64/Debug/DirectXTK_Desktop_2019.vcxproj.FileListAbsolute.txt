@@ -1,3 +1,4 @@
 D:\PeterStuff\X\Main\X\External\DirectXTK\Bin\Desktop_2019\x64\Debug\DirectXTK.lib
 D:\PeterStuff\X\Main\X\External\DirectXTK\Bin\Desktop_2019\x64\Debug\DirectXTK.pdb
 C:\Users\12365\Source\Repos\VGP240\X\External\DirectXTK\Bin\Desktop_2019\x64\Debug\DirectXTK.lib
+C:\Users\12365\source\repos\123\X\External\DirectXTK\Bin\Desktop_2019\x64\Debug\DirectXTK.lib
