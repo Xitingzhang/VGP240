@@ -50,7 +50,7 @@ void Rasterizer::DrawLine(const Vertex& a, const Vertex& b)
 	float dx = b.pos.x - a.pos.x;
 	float dy = b.pos.y - a.pos.y;
 	
-	if (abs(dx) <= 0.01f)
+	if (MathHelper::CheckEqual(dx,0.0f) )
 	{
 		if (a.pos.y < b.pos.y)
 		{

@@ -69,6 +69,18 @@
     <ClCompile Include="CmdSetFillMode.cpp">
       <Filter>Commands</Filter>
     </ClCompile>
+    <ClCompile Include="Clipper.cpp">
+      <Filter>Gra</Filter>
+    </ClCompile>
+    <ClCompile Include="CmdSetClipping.cpp">
+      <Filter>Gra</Filter>
+    </ClCompile>
+    <ClCompile Include="CmdSetViewport.cpp">
+      <Filter>Gra</Filter>
+    </ClCompile>
+    <ClCompile Include="CmdShowViewport.cpp">
+      <Filter>Gra</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TextEditor.h">
@@ -136,6 +148,18 @@
     </ClInclude>
     <ClInclude Include="CmdSetFillMode.h">
       <Filter>Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Clipper.h">
+      <Filter>Gra</Filter>
+    </ClInclude>
+    <ClInclude Include="CmdSetClipping.h">
+      <Filter>Gra</Filter>
+    </ClInclude>
+    <ClInclude Include="CmdSetViewport.h">
+      <Filter>Gra</Filter>
+    </ClInclude>
+    <ClInclude Include="CmdShowViewport.h">
+      <Filter>Gra</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,6 @@
 #include "PrimitivesManager.h"
 #include "Rasterizer.h"
-
+#include "Clipper.h"
 PrimitivesManager* PrimitivesManager::Get()
 {
 	static PrimitivesManager sInstance;
@@ -34,14 +34,22 @@ bool PrimitivesManager::EndDraw()
 	case Topology::Point:
 		for (size_t i=0; i< mVertexBuffer.size(); ++i)
 		{
-			Rasterizer::Get()->DrawPoint(mVertexBuffer[i]);
+			if (!Clipper::Get()->ClipPoint(mVertexBuffer[i]))
+			{
+				Rasterizer::Get()->DrawPoint(mVertexBuffer[i]);
+			}
+			
 		}
 
 		break;//draw point
 	case Topology::Line: 
 		for (size_t i = 1; i < mVertexBuffer.size(); i += 2)
 		{
-			Rasterizer::Get()->DrawLine(mVertexBuffer[i - 1], mVertexBuffer[i]);
+			if (!Clipper::Get()->ClipLine(mVertexBuffer[i - 1], mVertexBuffer[i]))
+			{
+				Rasterizer::Get()->DrawLine(mVertexBuffer[i - 1], mVertexBuffer[i]);
+			}
+			
 		}
 		break;//draw line
 	case Topology::Triangle: 
