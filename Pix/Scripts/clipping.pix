@@ -37,6 +37,8 @@ Vertex(25, 43, 0, 1, 1)
 Vertex(5, 43, 1, 0, 1)
 
 Vertex(30, 20, 1, 0, 0)
-Vertex(48, 25, 0, 1, 0)
+Vertex(50, 25, 0, 1, 0)
 Vertex(35, 33, 0, 0, 1)
 EndDraw()
+
+

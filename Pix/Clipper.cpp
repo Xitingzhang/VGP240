@@ -10,11 +10,58 @@ const short BIT_TOP = 1 << 4; //1000
 enum class ClipEdge : short
 {
 	Left,
-	Bottom,
-	Right,
 	Top,
+	Right,
+	Bottom,
 	Count
 };
+
+bool IsInFront(ClipEdge edge, const Vector3& pos)
+{
+	switch (edge)
+	{
+	case ClipEdge:: Left: return pos.x > Viewport::Get()->GetMinX();
+	case ClipEdge:: Top: return pos.y > Viewport::Get()->GetMinY();
+	case ClipEdge:: Right: return pos.x < Viewport::Get()->GetMaxX();
+	case ClipEdge:: Bottom: return pos.y < Viewport::Get()->GetMaxY();
+
+		default:
+			break;
+
+	}
+}
+
+Vertex ComputeIntersection(ClipEdge edge, const Vertex& nVertex, const Vertex& np1Vertex)
+{
+	float t = 0.0f;
+	switch (edge)
+	{
+	case ClipEdge::Left: 
+	{
+		t = (Viewport::Get()->GetMinX() - nVertex.pos.x) / (np1Vertex.pos.x - nVertex.pos.x);
+	}
+	break;
+	case ClipEdge::Top: 
+	{
+		t = (Viewport::Get()->GetMinY() - nVertex.pos.y) / (np1Vertex.pos.y - nVertex.pos.y);
+	}
+	break;
+	case ClipEdge::Right:
+	{
+		t = (Viewport::Get()->GetMaxX() - nVertex.pos.x) / (np1Vertex.pos.x - nVertex.pos.x);
+	}
+	break;
+	case ClipEdge::Bottom:
+	{
+		t = (Viewport::Get()->GetMaxY() - nVertex.pos.y) / (np1Vertex.pos.y - nVertex.pos.y);
+	}
+	break;
+	default:
+		break;
+
+	}
+	return LerpVertex(nVertex, np1Vertex, t);
+}
 
 short GetOutputCode(float x, float y)
 {
@@ -50,7 +97,8 @@ Clipper* Clipper::Get()
 
 void Clipper::OnNewFrame()
 {
-
+	mClipping = false;
+	
 }
 
 
@@ -143,3 +191,50 @@ bool Clipper::ClipLine(Vertex& v0, Vertex& v1)
 
 }
 
+bool Clipper::ClipTriangle(std::vector<Vertex>& vertices)
+{
+	if (!mClipping)
+	{
+		return false;
+	}
+	std::vector<Vertex> newVertices;
+	for (int i = 0; i < (int)ClipEdge::Count; ++i)
+	{
+		newVertices.clear();
+		ClipEdge edge = (ClipEdge)i;
+		for (size_t n = 0; n < vertices.size(); ++n)
+		{
+			size_t np1 = (n + 1) % vertices.size();
+			const Vertex& nVertex = vertices[n];
+			const Vertex& np1Vertex = vertices[np1];
+
+			bool nIsInFront = IsInFront(edge, nVertex.pos);
+			bool np1IsInFront = IsInFront(edge, np1Vertex.pos);
+
+			if (nIsInFront && np1IsInFront)
+			{
+				//case1
+				newVertices.push_back(np1Vertex);
+			}
+			else if (nIsInFront && !np1IsInFront)
+			{
+				//case2
+				newVertices.push_back(ComputeIntersection(edge, nVertex, np1Vertex));
+			}
+			else if (!nIsInFront && !np1IsInFront)
+			{
+				//case3
+			}
+			else if (!nIsInFront && np1IsInFront)
+			{
+				//case4
+				
+				newVertices.push_back(ComputeIntersection(edge, nVertex, np1Vertex));
+				newVertices.push_back(np1Vertex);
+			}
+
+		}
+		vertices = newVertices;
+	}
+	return newVertices.empty();
+}

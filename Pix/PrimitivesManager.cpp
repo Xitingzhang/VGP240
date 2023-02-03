@@ -55,7 +55,16 @@ bool PrimitivesManager::EndDraw()
 	case Topology::Triangle: 
 		for (size_t i = 2; i < mVertexBuffer.size(); i += 3)
 		{
-			Rasterizer::Get()->DrawTriangle(mVertexBuffer[i - 2], mVertexBuffer[i - 1], mVertexBuffer[i]);
+			std::vector<Vertex> triangle = { mVertexBuffer[i - 2], mVertexBuffer[i - 1], mVertexBuffer[i] };
+			if (!Clipper::Get()->ClipTriangle(triangle))
+			{
+				for (size_t v = 2; v < triangle.size(); ++v)
+				{
+					Rasterizer::Get()->DrawTriangle(triangle[0], triangle[v - 1], triangle[v]);
+				}
+				
+			}
+			
 		}
 		break;//draw triangle
 	default:
