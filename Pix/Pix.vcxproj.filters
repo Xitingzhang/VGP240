@@ -81,6 +81,9 @@
     <ClCompile Include="CmdShowViewport.cpp">
       <Filter>Gra</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Gra</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TextEditor.h">
@@ -163,6 +166,9 @@
     </ClInclude>
     <ClInclude Include="Matrix4.h">
       <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Gra</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
