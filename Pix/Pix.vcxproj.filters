@@ -12,6 +12,9 @@
     <None Include="..\..\..\..\Desktop\新建文件夹\drawPoints.pix">
       <Filter>Scripts</Filter>
     </None>
+    <None Include="Scripts\3d_pipeline.pix">
+      <Filter>Scripts</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp" />

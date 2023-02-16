@@ -19,11 +19,14 @@ public:
 
 	const Vector3& GetPosition() const { return mPosition; }
 	const Vector3& GetDirection() const { return mDirection; }
+
 private:
+
 	Vector3 mPosition;
 	Vector3 mDirection;
 	float mNearPlane;
 	float mFarPlane;
 	float mFOV;
+
 
 };
