@@ -87,6 +87,15 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Gra</Filter>
     </ClCompile>
+    <ClCompile Include="MatrixStack.cpp">
+      <Filter>Gra</Filter>
+    </ClCompile>
+    <ClCompile Include="CmdPushTranslation.cpp">
+      <Filter>Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="DepthBuffer.cpp">
+      <Filter>Editor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TextEditor.h">
@@ -171,6 +180,15 @@
       <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
+      <Filter>Gra</Filter>
+    </ClInclude>
+    <ClInclude Include="MatrixStack.h">
+      <Filter>Gra</Filter>
+    </ClInclude>
+    <ClInclude Include="CmdPushTranslation.h">
+      <Filter>Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="DepthBuffer.h">
       <Filter>Gra</Filter>
     </ClInclude>
   </ItemGroup>

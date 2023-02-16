@@ -11,6 +11,7 @@
 #include "CmdSetClipping.h"
 #include "CmdSetViewport.h"
 #include "CmdShowViewport.h"
+#include "CmdPushTranslation.h"
 
 CommandDictionary* CommandDictionary::Get()
 {
@@ -31,14 +32,32 @@ CommandDictionary::CommandDictionary()
 
 	// Variable commands
 	RegisterCommand<CmdVarFloat>();
+	RegisterCommand<CmdPushTranslation>();
+	//RegisterCommand<CmdPushRotationX>();
+	//RegisterCommand<CmdPushRotationY>();
+	//RegisterCommand<CmdPushRotationZ>();
+	//RegisterCommand<CmdPushScaling>();
+	//RegisterCommand<CmdPopMatrix>();
+
+	// Camera Commands
+	//RegisterCommand<CmdSetCameraDirection>();
+	//RegisterCommand<CmdSetCameraPosition>();
+	//RegisterCommand<CmdSetCameraNear>();
+	//RegisterCommand<CmdSetCameraFar>();
+	//RegisterCommand<CmdSetCameraFov>();
 
 	// Rasterization commands
 	RegisterCommand<CmdDrawPixel>();
 	RegisterCommand<CmdSetColor>();
+	RegisterCommand<CmdSetFillMode>();
+
+
 	RegisterCommand<CmdBeginDraw>();
 	RegisterCommand<CmdEndDraw>();
 	RegisterCommand<CmdVertex>();
-	RegisterCommand<CmdSetFillMode>();
+
+	
+	
 	
 }
 

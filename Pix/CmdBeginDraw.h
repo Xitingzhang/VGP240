@@ -10,7 +10,7 @@ public:
 	}
 	const char* GetDescription()
 	{
-		return "BeginDraw(topology)begin drawing a parimitive";
+		return "BeginDraw(topology, applyTransform)begin drawing a primative";
 	}
 
 	bool Execute(const std::vector<std::string>& params);

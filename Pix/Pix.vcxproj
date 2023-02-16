@@ -160,6 +160,7 @@
     <ClCompile Include="CmdBeginDraw.cpp" />
     <ClCompile Include="CmdDrawPixel.cpp" />
     <ClCompile Include="CmdEndDraw.cpp" />
+    <ClCompile Include="CmdPushTranslation.cpp" />
     <ClCompile Include="CmdSetClipping.cpp" />
     <ClCompile Include="CmdSetColor.cpp" />
     <ClCompile Include="CmdSetFillMode.cpp" />
@@ -169,8 +170,10 @@
     <ClCompile Include="CmdVarFloat.cpp" />
     <ClCompile Include="CmdVertex.cpp" />
     <ClCompile Include="CommandDictionary.cpp" />
+    <ClCompile Include="DepthBuffer.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="MathHelper.cpp" />
+    <ClCompile Include="MatrixStack.cpp" />
     <ClCompile Include="PixEditor.cpp" />
     <ClCompile Include="PrimitivesManager.cpp" />
     <ClCompile Include="Rasterizer.cpp" />
@@ -191,6 +194,7 @@
     <ClInclude Include="CmdBeginDraw.h" />
     <ClInclude Include="CmdDrawPixel.h" />
     <ClInclude Include="CmdEndDraw.h" />
+    <ClInclude Include="CmdPushTranslation.h" />
     <ClInclude Include="CmdSetClipping.h" />
     <ClInclude Include="CmdSetColor.h" />
     <ClInclude Include="CmdSetFillMode.h" />
@@ -201,9 +205,11 @@
     <ClInclude Include="CmdVertex.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="CommandDictionary.h" />
+    <ClInclude Include="DepthBuffer.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="MathHelper.h" />
     <ClInclude Include="Matrix4.h" />
+    <ClInclude Include="MatrixStack.h" />
     <ClInclude Include="PixEditor.h" />
     <ClInclude Include="PrimitivesManager.h" />
     <ClInclude Include="Rasterizer.h" />

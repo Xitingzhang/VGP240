@@ -52,7 +52,7 @@ Matrix4 Camera::GetViewMatrix() const
 		r.x, u.x, l.x, 0.0f,
 		r.y, u.y, l.y, 0.0f,
 		r.z, u.z, l.z, 0.0f,
-		dx, dy, dz, 0.0f
+		dx, dy, dz, 1.0f
 	);
 }
 Matrix4 Camera::GetProjectionMatrix() const
@@ -66,7 +66,7 @@ Matrix4 Camera::GetProjectionMatrix() const
 	return Matrix4(
 		w, 0.0f, 0.0f, 0.0f,
 		0.0f, h, 0.0f, 0.0f,
-		0.0f, 0.0f, d, 0.0f,
+		0.0f, 0.0f, d, 1.0f,
 		0.0f, 0.0f, -zn * d, 0.0f
 	);
 }
