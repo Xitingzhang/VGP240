@@ -185,6 +185,7 @@
     <ClCompile Include="CommandDictionary.cpp" />
     <ClCompile Include="DepthBuffer.cpp" />
     <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="Light.cpp" />
     <ClCompile Include="MathHelper.cpp" />
     <ClCompile Include="MatrixStack.cpp" />
     <ClCompile Include="PixEditor.cpp" />
@@ -232,6 +233,7 @@
     <ClInclude Include="CommandDictionary.h" />
     <ClInclude Include="DepthBuffer.h" />
     <ClInclude Include="Graphics.h" />
+    <ClInclude Include="Light.h" />
     <ClInclude Include="MathHelper.h" />
     <ClInclude Include="Matrix4.h" />
     <ClInclude Include="MatrixStack.h" />

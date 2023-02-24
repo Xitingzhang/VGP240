@@ -135,6 +135,9 @@
     <ClCompile Include="CmdEnableDepth.cpp">
       <Filter>Commands</Filter>
     </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Gra</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TextEditor.h">
@@ -265,6 +268,9 @@
     </ClInclude>
     <ClInclude Include="CmdEnableDepth.h">
       <Filter>Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Gra</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
