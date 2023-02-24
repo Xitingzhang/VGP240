@@ -17,6 +17,7 @@ enum class CullMode
 class PrimitivesManager
 {
 public:
+	void OnNewFrame();
 	static PrimitivesManager* Get();
 
 	void SetCullMode(CullMode mode);

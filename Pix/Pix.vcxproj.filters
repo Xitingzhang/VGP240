@@ -15,6 +15,9 @@
     <None Include="Scripts\3d_pipeline.pix">
       <Filter>Scripts</Filter>
     </None>
+    <None Include="Scripts\3d_triangles.pix">
+      <Filter>Scripts</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp" />
@@ -124,6 +127,12 @@
       <Filter>Commands</Filter>
     </ClCompile>
     <ClCompile Include="CmdSetCameraFov.cpp">
+      <Filter>Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="CmdSetCullMode.cpp">
+      <Filter>Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="CmdEnableDepth.cpp">
       <Filter>Commands</Filter>
     </ClCompile>
   </ItemGroup>
@@ -249,6 +258,12 @@
       <Filter>Commands</Filter>
     </ClInclude>
     <ClInclude Include="CmdSetCameraFov.h">
+      <Filter>Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="CmdSetCullMode.h">
+      <Filter>Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="CmdEnableDepth.h">
       <Filter>Commands</Filter>
     </ClInclude>
   </ItemGroup>

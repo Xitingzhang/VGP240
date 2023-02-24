@@ -6,8 +6,10 @@
 #include "CmdSetColor.h"
 #include "CmdBeginDraw.h"
 #include "CmdEndDraw.h"
+#include "CmdEnableDepth.h"
 #include "CmdVertex.h"
 #include "CmdSetFillMode.h"
+#include "CmdSetCullMode.h"
 #include "CmdSetClipping.h"
 #include "CmdSetViewport.h"
 #include "CmdShowViewport.h"
@@ -38,6 +40,8 @@ CommandDictionary::CommandDictionary()
 	RegisterCommand<CmdSetViewport>();
 	RegisterCommand<CmdShowViewport>();
 	RegisterCommand<CmdSetClipping>();
+	RegisterCommand<CmdEnableDepth>();
+	                                        
 
 
 	// Variable commands
@@ -65,6 +69,7 @@ CommandDictionary::CommandDictionary()
 	RegisterCommand<CmdBeginDraw>();
 	RegisterCommand<CmdEndDraw>();
 	RegisterCommand<CmdVertex>();
+	RegisterCommand<CmdSetCullMode>();
 
 	
 	

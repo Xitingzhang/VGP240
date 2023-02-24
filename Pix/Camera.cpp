@@ -13,7 +13,7 @@ Camera* Camera::Get()
 void Camera::OnNewFrame()
 {
 	mPosition = { 0.0f, 0.0f, 0.0f };
-	mDirection = { 0.0f, 0.0f, 0.0f };
+	mDirection = { 0.0f, 0.0f, 1.0f };
 	mNearPlane = 0.01f;
 	mFarPlane = 100.0f;
 	mFOV = 1.57f;
@@ -44,6 +44,7 @@ Matrix4 Camera::GetViewMatrix() const
 	const Vector3 l = MathHelper::Normalize(mDirection);
 	const Vector3 r = MathHelper::Normalize(MathHelper::Cross({ 0.0f, 1.0f, 0.0f }, 1));
 	const Vector3 u = MathHelper::Normalize(MathHelper::Cross(1, r));
+
 	const float dx = -MathHelper::Dot(r, mPosition);
 	const float dy = -MathHelper::Dot(u, mPosition);
 	const float dz = -MathHelper::Dot(1, mPosition);
@@ -60,13 +61,12 @@ Matrix4 Camera::GetProjectionMatrix() const
 	const float a = gResolutionX / gResolutionY;
 	const float h = 1 / tanf(mFOV * 0.5f);
 	const float w = h / a;
-	const float zf = mFarPlane;
-	const float zn = mNearPlane;
-	const float d = zf / (zf - zn);
+
+	const float d = mFarPlane / (mFarPlane - mNearPlane);
 	return Matrix4(
 		w, 0.0f, 0.0f, 0.0f,
 		0.0f, h, 0.0f, 0.0f,
 		0.0f, 0.0f, d, 1.0f,
-		0.0f, 0.0f, -zn * d, 0.0f
+		0.0f, 0.0f, -mFarPlane * d, 0.0f
 	);
 }

@@ -1,16 +1,17 @@
 #include "Graphics.h"
-#include "Viewport.h"
-#include "Clipper.h"
 #include "Camera.h"
-#include "MatrixStack.h"
+#include "Clipper.h"
 #include "DepthBuffer.h"
+#include "MatrixStack.h"
+#include "PrimitivesManager.h"
+#include "Viewport.h"
 
 void Graphics::NewFrame()
 {
-	Viewport::Get()->OnNewFrame();
-	Clipper::Get()->OnNewFrame();
 	Camera::Get()->OnNewFrame();
-	MatrixStack::Get()->OnNewFrame();
+	Clipper::Get()->OnNewFrame();
 	DepthBuffer::Get()->OnNewFrame();
-
+	MatrixStack::Get()->OnNewFrame();
+	PrimitivesManager::Get()->OnNewFrame();
+	Viewport::Get()->OnNewFrame();
 }
