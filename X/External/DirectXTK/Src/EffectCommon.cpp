@@ -111,7 +111,7 @@ void XM_CALLCONV EffectFog::SetConstants(int& dirtyFlags, FXMMATRIX worldView, X
 }
 
 
-// Constructor initializes default material color settings.
+// Constructor initializes default Light color settings.
 EffectColor::EffectColor() noexcept :
     diffuseColor(g_XMOne),
     alpha(1.f)
@@ -119,34 +119,34 @@ EffectColor::EffectColor() noexcept :
 }
 
 
-// Lazily recomputes the material color parameter for shaders that do not support realtime lighting.
+// Lazily recomputes the Light color parameter for shaders that do not support realtime Lighting.
 void EffectColor::SetConstants(_Inout_ int& dirtyFlags, _Inout_ XMVECTOR& diffuseColorConstant)
 {
-    if (dirtyFlags & EffectDirtyFlags::MaterialColor)
+    if (dirtyFlags & EffectDirtyFlags::LightColor)
     {
         XMVECTOR alphaVector = XMVectorReplicate(alpha);
 
         // xyz = diffuse * alpha, w = alpha.
         diffuseColorConstant = XMVectorSelect(alphaVector, XMVectorMultiply(diffuseColor, alphaVector), g_XMSelect1110);
 
-        dirtyFlags &= ~EffectDirtyFlags::MaterialColor;
+        dirtyFlags &= ~EffectDirtyFlags::LightColor;
         dirtyFlags |= EffectDirtyFlags::ConstantBuffer;
     }
 }
 
 
-// Constructor initializes default light settings.
+// Constructor initializes default Light settings.
 EffectLights::EffectLights() noexcept :
     emissiveColor{},
     ambientLightColor{},
-    lightEnabled{},
-    lightDiffuseColor{},
-    lightSpecularColor{}
+    LightEnabled{},
+    LightDiffuseColor{},
+    LightSpecularColor{}
 {
     for (int i = 0; i < MaxDirectionalLights; i++)
     {
-        lightEnabled[i] = (i == 0);
-        lightDiffuseColor[i] = g_XMOne;
+        LightEnabled[i] = (i == 0);
+        LightDiffuseColor[i] = g_XMOne;
     }
 }
 
@@ -156,8 +156,8 @@ EffectLights::EffectLights() noexcept :
 #pragma prefast(disable:22103, "PREFAST doesn't understand buffer is bounded by a static const value even with SAL" )
 #endif
 
-// Initializes constant buffer fields to match the current lighting state.
-_Use_decl_annotations_ void EffectLights::InitializeConstants(XMVECTOR& specularColorAndPowerConstant, XMVECTOR* lightDirectionConstant, XMVECTOR* lightDiffuseConstant, XMVECTOR* lightSpecularConstant) const
+// Initializes constant buffer fields to match the current Lighting state.
+_Use_decl_annotations_ void EffectLights::InitializeConstants(XMVECTOR& specularColorAndPowerConstant, XMVECTOR* LightDirectionConstant, XMVECTOR* LightDiffuseConstant, XMVECTOR* LightSpecularConstant) const
 {
     static const XMVECTORF32 defaultSpecular = { { { 1, 1, 1, 16 } } };
     static const XMVECTORF32 defaultLightDirection = { { { 0, -1, 0, 0 } } };
@@ -166,10 +166,10 @@ _Use_decl_annotations_ void EffectLights::InitializeConstants(XMVECTOR& specular
 
     for (int i = 0; i < MaxDirectionalLights; i++)
     {
-        lightDirectionConstant[i] = defaultLightDirection;
+        LightDirectionConstant[i] = defaultLightDirection;
 
-        lightDiffuseConstant[i]  = lightEnabled[i] ? lightDiffuseColor[i]  : g_XMZero;
-        lightSpecularConstant[i] = lightEnabled[i] ? lightSpecularColor[i] : g_XMZero;
+        LightDiffuseConstant[i]  = LightEnabled[i] ? LightDiffuseColor[i]  : g_XMZero;
+        LightSpecularConstant[i] = LightEnabled[i] ? LightSpecularColor[i] : g_XMZero;
     }
 }
 
@@ -178,10 +178,10 @@ _Use_decl_annotations_ void EffectLights::InitializeConstants(XMVECTOR& specular
 #endif
 
 
-// Lazily recomputes derived parameter values used by shader lighting calculations.
-_Use_decl_annotations_ void EffectLights::SetConstants(int& dirtyFlags, EffectMatrices const& matrices, XMMATRIX& worldConstant, XMVECTOR worldInverseTransposeConstant[3], XMVECTOR& eyePositionConstant, XMVECTOR& diffuseColorConstant, XMVECTOR& emissiveColorConstant, bool lightingEnabled)
+// Lazily recomputes derived parameter values used by shader Lighting calculations.
+_Use_decl_annotations_ void EffectLights::SetConstants(int& dirtyFlags, EffectMatrices const& matrices, XMMATRIX& worldConstant, XMVECTOR worldInverseTransposeConstant[3], XMVECTOR& eyePositionConstant, XMVECTOR& diffuseColorConstant, XMVECTOR& emissiveColorConstant, bool LightingEnabled)
 {
-    if (lightingEnabled)
+    if (LightingEnabled)
     {
         // World inverse transpose matrix.
         if (dirtyFlags & EffectDirtyFlags::WorldInverseTranspose)
@@ -210,48 +210,48 @@ _Use_decl_annotations_ void EffectLights::SetConstants(int& dirtyFlags, EffectMa
         }
     }
 
-    // Material color parameters. The desired lighting model is:
+    // Light color parameters. The desired Lighting model is:
     //
-    //     ((ambientLightColor + sum(diffuse directional light)) * diffuseColor) + emissiveColor
+    //     ((ambientLightColor + sum(diffuse directional Light)) * diffuseColor) + emissiveColor
     //
-    // When lighting is disabled, ambient and directional lights are ignored, leaving:
+    // When Lighting is disabled, ambient and directional Lights are ignored, leaving:
     //
     //     diffuseColor + emissiveColor
     //
-    // For the lighting disabled case, we can save one shader instruction by precomputing
+    // For the Lighting disabled case, we can save one shader instruction by precomputing
     // diffuse+emissive on the CPU, after which the shader can use diffuseColor directly,
     // ignoring its emissive parameter.
     //
-    // When lighting is enabled, we can merge the ambient and emissive settings. If we
+    // When Lighting is enabled, we can merge the ambient and emissive settings. If we
     // set our emissive parameter to emissive+(ambient*diffuse), the shader no longer
     // needs to bother adding the ambient contribution, simplifying its computation to:
     //
-    //     (sum(diffuse directional light) * diffuseColor) + emissiveColor
+    //     (sum(diffuse directional Light) * diffuseColor) + emissiveColor
     //
-    // For futher optimization goodness, we merge material alpha with the diffuse
+    // For futher optimization goodness, we merge Light alpha with the diffuse
     // color parameter, and premultiply all color values by this alpha.
 
-    if (dirtyFlags & EffectDirtyFlags::MaterialColor)
+    if (dirtyFlags & EffectDirtyFlags::LightColor)
     {
         XMVECTOR diffuse = diffuseColor;
         XMVECTOR alphaVector = XMVectorReplicate(alpha);
 
-        if (lightingEnabled)
+        if (LightingEnabled)
         {
-            // Merge emissive and ambient light contributions.
+            // Merge emissive and ambient Light contributions.
             // (emissiveColor + ambientLightColor * diffuse) * alphaVector;
             emissiveColorConstant = XMVectorMultiply(XMVectorMultiplyAdd(ambientLightColor, diffuse, emissiveColor), alphaVector);
         }
         else
         {
-            // Merge diffuse and emissive light contributions.
+            // Merge diffuse and emissive Light contributions.
             diffuse = XMVectorAdd(diffuse, emissiveColor);
         }
 
         // xyz = diffuse * alpha, w = alpha.
         diffuseColorConstant = XMVectorSelect(alphaVector, XMVectorMultiply(diffuse, alphaVector), g_XMSelect1110);
 
-        dirtyFlags &= ~EffectDirtyFlags::MaterialColor;
+        dirtyFlags &= ~EffectDirtyFlags::LightColor;
         dirtyFlags |= EffectDirtyFlags::ConstantBuffer;
     }
 }
@@ -262,46 +262,46 @@ _Use_decl_annotations_ void EffectLights::SetConstants(int& dirtyFlags, EffectMa
 #pragma prefast(disable:26015, "PREFAST doesn't understand that ValidateLightIndex bounds whichLight" )
 #endif
 
-// Helper for turning one of the directional lights on or off.
-_Use_decl_annotations_ int EffectLights::SetLightEnabled(int whichLight, bool value, XMVECTOR* lightDiffuseConstant, XMVECTOR* lightSpecularConstant)
+// Helper for turning one of the directional Lights on or off.
+_Use_decl_annotations_ int EffectLights::SetLightEnabled(int whichLight, bool value, XMVECTOR* LightDiffuseConstant, XMVECTOR* LightSpecularConstant)
 {
     ValidateLightIndex(whichLight);
 
-    if (lightEnabled[whichLight] == value)
+    if (LightEnabled[whichLight] == value)
         return 0;
 
-    lightEnabled[whichLight] = value;
+    LightEnabled[whichLight] = value;
 
     if (value)
     {
-        // If this light is now on, store its color in the constant buffer.
-        lightDiffuseConstant[whichLight] = lightDiffuseColor[whichLight];
-        lightSpecularConstant[whichLight] = lightSpecularColor[whichLight];
+        // If this Light is now on, store its color in the constant buffer.
+        LightDiffuseConstant[whichLight] = LightDiffuseColor[whichLight];
+        LightSpecularConstant[whichLight] = LightSpecularColor[whichLight];
     }
     else
     {
-        // If the light is off, reset constant buffer colors to zero.
-        lightDiffuseConstant[whichLight] = g_XMZero;
-        lightSpecularConstant[whichLight] = g_XMZero;
+        // If the Light is off, reset constant buffer colors to zero.
+        LightDiffuseConstant[whichLight] = g_XMZero;
+        LightSpecularConstant[whichLight] = g_XMZero;
     }
 
     return EffectDirtyFlags::ConstantBuffer;
 }
 
 
-// Helper for setting diffuse color of one of the directional lights.
+// Helper for setting diffuse color of one of the directional Lights.
 _Use_decl_annotations_
-int XM_CALLCONV EffectLights::SetLightDiffuseColor(int whichLight, FXMVECTOR value, XMVECTOR* lightDiffuseConstant)
+int XM_CALLCONV EffectLights::SetLightDiffuseColor(int whichLight, FXMVECTOR value, XMVECTOR* LightDiffuseConstant)
 {
     ValidateLightIndex(whichLight);
 
     // Locally store the new color.
-    lightDiffuseColor[whichLight] = value;
+    LightDiffuseColor[whichLight] = value;
 
-    // If this light is currently on, also update the constant buffer.
-    if (lightEnabled[whichLight])
+    // If this Light is currently on, also update the constant buffer.
+    if (LightEnabled[whichLight])
     {
-        lightDiffuseConstant[whichLight] = value;
+        LightDiffuseConstant[whichLight] = value;
         
         return EffectDirtyFlags::ConstantBuffer;
     }
@@ -310,19 +310,19 @@ int XM_CALLCONV EffectLights::SetLightDiffuseColor(int whichLight, FXMVECTOR val
 }
 
 
-// Helper for setting specular color of one of the directional lights.
+// Helper for setting specular color of one of the directional Lights.
 _Use_decl_annotations_
-int XM_CALLCONV EffectLights::SetLightSpecularColor(int whichLight, FXMVECTOR value, XMVECTOR* lightSpecularConstant)
+int XM_CALLCONV EffectLights::SetLightSpecularColor(int whichLight, FXMVECTOR value, XMVECTOR* LightSpecularConstant)
 {
     ValidateLightIndex(whichLight);
 
     // Locally store the new color.
-    lightSpecularColor[whichLight] = value;
+    LightSpecularColor[whichLight] = value;
 
-    // If this light is currently on, also update the constant buffer.
-    if (lightEnabled[whichLight])
+    // If this Light is currently on, also update the constant buffer.
+    if (LightEnabled[whichLight])
     {
-        lightSpecularConstant[whichLight] = value;
+        LightSpecularConstant[whichLight] = value;
 
         return EffectDirtyFlags::ConstantBuffer;
     }
@@ -345,7 +345,7 @@ void EffectLights::ValidateLightIndex(int whichLight)
 }
 
 
-// Activates the default lighting rig (key, fill, and back lights).
+// Activates the default Lighting rig (key, fill, and back Lights).
 void EffectLights::EnableDefaultLighting(_In_ IEffectLights* effect)
 {
     static const XMVECTORF32 defaultDirections[MaxDirectionalLights] =

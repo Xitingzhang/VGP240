@@ -94,7 +94,7 @@ float4 PSHemiAmbient(PSInputPixelLightingTx pin) : SV_Target0
 {
     float3 normal = normalize(pin.NormalWS);
 
-    // Do lighting
+    // Do Lighting
     float3 color = CalcHemiAmbient(normal, pin.Diffuse.rgb);
 
     return float4(color, pin.Diffuse.a);

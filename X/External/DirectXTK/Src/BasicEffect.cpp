@@ -21,9 +21,9 @@ namespace
         XMVECTOR emissiveColor;
         XMVECTOR specularColorAndPower;
 
-        XMVECTOR lightDirection[IEffectLights::MaxDirectionalLights];
-        XMVECTOR lightDiffuseColor[IEffectLights::MaxDirectionalLights];
-        XMVECTOR lightSpecularColor[IEffectLights::MaxDirectionalLights];
+        XMVECTOR LightDirection[IEffectLights::MaxDirectionalLights];
+        XMVECTOR LightDiffuseColor[IEffectLights::MaxDirectionalLights];
+        XMVECTOR LightSpecularColor[IEffectLights::MaxDirectionalLights];
 
         XMVECTOR eyePosition;
 
@@ -55,13 +55,13 @@ class BasicEffect::Impl : public EffectBase<BasicEffectTraits>
 public:
     Impl(_In_ ID3D11Device* device);
 
-    bool lightingEnabled;
+    bool LightingEnabled;
     bool preferPerPixelLighting;
     bool vertexColorEnabled;
     bool textureEnabled;
     bool biasedVertexNormals;
 
-    EffectLights lights;
+    EffectLights Lights;
 
     int GetCurrentShaderPermutation() const noexcept;
 
@@ -236,59 +236,59 @@ const int EffectBase<BasicEffectTraits>::VertexShaderIndices[] =
     6,      // texture + vertex color
     7,      // texture + vertex color, no fog
     
-    8,      // vertex lighting
-    8,      // vertex lighting, no fog
-    9,      // vertex lighting + vertex color
-    9,      // vertex lighting + vertex color, no fog
-    10,     // vertex lighting + texture
-    10,     // vertex lighting + texture, no fog
-    11,     // vertex lighting + texture + vertex color
-    11,     // vertex lighting + texture + vertex color, no fog
+    8,      // vertex Lighting
+    8,      // vertex Lighting, no fog
+    9,      // vertex Lighting + vertex color
+    9,      // vertex Lighting + vertex color, no fog
+    10,     // vertex Lighting + texture
+    10,     // vertex Lighting + texture, no fog
+    11,     // vertex Lighting + texture + vertex color
+    11,     // vertex Lighting + texture + vertex color, no fog
     
-    12,     // one light
-    12,     // one light, no fog
-    13,     // one light + vertex color
-    13,     // one light + vertex color, no fog
-    14,     // one light + texture
-    14,     // one light + texture, no fog
-    15,     // one light + texture + vertex color
-    15,     // one light + texture + vertex color, no fog
+    12,     // one Light
+    12,     // one Light, no fog
+    13,     // one Light + vertex color
+    13,     // one Light + vertex color, no fog
+    14,     // one Light + texture
+    14,     // one Light + texture, no fog
+    15,     // one Light + texture + vertex color
+    15,     // one Light + texture + vertex color, no fog
     
-    16,     // pixel lighting
-    16,     // pixel lighting, no fog
-    17,     // pixel lighting + vertex color
-    17,     // pixel lighting + vertex color, no fog
-    18,     // pixel lighting + texture
-    18,     // pixel lighting + texture, no fog
-    19,     // pixel lighting + texture + vertex color
-    19,     // pixel lighting + texture + vertex color, no fog
+    16,     // pixel Lighting
+    16,     // pixel Lighting, no fog
+    17,     // pixel Lighting + vertex color
+    17,     // pixel Lighting + vertex color, no fog
+    18,     // pixel Lighting + texture
+    18,     // pixel Lighting + texture, no fog
+    19,     // pixel Lighting + texture + vertex color
+    19,     // pixel Lighting + texture + vertex color, no fog
 
-    20,     // vertex lighting (biased vertex normals)
-    20,     // vertex lighting (biased vertex normals), no fog
-    21,     // vertex lighting (biased vertex normals) + vertex color
-    21,     // vertex lighting (biased vertex normals) + vertex color, no fog
-    22,     // vertex lighting (biased vertex normals) + texture
-    22,     // vertex lighting (biased vertex normals) + texture, no fog
-    23,     // vertex lighting (biased vertex normals) + texture + vertex color
-    23,     // vertex lighting (biased vertex normals) + texture + vertex color, no fog
+    20,     // vertex Lighting (biased vertex normals)
+    20,     // vertex Lighting (biased vertex normals), no fog
+    21,     // vertex Lighting (biased vertex normals) + vertex color
+    21,     // vertex Lighting (biased vertex normals) + vertex color, no fog
+    22,     // vertex Lighting (biased vertex normals) + texture
+    22,     // vertex Lighting (biased vertex normals) + texture, no fog
+    23,     // vertex Lighting (biased vertex normals) + texture + vertex color
+    23,     // vertex Lighting (biased vertex normals) + texture + vertex color, no fog
 
-    24,     // one light (biased vertex normals)
-    24,     // one light (biased vertex normals), no fog
-    25,     // one light (biased vertex normals) + vertex color
-    25,     // one light (biased vertex normals) + vertex color, no fog
-    26,     // one light (biased vertex normals) + texture
-    26,     // one light (biased vertex normals) + texture, no fog
-    27,     // one light (biased vertex normals) + texture + vertex color
-    27,     // one light (biased vertex normals) + texture + vertex color, no fog
+    24,     // one Light (biased vertex normals)
+    24,     // one Light (biased vertex normals), no fog
+    25,     // one Light (biased vertex normals) + vertex color
+    25,     // one Light (biased vertex normals) + vertex color, no fog
+    26,     // one Light (biased vertex normals) + texture
+    26,     // one Light (biased vertex normals) + texture, no fog
+    27,     // one Light (biased vertex normals) + texture + vertex color
+    27,     // one Light (biased vertex normals) + texture + vertex color, no fog
 
-    28,     // pixel lighting (biased vertex normals)
-    28,     // pixel lighting (biased vertex normals), no fog
-    29,     // pixel lighting (biased vertex normals) + vertex color
-    29,     // pixel lighting (biased vertex normals) + vertex color, no fog
-    30,     // pixel lighting (biased vertex normals) + texture
-    30,     // pixel lighting (biased vertex normals) + texture, no fog
-    31,     // pixel lighting (biased vertex normals) + texture + vertex color
-    31,     // pixel lighting (biased vertex normals) + texture + vertex color, no fog
+    28,     // pixel Lighting (biased vertex normals)
+    28,     // pixel Lighting (biased vertex normals), no fog
+    29,     // pixel Lighting (biased vertex normals) + vertex color
+    29,     // pixel Lighting (biased vertex normals) + vertex color, no fog
+    30,     // pixel Lighting (biased vertex normals) + texture
+    30,     // pixel Lighting (biased vertex normals) + texture, no fog
+    31,     // pixel Lighting (biased vertex normals) + texture + vertex color
+    31,     // pixel Lighting (biased vertex normals) + texture + vertex color, no fog
 };
 
 
@@ -322,59 +322,59 @@ const int EffectBase<BasicEffectTraits>::PixelShaderIndices[] =
     2,      // texture + vertex color
     3,      // texture + vertex color, no fog
     
-    4,      // vertex lighting
-    5,      // vertex lighting, no fog
-    4,      // vertex lighting + vertex color
-    5,      // vertex lighting + vertex color, no fog
-    6,      // vertex lighting + texture
-    7,      // vertex lighting + texture, no fog
-    6,      // vertex lighting + texture + vertex color
-    7,      // vertex lighting + texture + vertex color, no fog
+    4,      // vertex Lighting
+    5,      // vertex Lighting, no fog
+    4,      // vertex Lighting + vertex color
+    5,      // vertex Lighting + vertex color, no fog
+    6,      // vertex Lighting + texture
+    7,      // vertex Lighting + texture, no fog
+    6,      // vertex Lighting + texture + vertex color
+    7,      // vertex Lighting + texture + vertex color, no fog
     
-    4,      // one light
-    5,      // one light, no fog
-    4,      // one light + vertex color
-    5,      // one light + vertex color, no fog
-    6,      // one light + texture
-    7,      // one light + texture, no fog
-    6,      // one light + texture + vertex color
-    7,      // one light + texture + vertex color, no fog
+    4,      // one Light
+    5,      // one Light, no fog
+    4,      // one Light + vertex color
+    5,      // one Light + vertex color, no fog
+    6,      // one Light + texture
+    7,      // one Light + texture, no fog
+    6,      // one Light + texture + vertex color
+    7,      // one Light + texture + vertex color, no fog
     
-    8,      // pixel lighting
-    8,      // pixel lighting, no fog
-    8,      // pixel lighting + vertex color
-    8,      // pixel lighting + vertex color, no fog
-    9,      // pixel lighting + texture
-    9,      // pixel lighting + texture, no fog
-    9,      // pixel lighting + texture + vertex color
-    9,      // pixel lighting + texture + vertex color, no fog
+    8,      // pixel Lighting
+    8,      // pixel Lighting, no fog
+    8,      // pixel Lighting + vertex color
+    8,      // pixel Lighting + vertex color, no fog
+    9,      // pixel Lighting + texture
+    9,      // pixel Lighting + texture, no fog
+    9,      // pixel Lighting + texture + vertex color
+    9,      // pixel Lighting + texture + vertex color, no fog
 
-    4,      // vertex lighting (biased vertex normals)
-    5,      // vertex lighting (biased vertex normals), no fog
-    4,      // vertex lighting (biased vertex normals) + vertex color
-    5,      // vertex lighting (biased vertex normals) + vertex color, no fog
-    6,      // vertex lighting (biased vertex normals) + texture
-    7,      // vertex lighting (biased vertex normals) + texture, no fog
-    6,      // vertex lighting (biased vertex normals) + texture + vertex color
-    7,      // vertex lighting (biased vertex normals) + texture + vertex color, no fog
+    4,      // vertex Lighting (biased vertex normals)
+    5,      // vertex Lighting (biased vertex normals), no fog
+    4,      // vertex Lighting (biased vertex normals) + vertex color
+    5,      // vertex Lighting (biased vertex normals) + vertex color, no fog
+    6,      // vertex Lighting (biased vertex normals) + texture
+    7,      // vertex Lighting (biased vertex normals) + texture, no fog
+    6,      // vertex Lighting (biased vertex normals) + texture + vertex color
+    7,      // vertex Lighting (biased vertex normals) + texture + vertex color, no fog
 
-    4,      // one light (biased vertex normals)
-    5,      // one light (biased vertex normals), no fog
-    4,      // one light (biased vertex normals) + vertex color
-    5,      // one light (biased vertex normals) + vertex color, no fog
-    6,      // one light (biased vertex normals) + texture
-    7,      // one light (biased vertex normals) + texture, no fog
-    6,      // one light (biased vertex normals) + texture + vertex color
-    7,      // one light (biased vertex normals) + texture + vertex color, no fog
+    4,      // one Light (biased vertex normals)
+    5,      // one Light (biased vertex normals), no fog
+    4,      // one Light (biased vertex normals) + vertex color
+    5,      // one Light (biased vertex normals) + vertex color, no fog
+    6,      // one Light (biased vertex normals) + texture
+    7,      // one Light (biased vertex normals) + texture, no fog
+    6,      // one Light (biased vertex normals) + texture + vertex color
+    7,      // one Light (biased vertex normals) + texture + vertex color, no fog
 
-    8,      // pixel lighting (biased vertex normals)
-    8,      // pixel lighting (biased vertex normals), no fog
-    8,      // pixel lighting (biased vertex normals) + vertex color
-    8,      // pixel lighting (biased vertex normals) + vertex color, no fog
-    9,      // pixel lighting (biased vertex normals) + texture
-    9,      // pixel lighting (biased vertex normals) + texture, no fog
-    9,      // pixel lighting (biased vertex normals) + texture + vertex color
-    9,      // pixel lighting (biased vertex normals) + texture + vertex color, no fog
+    8,      // pixel Lighting (biased vertex normals)
+    8,      // pixel Lighting (biased vertex normals), no fog
+    8,      // pixel Lighting (biased vertex normals) + vertex color
+    8,      // pixel Lighting (biased vertex normals) + vertex color, no fog
+    9,      // pixel Lighting (biased vertex normals) + texture
+    9,      // pixel Lighting (biased vertex normals) + texture, no fog
+    9,      // pixel Lighting (biased vertex normals) + texture + vertex color
+    9,      // pixel Lighting (biased vertex normals) + texture + vertex color, no fog
 };
 
 
@@ -386,7 +386,7 @@ SharedResourcePool<ID3D11Device*, EffectBase<BasicEffectTraits>::DeviceResources
 // Constructor.
 BasicEffect::Impl::Impl(_In_ ID3D11Device* device)
     : EffectBase(device),
-    lightingEnabled(false),
+    LightingEnabled(false),
     preferPerPixelLighting(false),
     vertexColorEnabled(false),
     textureEnabled(false),
@@ -397,7 +397,7 @@ BasicEffect::Impl::Impl(_In_ ID3D11Device* device)
     static_assert(static_cast<int>(std::size(EffectBase<BasicEffectTraits>::PixelShaderBytecode)) == BasicEffectTraits::PixelShaderCount, "array/max mismatch");
     static_assert(static_cast<int>(std::size(EffectBase<BasicEffectTraits>::PixelShaderIndices)) == BasicEffectTraits::ShaderPermutationCount, "array/max mismatch");
 
-    lights.InitializeConstants(constants.specularColorAndPower, constants.lightDirection, constants.lightDiffuseColor, constants.lightSpecularColor);
+    Lights.InitializeConstants(constants.specularColorAndPower, constants.LightDirection, constants.LightDiffuseColor, constants.LightSpecularColor);
 }
 
 
@@ -423,21 +423,21 @@ int BasicEffect::Impl::GetCurrentShaderPermutation() const noexcept
         permutation += 4;
     }
 
-    if (lightingEnabled)
+    if (LightingEnabled)
     {
         if (preferPerPixelLighting)
         {
-            // Do lighting in the pixel shader.
+            // Do Lighting in the pixel shader.
             permutation += 24;
         }
-        else if (!lights.lightEnabled[1] && !lights.lightEnabled[2])
+        else if (!Lights.LightEnabled[1] && !Lights.LightEnabled[2])
         {
-            // Use the only-bother-with-the-first-light shader optimization.
+            // Use the only-bother-with-the-first-Light shader optimization.
             permutation += 16;
         }
         else
         {
-            // Compute all three lights in the vertex shader.
+            // Compute all three Lights in the vertex shader.
             permutation += 8;
         }
 
@@ -460,7 +460,7 @@ void BasicEffect::Impl::Apply(_In_ ID3D11DeviceContext* deviceContext)
 
     fog.SetConstants(dirtyFlags, matrices.worldView, constants.fogVector);
 
-    lights.SetConstants(dirtyFlags, matrices, constants.world, constants.worldInverseTranspose, constants.eyePosition, constants.diffuseColor, constants.emissiveColor, lightingEnabled);
+    Lights.SetConstants(dirtyFlags, matrices, constants.world, constants.worldInverseTranspose, constants.eyePosition, constants.diffuseColor, constants.emissiveColor, LightingEnabled);
 
     // Set the texture.
     if (textureEnabled)
@@ -551,20 +551,20 @@ void XM_CALLCONV BasicEffect::SetMatrices(FXMMATRIX world, CXMMATRIX view, CXMMA
 }
 
 
-// Material settings.
+// Light settings.
 void XM_CALLCONV BasicEffect::SetDiffuseColor(FXMVECTOR value)
 {
-    pImpl->lights.diffuseColor = value;
+    pImpl->Lights.diffuseColor = value;
 
-    pImpl->dirtyFlags |= EffectDirtyFlags::MaterialColor;
+    pImpl->dirtyFlags |= EffectDirtyFlags::LightColor;
 }
 
 
 void XM_CALLCONV BasicEffect::SetEmissiveColor(FXMVECTOR value)
 {
-    pImpl->lights.emissiveColor = value;
+    pImpl->Lights.emissiveColor = value;
 
-    pImpl->dirtyFlags |= EffectDirtyFlags::MaterialColor;
+    pImpl->dirtyFlags |= EffectDirtyFlags::LightColor;
 }
 
 
@@ -589,7 +589,7 @@ void BasicEffect::SetSpecularPower(float value)
 void BasicEffect::DisableSpecular()
 {
     // Set specular color to black, power to 1
-    // Note: Don't use a power of 0 or the shader will generate strange highlights on non-specular materials
+    // Note: Don't use a power of 0 or the shader will generate strange highLights on non-specular Lights
 
     pImpl->constants.specularColorAndPower = g_XMIdentityR3; 
 
@@ -599,27 +599,27 @@ void BasicEffect::DisableSpecular()
 
 void BasicEffect::SetAlpha(float value)
 {
-    pImpl->lights.alpha = value;
+    pImpl->Lights.alpha = value;
 
-    pImpl->dirtyFlags |= EffectDirtyFlags::MaterialColor;
+    pImpl->dirtyFlags |= EffectDirtyFlags::LightColor;
 }
 
 
 void XM_CALLCONV BasicEffect::SetColorAndAlpha(FXMVECTOR value)
 {
-    pImpl->lights.diffuseColor = value;
-    pImpl->lights.alpha = XMVectorGetW(value);
+    pImpl->Lights.diffuseColor = value;
+    pImpl->Lights.alpha = XMVectorGetW(value);
 
-    pImpl->dirtyFlags |= EffectDirtyFlags::MaterialColor;
+    pImpl->dirtyFlags |= EffectDirtyFlags::LightColor;
 }
 
 
 // Light settings.
 void BasicEffect::SetLightingEnabled(bool value)
 {
-    pImpl->lightingEnabled = value;
+    pImpl->LightingEnabled = value;
 
-    pImpl->dirtyFlags |= EffectDirtyFlags::MaterialColor;
+    pImpl->dirtyFlags |= EffectDirtyFlags::LightColor;
 }
 
 
@@ -631,15 +631,15 @@ void BasicEffect::SetPerPixelLighting(bool value)
 
 void XM_CALLCONV BasicEffect::SetAmbientLightColor(FXMVECTOR value)
 {
-    pImpl->lights.ambientLightColor = value;
+    pImpl->Lights.ambientLightColor = value;
 
-    pImpl->dirtyFlags |= EffectDirtyFlags::MaterialColor;
+    pImpl->dirtyFlags |= EffectDirtyFlags::LightColor;
 }
 
 
 void BasicEffect::SetLightEnabled(int whichLight, bool value)
 {
-    pImpl->dirtyFlags |= pImpl->lights.SetLightEnabled(whichLight, value, pImpl->constants.lightDiffuseColor, pImpl->constants.lightSpecularColor);
+    pImpl->dirtyFlags |= pImpl->Lights.SetLightEnabled(whichLight, value, pImpl->constants.LightDiffuseColor, pImpl->constants.LightSpecularColor);
 }
 
 
@@ -647,7 +647,7 @@ void XM_CALLCONV BasicEffect::SetLightDirection(int whichLight, FXMVECTOR value)
 {
     EffectLights::ValidateLightIndex(whichLight);
 
-    pImpl->constants.lightDirection[whichLight] = value;
+    pImpl->constants.LightDirection[whichLight] = value;
 
     pImpl->dirtyFlags |= EffectDirtyFlags::ConstantBuffer;
 }
@@ -655,13 +655,13 @@ void XM_CALLCONV BasicEffect::SetLightDirection(int whichLight, FXMVECTOR value)
 
 void XM_CALLCONV BasicEffect::SetLightDiffuseColor(int whichLight, FXMVECTOR value)
 {
-    pImpl->dirtyFlags |= pImpl->lights.SetLightDiffuseColor(whichLight, value, pImpl->constants.lightDiffuseColor);
+    pImpl->dirtyFlags |= pImpl->Lights.SetLightDiffuseColor(whichLight, value, pImpl->constants.LightDiffuseColor);
 }
 
 
 void XM_CALLCONV BasicEffect::SetLightSpecularColor(int whichLight, FXMVECTOR value)
 {
-    pImpl->dirtyFlags |= pImpl->lights.SetLightSpecularColor(whichLight, value, pImpl->constants.lightSpecularColor);
+    pImpl->dirtyFlags |= pImpl->Lights.SetLightSpecularColor(whichLight, value, pImpl->constants.LightSpecularColor);
 }
 
 

@@ -2420,7 +2420,7 @@ static void ShowDemoWindowLayout()
             HelpMarker("Test of different widgets react and impact the work rectangle growing when horizontal scrolling is enabled.\n\nUse 'Metrics->Tools->Show windows rectangles' to visualize rectangles.");
             ImGui::Checkbox("H-scrollbar", &show_h_scrollbar);
             ImGui::Checkbox("Button", &show_button);            // Will grow contents size (unless explicitly overwritten)
-            ImGui::Checkbox("Tree nodes", &show_tree_nodes);    // Will grow contents size and display highlight over full width
+            ImGui::Checkbox("Tree nodes", &show_tree_nodes);    // Will grow contents size and display highLight over full width
             ImGui::Checkbox("Text wrapped", &show_text_wrapped);// Will grow and use contents size
             ImGui::Checkbox("Columns", &show_columns);          // Will use contents size
             ImGui::Checkbox("Tab bar", &show_tab_bar);          // Will use contents size
@@ -4264,7 +4264,7 @@ static void ShowExampleAppPropertyEditor(bool* p_open)
                     }
                     else
                     {
-                        // Here we use a TreeNode to highlight on hover (we could use e.g. Selectable as well)
+                        // Here we use a TreeNode to highLight on hover (we could use e.g. Selectable as well)
                         ImGui::AlignTextToFramePadding();
                         ImGui::TreeNodeEx("Field", ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_Bullet, "Field_%d", i);
                         ImGui::NextColumn();

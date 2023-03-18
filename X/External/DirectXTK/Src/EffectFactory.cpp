@@ -88,7 +88,7 @@ std::shared_ptr<IEffect> EffectFactory::Impl::CreateEffect(IEffectFactory* facto
 
         effect->SetAlpha(info.alpha);
 
-        // Skinned Effect does not have an ambient material color, or per-vertex color support
+        // Skinned Effect does not have an ambient Light color, or per-vertex color support
 
         XMVECTOR color = XMLoadFloat3(&info.diffuseColor);
         effect->SetDiffuseColor(color);
@@ -147,7 +147,7 @@ std::shared_ptr<IEffect> EffectFactory::Impl::CreateEffect(IEffectFactory* facto
 
         auto effect = std::make_shared<DualTextureEffect>(mDevice.Get());
 
-        // Dual texture effect doesn't support lighting (usually it's lightmaps)
+        // Dual texture effect doesn't support Lighting (usually it's Lightmaps)
 
         effect->SetAlpha(info.alpha);
 
@@ -218,7 +218,7 @@ std::shared_ptr<IEffect> EffectFactory::Impl::CreateEffect(IEffectFactory* facto
             effect->SetVertexColorEnabled(true);
         }
 
-        // NormalMap Effect does not have an ambient material color
+        // NormalMap Effect does not have an ambient Light color
 
         XMVECTOR color = XMLoadFloat3(&info.diffuseColor);
         effect->SetDiffuseColor(color);
@@ -305,7 +305,7 @@ std::shared_ptr<IEffect> EffectFactory::Impl::CreateEffect(IEffectFactory* facto
             effect->SetVertexColorEnabled(true);
         }
 
-        // Basic Effect does not have an ambient material color
+        // Basic Effect does not have an ambient Light color
 
         XMVECTOR color = XMLoadFloat3(&info.diffuseColor);
         effect->SetDiffuseColor(color);

@@ -54,7 +54,7 @@ float3 Skin(inout VSInputNmTxWeights vin, float3 normal, uniform int boneCount)
 }
 
 
-// Vertex shader: vertex lighting, one bone.
+// Vertex shader: vertex Lighting, one bone.
 VSOutputTx VSSkinnedVertexLightingOneBone(VSInputNmTxWeights vin)
 {
     VSOutputTx vout;
@@ -86,7 +86,7 @@ VSOutputTx VSSkinnedVertexLightingOneBoneBn(VSInputNmTxWeights vin)
 }
 
 
-// Vertex shader: vertex lighting, two bones.
+// Vertex shader: vertex Lighting, two bones.
 VSOutputTx VSSkinnedVertexLightingTwoBones(VSInputNmTxWeights vin)
 {
     VSOutputTx vout;
@@ -118,7 +118,7 @@ VSOutputTx VSSkinnedVertexLightingTwoBonesBn(VSInputNmTxWeights vin)
 }
 
 
-// Vertex shader: vertex lighting, four bones.
+// Vertex shader: vertex Lighting, four bones.
 VSOutputTx VSSkinnedVertexLightingFourBones(VSInputNmTxWeights vin)
 {
     VSOutputTx vout;
@@ -150,7 +150,7 @@ VSOutputTx VSSkinnedVertexLightingFourBonesBn(VSInputNmTxWeights vin)
 }
 
 
-// Vertex shader: one light, one bone.
+// Vertex shader: one Light, one bone.
 VSOutputTx VSSkinnedOneLightOneBone(VSInputNmTxWeights vin)
 {
     VSOutputTx vout;
@@ -182,7 +182,7 @@ VSOutputTx VSSkinnedOneLightOneBoneBn(VSInputNmTxWeights vin)
 }
 
 
-// Vertex shader: one light, two bones.
+// Vertex shader: one Light, two bones.
 VSOutputTx VSSkinnedOneLightTwoBones(VSInputNmTxWeights vin)
 {
     VSOutputTx vout;
@@ -213,7 +213,7 @@ VSOutputTx VSSkinnedOneLightTwoBonesBn(VSInputNmTxWeights vin)
     return vout;
 }
 
-// Vertex shader: one light, four bones.
+// Vertex shader: one Light, four bones.
 VSOutputTx VSSkinnedOneLightFourBones(VSInputNmTxWeights vin)
 {
     VSOutputTx vout;
@@ -245,7 +245,7 @@ VSOutputTx VSSkinnedOneLightFourBonesBn(VSInputNmTxWeights vin)
 }
 
 
-// Vertex shader: pixel lighting, one bone.
+// Vertex shader: pixel Lighting, one bone.
 VSOutputPixelLightingTx VSSkinnedPixelLightingOneBone(VSInputNmTxWeights vin)
 {
     VSOutputPixelLightingTx vout;
@@ -279,7 +279,7 @@ VSOutputPixelLightingTx VSSkinnedPixelLightingOneBoneBn(VSInputNmTxWeights vin)
 }
 
 
-// Vertex shader: pixel lighting, two bones.
+// Vertex shader: pixel Lighting, two bones.
 VSOutputPixelLightingTx VSSkinnedPixelLightingTwoBones(VSInputNmTxWeights vin)
 {
     VSOutputPixelLightingTx vout;
@@ -313,7 +313,7 @@ VSOutputPixelLightingTx VSSkinnedPixelLightingTwoBonesBn(VSInputNmTxWeights vin)
 }
 
 
-// Vertex shader: pixel lighting, four bones.
+// Vertex shader: pixel Lighting, four bones.
 VSOutputPixelLightingTx VSSkinnedPixelLightingFourBones(VSInputNmTxWeights vin)
 {
     VSOutputPixelLightingTx vout;
@@ -347,7 +347,7 @@ VSOutputPixelLightingTx VSSkinnedPixelLightingFourBonesBn(VSInputNmTxWeights vin
 }
 
 
-// Pixel shader: vertex lighting.
+// Pixel shader: vertex Lighting.
 float4 PSSkinnedVertexLighting(PSInputTx pin) : SV_Target0
 {
     float4 color = Texture.Sample(Sampler, pin.TexCoord) * pin.Diffuse;
@@ -359,7 +359,7 @@ float4 PSSkinnedVertexLighting(PSInputTx pin) : SV_Target0
 }
 
 
-// Pixel shader: vertex lighting, no fog.
+// Pixel shader: vertex Lighting, no fog.
 float4 PSSkinnedVertexLightingNoFog(PSInputTx pin) : SV_Target0
 {
     float4 color = Texture.Sample(Sampler, pin.TexCoord) * pin.Diffuse;
@@ -370,7 +370,7 @@ float4 PSSkinnedVertexLightingNoFog(PSInputTx pin) : SV_Target0
 }
 
 
-// Pixel shader: pixel lighting.
+// Pixel shader: pixel Lighting.
 float4 PSSkinnedPixelLighting(PSInputPixelLightingTx pin) : SV_Target0
 {
     float4 color = Texture.Sample(Sampler, pin.TexCoord) * pin.Diffuse;
@@ -378,11 +378,11 @@ float4 PSSkinnedPixelLighting(PSInputPixelLightingTx pin) : SV_Target0
     float3 eyeVector = normalize(EyePosition - pin.PositionWS.xyz);
     float3 worldNormal = normalize(pin.NormalWS);
 
-    ColorPair lightResult = ComputeLights(eyeVector, worldNormal, 3);
+    ColorPair LightResult = ComputeLights(eyeVector, worldNormal, 3);
 
-    color.rgb *= lightResult.Diffuse;
+    color.rgb *= LightResult.Diffuse;
 
-    AddSpecular(color, lightResult.Specular);
+    AddSpecular(color, LightResult.Specular);
     ApplyFog(color, pin.PositionWS.w);
 
     return color;

@@ -2648,13 +2648,13 @@ inline Matrix Matrix::CreateFromYawPitchRoll(float yaw, float pitch, float roll)
     return R;
 }
 
-inline Matrix Matrix::CreateShadow(const Vector3& lightDir, const Plane& plane) noexcept
+inline Matrix Matrix::CreateShadow(const Vector3& LightDir, const Plane& plane) noexcept
 {
     using namespace DirectX;
     Matrix R;
-    XMVECTOR light = XMLoadFloat3(&lightDir);
+    XMVECTOR Light = XMLoadFloat3(&LightDir);
     XMVECTOR planev = XMLoadFloat4(&plane);
-    XMStoreFloat4x4(&R, XMMatrixShadow(planev, light));
+    XMStoreFloat4x4(&R, XMMatrixShadow(planev, Light));
     return R;
 }
 

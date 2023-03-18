@@ -15,7 +15,7 @@ public:
 
 
 	
-private:
+protected:
 	X::Color mAmbient = X::Colors::White;
 	X::Color mDiffuse = X::Colors::White;
 	X::Color mSpecular = X::Colors::White;

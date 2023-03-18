@@ -4,7 +4,7 @@
 // Function for capturing a 2D texture and saving it to a file (aka a 'screenshot'
 // when used on a Direct3D Render Target).
 //
-// Note these functions are useful as a light-weight runtime screen grabber. For
+// Note these functions are useful as a Light-weight runtime screen grabber. For
 // full-featured texture capture, DDS writer, and texture processing pipeline,
 // see the 'Texconv' sample and the 'DirectXTex' library.
 //

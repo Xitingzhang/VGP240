@@ -20,9 +20,9 @@ struct NormalMapEffectConstants
     XMVECTOR emissiveColor;
     XMVECTOR specularColorAndPower;
     
-    XMVECTOR lightDirection[IEffectLights::MaxDirectionalLights];
-    XMVECTOR lightDiffuseColor[IEffectLights::MaxDirectionalLights];
-    XMVECTOR lightSpecularColor[IEffectLights::MaxDirectionalLights];
+    XMVECTOR LightDirection[IEffectLights::MaxDirectionalLights];
+    XMVECTOR LightDiffuseColor[IEffectLights::MaxDirectionalLights];
+    XMVECTOR LightSpecularColor[IEffectLights::MaxDirectionalLights];
 
     XMVECTOR eyePosition;
 
@@ -60,7 +60,7 @@ public:
     bool vertexColorEnabled;
     bool biasedVertexNormals;
   
-    EffectLights lights;
+    EffectLights Lights;
 
     int GetCurrentShaderPermutation() const noexcept;
 
@@ -111,25 +111,25 @@ const ShaderBytecode EffectBase<NormalMapEffectTraits>::VertexShaderBytecode[] =
 template<>
 const int EffectBase<NormalMapEffectTraits>::VertexShaderIndices[] =
 {    
-    0,      // pixel lighting + texture
-    0,      // pixel lighting + texture, no fog
-    1,      // pixel lighting + texture + vertex color
-    1,      // pixel lighting + texture + vertex color, no fog
+    0,      // pixel Lighting + texture
+    0,      // pixel Lighting + texture, no fog
+    1,      // pixel Lighting + texture + vertex color
+    1,      // pixel Lighting + texture + vertex color, no fog
 
-    0,      // pixel lighting + texture, no specular
-    0,      // pixel lighting + texture, no fog or specular
-    1,      // pixel lighting + texture + vertex color, no specular
-    1,      // pixel lighting + texture + vertex color, no fog or specular
+    0,      // pixel Lighting + texture, no specular
+    0,      // pixel Lighting + texture, no fog or specular
+    1,      // pixel Lighting + texture + vertex color, no specular
+    1,      // pixel Lighting + texture + vertex color, no fog or specular
 
-    2,      // pixel lighting (biased vertex normal) + texture
-    2,      // pixel lighting (biased vertex normal) + texture, no fog
-    3,      // pixel lighting (biased vertex normal) + texture + vertex color
-    3,      // pixel lighting (biased vertex normal) + texture + vertex color, no fog
+    2,      // pixel Lighting (biased vertex normal) + texture
+    2,      // pixel Lighting (biased vertex normal) + texture, no fog
+    3,      // pixel Lighting (biased vertex normal) + texture + vertex color
+    3,      // pixel Lighting (biased vertex normal) + texture + vertex color, no fog
 
-    2,      // pixel lighting (biased vertex normal) + texture, no specular
-    2,      // pixel lighting (biased vertex normal) + texture, no fog or specular
-    3,      // pixel lighting (biased vertex normal) + texture + vertex color, no specular
-    3,      // pixel lighting (biased vertex normal) + texture + vertex color, no fog or specular
+    2,      // pixel Lighting (biased vertex normal) + texture, no specular
+    2,      // pixel Lighting (biased vertex normal) + texture, no fog or specular
+    3,      // pixel Lighting (biased vertex normal) + texture + vertex color, no specular
+    3,      // pixel Lighting (biased vertex normal) + texture + vertex color, no fog or specular
 };
 
 
@@ -146,25 +146,25 @@ const ShaderBytecode EffectBase<NormalMapEffectTraits>::PixelShaderBytecode[] =
 template<>
 const int EffectBase<NormalMapEffectTraits>::PixelShaderIndices[] =
 {    
-    0,      // pixel lighting + texture
-    1,      // pixel lighting + texture, no fog
-    0,      // pixel lighting + texture + vertex color
-    1,      // pixel lighting + texture + vertex color, no fog
+    0,      // pixel Lighting + texture
+    1,      // pixel Lighting + texture, no fog
+    0,      // pixel Lighting + texture + vertex color
+    1,      // pixel Lighting + texture + vertex color, no fog
 
-    2,      // pixel lighting + texture, no specular
-    3,      // pixel lighting + texture, no fog or specular
-    2,      // pixel lighting + texture + vertex color, no specular
-    3,      // pixel lighting + texture + vertex color, no fog or specular
+    2,      // pixel Lighting + texture, no specular
+    3,      // pixel Lighting + texture, no fog or specular
+    2,      // pixel Lighting + texture + vertex color, no specular
+    3,      // pixel Lighting + texture + vertex color, no fog or specular
 
-    0,      // pixel lighting (biased vertex normal) + texture
-    1,      // pixel lighting (biased vertex normal) + texture, no fog
-    0,      // pixel lighting (biased vertex normal) + texture + vertex color
-    1,      // pixel lighting (biased vertex normal) + texture + vertex color, no fog
+    0,      // pixel Lighting (biased vertex normal) + texture
+    1,      // pixel Lighting (biased vertex normal) + texture, no fog
+    0,      // pixel Lighting (biased vertex normal) + texture + vertex color
+    1,      // pixel Lighting (biased vertex normal) + texture + vertex color, no fog
 
-    2,      // pixel lighting (biased vertex normal) + texture, no specular
-    3,      // pixel lighting (biased vertex normal) + texture, no fog or specular
-    2,      // pixel lighting (biased vertex normal) + texture + vertex color, no specular
-    3,      // pixel lighting (biased vertex normal) + texture + vertex color, no fog or specular
+    2,      // pixel Lighting (biased vertex normal) + texture, no specular
+    3,      // pixel Lighting (biased vertex normal) + texture, no fog or specular
+    2,      // pixel Lighting (biased vertex normal) + texture + vertex color, no specular
+    3,      // pixel Lighting (biased vertex normal) + texture + vertex color, no fog or specular
 };
 
 
@@ -189,7 +189,7 @@ NormalMapEffect::Impl::Impl(_In_ ID3D11Device* device)
     static_assert(static_cast<int>(std::size(EffectBase<NormalMapEffectTraits>::PixelShaderBytecode)) == NormalMapEffectTraits::PixelShaderCount, "array/max mismatch");
     static_assert(static_cast<int>(std::size(EffectBase<NormalMapEffectTraits>::PixelShaderIndices)) == NormalMapEffectTraits::ShaderPermutationCount, "array/max mismatch");
 
-    lights.InitializeConstants(constants.specularColorAndPower, constants.lightDirection, constants.lightDiffuseColor, constants.lightSpecularColor);
+    Lights.InitializeConstants(constants.specularColorAndPower, constants.LightDirection, constants.LightDiffuseColor, constants.LightSpecularColor);
 }
 
 
@@ -233,7 +233,7 @@ void NormalMapEffect::Impl::Apply(_In_ ID3D11DeviceContext* deviceContext)
 
     fog.SetConstants(dirtyFlags, matrices.worldView, constants.fogVector);
             
-    lights.SetConstants(dirtyFlags, matrices, constants.world, constants.worldInverseTranspose, constants.eyePosition, constants.diffuseColor, constants.emissiveColor, true);
+    Lights.SetConstants(dirtyFlags, matrices, constants.world, constants.worldInverseTranspose, constants.eyePosition, constants.diffuseColor, constants.emissiveColor, true);
 
     // Set the textures
     ID3D11ShaderResourceView* textures[] = { texture.Get(), specularTexture.Get(), normalTexture.Get()};
@@ -320,20 +320,20 @@ void XM_CALLCONV NormalMapEffect::SetMatrices(FXMMATRIX world, CXMMATRIX view, C
 }
 
 
-// Material settings.
+// Light settings.
 void XM_CALLCONV NormalMapEffect::SetDiffuseColor(FXMVECTOR value)
 {
-    pImpl->lights.diffuseColor = value;
+    pImpl->Lights.diffuseColor = value;
 
-    pImpl->dirtyFlags |= EffectDirtyFlags::MaterialColor;
+    pImpl->dirtyFlags |= EffectDirtyFlags::LightColor;
 }
 
 
 void XM_CALLCONV NormalMapEffect::SetEmissiveColor(FXMVECTOR value)
 {
-    pImpl->lights.emissiveColor = value;
+    pImpl->Lights.emissiveColor = value;
 
-    pImpl->dirtyFlags |= EffectDirtyFlags::MaterialColor;
+    pImpl->dirtyFlags |= EffectDirtyFlags::LightColor;
 }
 
 
@@ -358,7 +358,7 @@ void NormalMapEffect::SetSpecularPower(float value)
 void NormalMapEffect::DisableSpecular()
 {
     // Set specular color to black, power to 1
-    // Note: Don't use a power of 0 or the shader will generate strange highlights on non-specular materials
+    // Note: Don't use a power of 0 or the shader will generate strange highLights on non-specular Lights
 
     pImpl->constants.specularColorAndPower = g_XMIdentityR3; 
 
@@ -368,18 +368,18 @@ void NormalMapEffect::DisableSpecular()
 
 void NormalMapEffect::SetAlpha(float value)
 {
-    pImpl->lights.alpha = value;
+    pImpl->Lights.alpha = value;
 
-    pImpl->dirtyFlags |= EffectDirtyFlags::MaterialColor;
+    pImpl->dirtyFlags |= EffectDirtyFlags::LightColor;
 }
 
 
 void XM_CALLCONV NormalMapEffect::SetColorAndAlpha(FXMVECTOR value)
 {
-    pImpl->lights.diffuseColor = value;
-    pImpl->lights.alpha = XMVectorGetW(value);
+    pImpl->Lights.diffuseColor = value;
+    pImpl->Lights.alpha = XMVectorGetW(value);
 
-    pImpl->dirtyFlags |= EffectDirtyFlags::MaterialColor;
+    pImpl->dirtyFlags |= EffectDirtyFlags::LightColor;
 }
 
 
@@ -388,7 +388,7 @@ void NormalMapEffect::SetLightingEnabled(bool value)
 {
     if (!value)
     {
-        throw std::invalid_argument("NormalMapEffect does not support turning off lighting");
+        throw std::invalid_argument("NormalMapEffect does not support turning off Lighting");
     }
 }
 
@@ -401,15 +401,15 @@ void NormalMapEffect::SetPerPixelLighting(bool)
 
 void XM_CALLCONV NormalMapEffect::SetAmbientLightColor(FXMVECTOR value)
 {
-    pImpl->lights.ambientLightColor = value;
+    pImpl->Lights.ambientLightColor = value;
 
-    pImpl->dirtyFlags |= EffectDirtyFlags::MaterialColor;
+    pImpl->dirtyFlags |= EffectDirtyFlags::LightColor;
 }
 
 
 void NormalMapEffect::SetLightEnabled(int whichLight, bool value)
 {
-    pImpl->dirtyFlags |= pImpl->lights.SetLightEnabled(whichLight, value, pImpl->constants.lightDiffuseColor, pImpl->constants.lightSpecularColor);
+    pImpl->dirtyFlags |= pImpl->Lights.SetLightEnabled(whichLight, value, pImpl->constants.LightDiffuseColor, pImpl->constants.LightSpecularColor);
 }
 
 
@@ -417,7 +417,7 @@ void XM_CALLCONV NormalMapEffect::SetLightDirection(int whichLight, FXMVECTOR va
 {
     EffectLights::ValidateLightIndex(whichLight);
 
-    pImpl->constants.lightDirection[whichLight] = value;
+    pImpl->constants.LightDirection[whichLight] = value;
 
     pImpl->dirtyFlags |= EffectDirtyFlags::ConstantBuffer;
 }
@@ -425,13 +425,13 @@ void XM_CALLCONV NormalMapEffect::SetLightDirection(int whichLight, FXMVECTOR va
 
 void XM_CALLCONV NormalMapEffect::SetLightDiffuseColor(int whichLight, FXMVECTOR value)
 {
-    pImpl->dirtyFlags |= pImpl->lights.SetLightDiffuseColor(whichLight, value, pImpl->constants.lightDiffuseColor);
+    pImpl->dirtyFlags |= pImpl->Lights.SetLightDiffuseColor(whichLight, value, pImpl->constants.LightDiffuseColor);
 }
 
 
 void XM_CALLCONV NormalMapEffect::SetLightSpecularColor(int whichLight, FXMVECTOR value)
 {
-    pImpl->dirtyFlags |= pImpl->lights.SetLightSpecularColor(whichLight, value, pImpl->constants.lightSpecularColor);
+    pImpl->dirtyFlags |= pImpl->Lights.SetLightSpecularColor(whichLight, value, pImpl->constants.LightSpecularColor);
 }
 
 

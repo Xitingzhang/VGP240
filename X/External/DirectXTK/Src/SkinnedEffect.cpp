@@ -20,9 +20,9 @@ struct SkinnedEffectConstants
     XMVECTOR emissiveColor;
     XMVECTOR specularColorAndPower;
     
-    XMVECTOR lightDirection[IEffectLights::MaxDirectionalLights];
-    XMVECTOR lightDiffuseColor[IEffectLights::MaxDirectionalLights];
-    XMVECTOR lightSpecularColor[IEffectLights::MaxDirectionalLights];
+    XMVECTOR LightDirection[IEffectLights::MaxDirectionalLights];
+    XMVECTOR LightDiffuseColor[IEffectLights::MaxDirectionalLights];
+    XMVECTOR LightSpecularColor[IEffectLights::MaxDirectionalLights];
 
     XMVECTOR eyePosition;
 
@@ -60,7 +60,7 @@ public:
     bool biasedVertexNormals;
     int weightsPerVertex;
 
-    EffectLights lights;
+    EffectLights Lights;
 
     int GetCurrentShaderPermutation() const noexcept;
 
@@ -164,47 +164,47 @@ const ShaderBytecode EffectBase<SkinnedEffectTraits>::VertexShaderBytecode[] =
 template<>
 const int EffectBase<SkinnedEffectTraits>::VertexShaderIndices[] =
 {
-    0,      // vertex lighting, one bone
-    0,      // vertex lighting, one bone, no fog
-    1,      // vertex lighting, two bones
-    1,      // vertex lighting, two bones, no fog
-    2,      // vertex lighting, four bones
-    2,      // vertex lighting, four bones, no fog
+    0,      // vertex Lighting, one bone
+    0,      // vertex Lighting, one bone, no fog
+    1,      // vertex Lighting, two bones
+    1,      // vertex Lighting, two bones, no fog
+    2,      // vertex Lighting, four bones
+    2,      // vertex Lighting, four bones, no fog
     
-    3,      // one light, one bone
-    3,      // one light, one bone, no fog
-    4,      // one light, two bones
-    4,      // one light, two bones, no fog
-    5,      // one light, four bones
-    5,      // one light, four bones, no fog
+    3,      // one Light, one bone
+    3,      // one Light, one bone, no fog
+    4,      // one Light, two bones
+    4,      // one Light, two bones, no fog
+    5,      // one Light, four bones
+    5,      // one Light, four bones, no fog
     
-    6,      // pixel lighting, one bone
-    6,      // pixel lighting, one bone, no fog
-    7,      // pixel lighting, two bones
-    7,      // pixel lighting, two bones, no fog
-    8,      // pixel lighting, four bones
-    8,      // pixel lighting, four bones, no fog
+    6,      // pixel Lighting, one bone
+    6,      // pixel Lighting, one bone, no fog
+    7,      // pixel Lighting, two bones
+    7,      // pixel Lighting, two bones, no fog
+    8,      // pixel Lighting, four bones
+    8,      // pixel Lighting, four bones, no fog
 
-    9,      // vertex lighting (biased vertex normals), one bone
-    9,      // vertex lighting (biased vertex normals), one bone, no fog
-    10,     // vertex lighting (biased vertex normals), two bones
-    10,     // vertex lighting (biased vertex normals), two bones, no fog
-    11,     // vertex lighting (biased vertex normals), four bones
-    11,     // vertex lighting (biased vertex normals), four bones, no fog
+    9,      // vertex Lighting (biased vertex normals), one bone
+    9,      // vertex Lighting (biased vertex normals), one bone, no fog
+    10,     // vertex Lighting (biased vertex normals), two bones
+    10,     // vertex Lighting (biased vertex normals), two bones, no fog
+    11,     // vertex Lighting (biased vertex normals), four bones
+    11,     // vertex Lighting (biased vertex normals), four bones, no fog
 
-    12,     // one light (biased vertex normals), one bone
-    12,     // one light (biased vertex normals), one bone, no fog
-    13,     // one light (biased vertex normals), two bones
-    13,     // one light (biased vertex normals), two bones, no fog
-    14,     // one light (biased vertex normals), four bones
-    14,     // one light (biased vertex normals), four bones, no fog
+    12,     // one Light (biased vertex normals), one bone
+    12,     // one Light (biased vertex normals), one bone, no fog
+    13,     // one Light (biased vertex normals), two bones
+    13,     // one Light (biased vertex normals), two bones, no fog
+    14,     // one Light (biased vertex normals), four bones
+    14,     // one Light (biased vertex normals), four bones, no fog
 
-    15,     // pixel lighting (biased vertex normals), one bone
-    15,     // pixel lighting (biased vertex normals), one bone, no fog
-    16,     // pixel lighting (biased vertex normals), two bones
-    16,     // pixel lighting (biased vertex normals), two bones, no fog
-    17,     // pixel lighting (biased vertex normals), four bones
-    17,     // pixel lighting (biased vertex normals), four bones, no fog
+    15,     // pixel Lighting (biased vertex normals), one bone
+    15,     // pixel Lighting (biased vertex normals), one bone, no fog
+    16,     // pixel Lighting (biased vertex normals), two bones
+    16,     // pixel Lighting (biased vertex normals), two bones, no fog
+    17,     // pixel Lighting (biased vertex normals), four bones
+    17,     // pixel Lighting (biased vertex normals), four bones, no fog
 };
 
 
@@ -220,47 +220,47 @@ const ShaderBytecode EffectBase<SkinnedEffectTraits>::PixelShaderBytecode[] =
 template<>
 const int EffectBase<SkinnedEffectTraits>::PixelShaderIndices[] =
 {
-    0,      // vertex lighting, one bone
-    1,      // vertex lighting, one bone, no fog
-    0,      // vertex lighting, two bones
-    1,      // vertex lighting, two bones, no fog
-    0,      // vertex lighting, four bones
-    1,      // vertex lighting, four bones, no fog
+    0,      // vertex Lighting, one bone
+    1,      // vertex Lighting, one bone, no fog
+    0,      // vertex Lighting, two bones
+    1,      // vertex Lighting, two bones, no fog
+    0,      // vertex Lighting, four bones
+    1,      // vertex Lighting, four bones, no fog
     
-    0,      // one light, one bone
-    1,      // one light, one bone, no fog
-    0,      // one light, two bones
-    1,      // one light, two bones, no fog
-    0,      // one light, four bones
-    1,      // one light, four bones, no fog
+    0,      // one Light, one bone
+    1,      // one Light, one bone, no fog
+    0,      // one Light, two bones
+    1,      // one Light, two bones, no fog
+    0,      // one Light, four bones
+    1,      // one Light, four bones, no fog
     
-    2,      // pixel lighting, one bone
-    2,      // pixel lighting, one bone, no fog
-    2,      // pixel lighting, two bones
-    2,      // pixel lighting, two bones, no fog
-    2,      // pixel lighting, four bones
-    2,      // pixel lighting, four bones, no fog
+    2,      // pixel Lighting, one bone
+    2,      // pixel Lighting, one bone, no fog
+    2,      // pixel Lighting, two bones
+    2,      // pixel Lighting, two bones, no fog
+    2,      // pixel Lighting, four bones
+    2,      // pixel Lighting, four bones, no fog
 
-    0,      // vertex lighting (biased vertex normals), one bone
-    1,      // vertex lighting (biased vertex normals), one bone, no fog
-    0,      // vertex lighting (biased vertex normals), two bones
-    1,      // vertex lighting (biased vertex normals), two bones, no fog
-    0,      // vertex lighting (biased vertex normals), four bones
-    1,      // vertex lighting (biased vertex normals), four bones, no fog
+    0,      // vertex Lighting (biased vertex normals), one bone
+    1,      // vertex Lighting (biased vertex normals), one bone, no fog
+    0,      // vertex Lighting (biased vertex normals), two bones
+    1,      // vertex Lighting (biased vertex normals), two bones, no fog
+    0,      // vertex Lighting (biased vertex normals), four bones
+    1,      // vertex Lighting (biased vertex normals), four bones, no fog
 
-    0,      // one light (biased vertex normals), one bone
-    1,      // one light (biased vertex normals), one bone, no fog
-    0,      // one light (biased vertex normals), two bones
-    1,      // one light (biased vertex normals), two bones, no fog
-    0,      // one light (biased vertex normals), four bones
-    1,      // one light (biased vertex normals), four bones, no fog
+    0,      // one Light (biased vertex normals), one bone
+    1,      // one Light (biased vertex normals), one bone, no fog
+    0,      // one Light (biased vertex normals), two bones
+    1,      // one Light (biased vertex normals), two bones, no fog
+    0,      // one Light (biased vertex normals), four bones
+    1,      // one Light (biased vertex normals), four bones, no fog
 
-    2,      // pixel lighting (biased vertex normals), one bone
-    2,      // pixel lighting (biased vertex normals), one bone, no fog
-    2,      // pixel lighting (biased vertex normals), two bones
-    2,      // pixel lighting (biased vertex normals), two bones, no fog
-    2,      // pixel lighting (biased vertex normals), four bones
-    2,      // pixel lighting (biased vertex normals), four bones, no fog
+    2,      // pixel Lighting (biased vertex normals), one bone
+    2,      // pixel Lighting (biased vertex normals), one bone, no fog
+    2,      // pixel Lighting (biased vertex normals), two bones
+    2,      // pixel Lighting (biased vertex normals), two bones, no fog
+    2,      // pixel Lighting (biased vertex normals), four bones
+    2,      // pixel Lighting (biased vertex normals), four bones, no fog
 };
 
 
@@ -281,7 +281,7 @@ SkinnedEffect::Impl::Impl(_In_ ID3D11Device* device)
     static_assert(static_cast<int>(std::size(EffectBase<SkinnedEffectTraits>::PixelShaderBytecode)) == SkinnedEffectTraits::PixelShaderCount, "array/max mismatch");
     static_assert(static_cast<int>(std::size(EffectBase<SkinnedEffectTraits>::PixelShaderIndices)) == SkinnedEffectTraits::ShaderPermutationCount, "array/max mismatch");
 
-    lights.InitializeConstants(constants.specularColorAndPower, constants.lightDirection, constants.lightDiffuseColor, constants.lightSpecularColor);
+    Lights.InitializeConstants(constants.specularColorAndPower, constants.LightDirection, constants.LightDiffuseColor, constants.LightSpecularColor);
 
     for (int i = 0; i < MaxBones; i++)
     {
@@ -314,12 +314,12 @@ int SkinnedEffect::Impl::GetCurrentShaderPermutation() const noexcept
 
     if (preferPerPixelLighting)
     {
-        // Do lighting in the pixel shader.
+        // Do Lighting in the pixel shader.
         permutation += 12;
     }
-    else if (!lights.lightEnabled[1] && !lights.lightEnabled[2])
+    else if (!Lights.LightEnabled[1] && !Lights.LightEnabled[2])
     {
-        // Use the only-bother-with-the-first-light shader optimization.
+        // Use the only-bother-with-the-first-Light shader optimization.
         permutation += 6;
     }
 
@@ -341,7 +341,7 @@ void SkinnedEffect::Impl::Apply(_In_ ID3D11DeviceContext* deviceContext)
 
     fog.SetConstants(dirtyFlags, matrices.worldView, constants.fogVector);
 
-    lights.SetConstants(dirtyFlags, matrices, constants.world, constants.worldInverseTranspose, constants.eyePosition, constants.diffuseColor, constants.emissiveColor, true);
+    Lights.SetConstants(dirtyFlags, matrices, constants.world, constants.worldInverseTranspose, constants.eyePosition, constants.diffuseColor, constants.emissiveColor, true);
 
     // Set the texture.
     auto textures = texture.Get();
@@ -431,20 +431,20 @@ void XM_CALLCONV SkinnedEffect::SetMatrices(FXMMATRIX world, CXMMATRIX view, CXM
 }
 
 
-// Material settings.
+// Light settings.
 void XM_CALLCONV SkinnedEffect::SetDiffuseColor(FXMVECTOR value)
 {
-    pImpl->lights.diffuseColor = value;
+    pImpl->Lights.diffuseColor = value;
 
-    pImpl->dirtyFlags |= EffectDirtyFlags::MaterialColor;
+    pImpl->dirtyFlags |= EffectDirtyFlags::LightColor;
 }
 
 
 void XM_CALLCONV SkinnedEffect::SetEmissiveColor(FXMVECTOR value)
 {
-    pImpl->lights.emissiveColor = value;
+    pImpl->Lights.emissiveColor = value;
 
-    pImpl->dirtyFlags |= EffectDirtyFlags::MaterialColor;
+    pImpl->dirtyFlags |= EffectDirtyFlags::LightColor;
 }
 
 
@@ -469,7 +469,7 @@ void SkinnedEffect::SetSpecularPower(float value)
 void SkinnedEffect::DisableSpecular()
 {
     // Set specular color to black, power to 1
-    // Note: Don't use a power of 0 or the shader will generate strange highlights on non-specular materials
+    // Note: Don't use a power of 0 or the shader will generate strange highLights on non-specular Lights
 
     pImpl->constants.specularColorAndPower = g_XMIdentityR3; 
 
@@ -479,18 +479,18 @@ void SkinnedEffect::DisableSpecular()
 
 void SkinnedEffect::SetAlpha(float value)
 {
-    pImpl->lights.alpha = value;
+    pImpl->Lights.alpha = value;
 
-    pImpl->dirtyFlags |= EffectDirtyFlags::MaterialColor;
+    pImpl->dirtyFlags |= EffectDirtyFlags::LightColor;
 }
 
 
 void XM_CALLCONV SkinnedEffect::SetColorAndAlpha(FXMVECTOR value)
 {
-    pImpl->lights.diffuseColor = value;
-    pImpl->lights.alpha = XMVectorGetW(value);
+    pImpl->Lights.diffuseColor = value;
+    pImpl->Lights.alpha = XMVectorGetW(value);
 
-    pImpl->dirtyFlags |= EffectDirtyFlags::MaterialColor;
+    pImpl->dirtyFlags |= EffectDirtyFlags::LightColor;
 }
 
 
@@ -499,7 +499,7 @@ void SkinnedEffect::SetLightingEnabled(bool value)
 {
     if (!value)
     {
-        throw std::invalid_argument("SkinnedEffect does not support turning off lighting");
+        throw std::invalid_argument("SkinnedEffect does not support turning off Lighting");
     }
 }
 
@@ -512,15 +512,15 @@ void SkinnedEffect::SetPerPixelLighting(bool value)
 
 void XM_CALLCONV SkinnedEffect::SetAmbientLightColor(FXMVECTOR value)
 {
-    pImpl->lights.ambientLightColor = value;
+    pImpl->Lights.ambientLightColor = value;
 
-    pImpl->dirtyFlags |= EffectDirtyFlags::MaterialColor;
+    pImpl->dirtyFlags |= EffectDirtyFlags::LightColor;
 }
 
 
 void SkinnedEffect::SetLightEnabled(int whichLight, bool value)
 {
-    pImpl->dirtyFlags |= pImpl->lights.SetLightEnabled(whichLight, value, pImpl->constants.lightDiffuseColor, pImpl->constants.lightSpecularColor);
+    pImpl->dirtyFlags |= pImpl->Lights.SetLightEnabled(whichLight, value, pImpl->constants.LightDiffuseColor, pImpl->constants.LightSpecularColor);
 }
 
 
@@ -528,7 +528,7 @@ void XM_CALLCONV SkinnedEffect::SetLightDirection(int whichLight, FXMVECTOR valu
 {
     EffectLights::ValidateLightIndex(whichLight);
 
-    pImpl->constants.lightDirection[whichLight] = value;
+    pImpl->constants.LightDirection[whichLight] = value;
 
     pImpl->dirtyFlags |= EffectDirtyFlags::ConstantBuffer;
 }
@@ -536,13 +536,13 @@ void XM_CALLCONV SkinnedEffect::SetLightDirection(int whichLight, FXMVECTOR valu
 
 void XM_CALLCONV SkinnedEffect::SetLightDiffuseColor(int whichLight, FXMVECTOR value)
 {
-    pImpl->dirtyFlags |= pImpl->lights.SetLightDiffuseColor(whichLight, value, pImpl->constants.lightDiffuseColor);
+    pImpl->dirtyFlags |= pImpl->Lights.SetLightDiffuseColor(whichLight, value, pImpl->constants.LightDiffuseColor);
 }
 
 
 void XM_CALLCONV SkinnedEffect::SetLightSpecularColor(int whichLight, FXMVECTOR value)
 {
-    pImpl->dirtyFlags |= pImpl->lights.SetLightSpecularColor(whichLight, value, pImpl->constants.lightSpecularColor);
+    pImpl->dirtyFlags |= pImpl->Lights.SetLightSpecularColor(whichLight, value, pImpl->constants.LightSpecularColor);
 }
 
 

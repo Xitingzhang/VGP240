@@ -306,7 +306,7 @@ void XM_CALLCONV DebugEffect::SetMatrices(FXMMATRIX world, CXMMATRIX view, CXMMA
 }
 
 
-// Material settings.
+// Light settings.
 void DebugEffect::SetMode(Mode debugMode)
 {
     if (static_cast<int>(debugMode) < 0 || static_cast<int>(debugMode) >= DebugEffectTraits::PixelShaderCount)

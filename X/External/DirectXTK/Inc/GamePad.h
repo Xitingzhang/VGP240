@@ -172,7 +172,7 @@ namespace DirectX
                 GAMEPAD,
                 WHEEL,
                 ARCADE_STICK,
-                FLIGHT_STICK,
+                FLight_STICK,
                 DANCE_PAD,
                 GUITAR,
                 GUITAR_ALTERNATE,

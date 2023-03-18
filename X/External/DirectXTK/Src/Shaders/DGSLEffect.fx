@@ -7,13 +7,13 @@
 // http://aka.ms/vs3dkit
 //
 
-cbuffer MaterialVars : register (b0)
+cbuffer LightVars : register (b0)
 {
-    float4 MaterialAmbient;
-    float4 MaterialDiffuse;
-    float4 MaterialSpecular;
-    float4 MaterialEmissive;
-    float MaterialSpecularPower;
+    float4 LightAmbient;
+    float4 LightDiffuse;
+    float4 LightSpecular;
+    float4 LightEmissive;
+    float LightSpecularPower;
 };
   
 cbuffer ObjectVars : register(b2)
@@ -123,7 +123,7 @@ V2P main(A2V vertex)
   
     // set output data
     result.pos = mul(vertex.pos, LocalToProjected4x4);
-    result.diffuse = MaterialDiffuse;
+    result.diffuse = LightDiffuse;
     result.uv = mul(float4(vertex.uv.x, vertex.uv.y, 0, 1), UVTransform4x4).xy;
     result.worldNorm = mul(vertex.normal, (float3x3)LocalToWorld4x4);
     result.worldPos = wp;
@@ -144,7 +144,7 @@ V2P mainVc(A2V_Vc vertex)
   
     // set output data
     result.pos = mul(vertex.pos, LocalToProjected4x4);
-    result.diffuse = vertex.color * MaterialDiffuse;
+    result.diffuse = vertex.color * LightDiffuse;
     result.uv = mul(float4(vertex.uv.x, vertex.uv.y, 0, 1), UVTransform4x4).xy;
     result.worldNorm = mul(vertex.normal, (float3x3)LocalToWorld4x4);
     result.worldPos = wp;
@@ -167,7 +167,7 @@ V2P main1Bones(A2V_Weights vertex)
   
     // set output data
     result.pos = mul(vertex.pos, LocalToProjected4x4);
-    result.diffuse = MaterialDiffuse;
+    result.diffuse = LightDiffuse;
     result.uv = mul(float4(vertex.uv.x, vertex.uv.y, 0, 1), UVTransform4x4).xy;
     result.worldNorm = mul(vertex.normal, (float3x3)LocalToWorld4x4);
     result.worldPos = wp;
@@ -189,7 +189,7 @@ V2P main2Bones(A2V_Weights vertex)
   
     // set output data
     result.pos = mul(vertex.pos, LocalToProjected4x4);
-    result.diffuse = MaterialDiffuse;
+    result.diffuse = LightDiffuse;
     result.uv = mul(float4(vertex.uv.x, vertex.uv.y, 0, 1), UVTransform4x4).xy;
     result.worldNorm = mul(vertex.normal, (float3x3)LocalToWorld4x4);
     result.worldPos = wp;
@@ -211,7 +211,7 @@ V2P main4Bones(A2V_Weights vertex)
   
     // set output data
     result.pos = mul(vertex.pos, LocalToProjected4x4);
-    result.diffuse = MaterialDiffuse;
+    result.diffuse = LightDiffuse;
     result.uv = mul(float4(vertex.uv.x, vertex.uv.y, 0, 1), UVTransform4x4).xy;
     result.worldNorm = mul(vertex.normal, (float3x3)LocalToWorld4x4);
     result.worldPos = wp;
@@ -234,7 +234,7 @@ V2P main1BonesVc(A2V_WeightsVc vertex)
   
     // set output data
     result.pos = mul(vertex.pos, LocalToProjected4x4);
-    result.diffuse = vertex.color * MaterialDiffuse;
+    result.diffuse = vertex.color * LightDiffuse;
     result.uv = mul(float4(vertex.uv.x, vertex.uv.y, 0, 1), UVTransform4x4).xy;
     result.worldNorm = mul(vertex.normal, (float3x3)LocalToWorld4x4);
     result.worldPos = wp;
@@ -256,7 +256,7 @@ V2P main2BonesVc(A2V_WeightsVc vertex)
   
     // set output data
     result.pos = mul(vertex.pos, LocalToProjected4x4);
-    result.diffuse = vertex.color * MaterialDiffuse;
+    result.diffuse = vertex.color * LightDiffuse;
     result.uv = mul(float4(vertex.uv.x, vertex.uv.y, 0, 1), UVTransform4x4).xy;
     result.worldNorm = mul(vertex.normal, (float3x3)LocalToWorld4x4);
     result.worldPos = wp;
@@ -278,7 +278,7 @@ V2P main4BonesVc(A2V_WeightsVc vertex)
   
     // set output data
     result.pos = mul(vertex.pos, LocalToProjected4x4);
-    result.diffuse = vertex.color * MaterialDiffuse;
+    result.diffuse = vertex.color * LightDiffuse;
     result.uv = mul(float4(vertex.uv.x, vertex.uv.y, 0, 1), UVTransform4x4).xy;
     result.worldNorm = mul(vertex.normal, (float3x3)LocalToWorld4x4);
     result.worldPos = wp;

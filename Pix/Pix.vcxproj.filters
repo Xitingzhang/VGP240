@@ -138,6 +138,21 @@
     <ClCompile Include="Light.cpp">
       <Filter>Gra</Filter>
     </ClCompile>
+    <ClCompile Include="LightManager.cpp">
+      <Filter>Gra</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialManager.cpp">
+      <Filter>Gra</Filter>
+    </ClCompile>
+    <ClCompile Include="CmdLights.cpp">
+      <Filter>Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="CmdMaterial.cpp">
+      <Filter>Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectionalLight.cpp">
+      <Filter>Gra</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TextEditor.h">
@@ -270,6 +285,21 @@
       <Filter>Commands</Filter>
     </ClInclude>
     <ClInclude Include="Light.h">
+      <Filter>Gra</Filter>
+    </ClInclude>
+    <ClInclude Include="LightManager.h">
+      <Filter>Gra</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialManager.h">
+      <Filter>Gra</Filter>
+    </ClInclude>
+    <ClInclude Include="CmdLights.h">
+      <Filter>Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="CmdMaterial.h">
+      <Filter>Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectionalLight.h">
       <Filter>Gra</Filter>
     </ClInclude>
   </ItemGroup>

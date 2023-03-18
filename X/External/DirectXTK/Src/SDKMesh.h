@@ -27,7 +27,7 @@ namespace DXUT
     // SDKMESH_MESH                 header->MeshDataOffset
     // SDKMESH_SUBSET               header->SubsetDataOffset
     // SDKMESH_FRAME                header->FrameDataOffset
-    // SDKMESH_MATERIAL             header->MaterialDataOffset
+    // SDKMESH_Light             header->LightDataOffset
     // [header->NonBufferDataSize]
     // { [ header->NumVertexBuffers]
     //      VB data
@@ -114,12 +114,12 @@ namespace DXUT
     constexpr uint32_t MAX_FRAME_NAME = 100;
     constexpr uint32_t MAX_MESH_NAME = 100;
     constexpr uint32_t MAX_SUBSET_NAME = 100;
-    constexpr uint32_t MAX_MATERIAL_NAME = 100;
+    constexpr uint32_t MAX_Light_NAME = 100;
     constexpr uint32_t MAX_TEXTURE_NAME = MAX_PATH;
-    constexpr uint32_t MAX_MATERIAL_PATH = MAX_PATH;
+    constexpr uint32_t MAX_Light_PATH = MAX_PATH;
     constexpr uint32_t INVALID_FRAME = uint32_t(-1);
     constexpr uint32_t INVALID_MESH =  uint32_t(-1);
-    constexpr uint32_t INVALID_MATERIAL = uint32_t(-1);
+    constexpr uint32_t INVALID_Light = uint32_t(-1);
     constexpr uint32_t INVALID_SUBSET = uint32_t(-1);
     constexpr uint32_t INVALID_ANIMATION_DATA = uint32_t(-1);
 
@@ -173,7 +173,7 @@ namespace DXUT
         uint32_t NumMeshes;
         uint32_t NumTotalSubsets;
         uint32_t NumFrames;
-        uint32_t NumMaterials;
+        uint32_t NumLights;
 
         //Offsets to Data
         uint64_t VertexStreamHeadersOffset;
@@ -181,7 +181,7 @@ namespace DXUT
         uint64_t MeshDataOffset;
         uint64_t SubsetDataOffset;
         uint64_t FrameDataOffset;
-        uint64_t MaterialDataOffset;
+        uint64_t LightDataOffset;
     };
 
     struct SDKMESH_VERTEX_BUFFER_HEADER
@@ -228,7 +228,7 @@ namespace DXUT
     struct SDKMESH_SUBSET
     {
         char Name[MAX_SUBSET_NAME];
-        uint32_t MaterialID;
+        uint32_t LightID;
         uint32_t PrimitiveType;
         uint64_t IndexStart;
         uint64_t IndexCount;
@@ -247,14 +247,14 @@ namespace DXUT
         uint32_t AnimationDataIndex;		//Used to index which set of keyframes transforms this frame
     };
 
-    struct SDKMESH_MATERIAL
+    struct SDKMESH_Light
     {
-        char    Name[MAX_MATERIAL_NAME];
+        char    Name[MAX_Light_NAME];
 
-        // Use MaterialInstancePath
-        char    MaterialInstancePath[MAX_MATERIAL_PATH];
+        // Use LightInstancePath
+        char    LightInstancePath[MAX_Light_PATH];
 
-        // Or fall back to d3d8-type materials
+        // Or fall back to d3d8-type Lights
         char    DiffuseTexture[MAX_TEXTURE_NAME];
         char    NormalTexture[MAX_TEXTURE_NAME];
         char    SpecularTexture[MAX_TEXTURE_NAME];
@@ -273,11 +273,11 @@ namespace DXUT
         uint64_t Force64_6;
     };
 
-    struct SDKMESH_MATERIAL_V2
+    struct SDKMESH_Light_V2
     {
-        char    Name[MAX_MATERIAL_NAME];
+        char    Name[MAX_Light_NAME];
 
-        // PBR materials
+        // PBR Lights
         char    RMATexture[MAX_TEXTURE_NAME];
         char    AlbetoTexture[MAX_TEXTURE_NAME];
         char    NormalTexture[MAX_TEXTURE_NAME];
@@ -331,8 +331,8 @@ static_assert( sizeof(DXUT::SDKMESH_INDEX_BUFFER_HEADER) == 32, "SDK Mesh struct
 static_assert( sizeof(DXUT::SDKMESH_MESH) == 224, "SDK Mesh structure size incorrect" );
 static_assert( sizeof(DXUT::SDKMESH_SUBSET) == 144, "SDK Mesh structure size incorrect" );
 static_assert( sizeof(DXUT::SDKMESH_FRAME) == 184, "SDK Mesh structure size incorrect" );
-static_assert( sizeof(DXUT::SDKMESH_MATERIAL) == 1256, "SDK Mesh structure size incorrect" );
-static_assert( sizeof(DXUT::SDKMESH_MATERIAL_V2) == sizeof(DXUT::SDKMESH_MATERIAL), "SDK Mesh structure size incorrect" );
+static_assert( sizeof(DXUT::SDKMESH_Light) == 1256, "SDK Mesh structure size incorrect" );
+static_assert( sizeof(DXUT::SDKMESH_Light_V2) == sizeof(DXUT::SDKMESH_Light), "SDK Mesh structure size incorrect" );
 static_assert( sizeof(DXUT::SDKANIMATION_FILE_HEADER) == 40, "SDK Mesh structure size incorrect" );
 static_assert( sizeof(DXUT::SDKANIMATION_DATA) == 40, "SDK Mesh structure size incorrect" );
 static_assert( sizeof(DXUT::SDKANIMATION_FRAME_DATA) == 112, "SDK Mesh structure size incorrect" );

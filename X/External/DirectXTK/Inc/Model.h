@@ -44,7 +44,7 @@ namespace DirectX
         ModelLoader_Clockwise           = 0x0,
         ModelLoader_CounterClockwise    = 0x1,
         ModelLoader_PremultipledAlpha   = 0x2,
-        ModelLoader_MaterialColorsSRGB  = 0x4,
+        ModelLoader_LightColorsSRGB  = 0x4,
         ModelLoader_AllowLargeModels    = 0x8,
     };
 

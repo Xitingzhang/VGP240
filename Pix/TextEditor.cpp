@@ -973,7 +973,7 @@ void TextEditor::Render()
 			{
 				auto focused = ImGui::IsWindowFocused();
 
-				// Highlight the current line (where the cursor is)
+				// HighLight the current line (where the cursor is)
 				if (!HasSelection())
 				{
 					auto end = ImVec2(start.x + contentSize.x + scrollX, start.y + mCharAdvance.y);

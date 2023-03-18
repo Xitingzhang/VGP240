@@ -22,8 +22,8 @@ struct PBREffectConstants
     XMMATRIX worldViewProj;
     XMMATRIX prevWorldViewProj; // for velocity generation
 
-    XMVECTOR lightDirection[IEffectLights::MaxDirectionalLights];
-    XMVECTOR lightDiffuseColor[IEffectLights::MaxDirectionalLights];
+    XMVECTOR LightDirection[IEffectLights::MaxDirectionalLights];
+    XMVECTOR LightDiffuseColor[IEffectLights::MaxDirectionalLights];
 
     // PBR Parameters
     XMVECTOR Albedo;
@@ -68,7 +68,7 @@ public:
     bool biasedVertexNormals;
     bool velocityEnabled;
 
-    XMVECTOR lightColor[MaxDirectionalLights];
+    XMVECTOR LightColor[MaxDirectionalLights];
 
     int GetCurrentShaderPermutation() const noexcept;
 
@@ -168,7 +168,7 @@ PBREffect::Impl::Impl(_In_ ID3D11Device* device)
     : EffectBase(device),
     biasedVertexNormals(false),
     velocityEnabled(false),
-    lightColor{}
+    LightColor{}
 {
     if (device->GetFeatureLevel() < D3D_FEATURE_LEVEL_10_0)
     {
@@ -184,9 +184,9 @@ PBREffect::Impl::Impl(_In_ ID3D11Device* device)
     static const XMVECTORF32 defaultLightDirection = { { { 0, -1, 0, 0 } } };
     for (int i = 0; i < MaxDirectionalLights; i++)
     {
-        lightColor[i] = g_XMOne;
-        constants.lightDirection[i] = defaultLightDirection;
-        constants.lightDiffuseColor[i] = g_XMZero;
+        LightColor[i] = g_XMOne;
+        constants.LightDirection[i] = defaultLightDirection;
+        constants.LightDiffuseColor[i] = g_XMZero;
     }
 
     // Default PBR values
@@ -366,7 +366,7 @@ void PBREffect::SetLightingEnabled(bool value)
 {
     if (!value)
     {
-        throw std::invalid_argument("PBREffect does not support turning off lighting");
+        throw std::invalid_argument("PBREffect does not support turning off Lighting");
     }
 }
 
@@ -387,7 +387,7 @@ void PBREffect::SetLightEnabled(int whichLight, bool value)
 {
     EffectLights::ValidateLightIndex(whichLight);
 
-    pImpl->constants.lightDiffuseColor[whichLight] = (value) ? pImpl->lightColor[whichLight] : g_XMZero;
+    pImpl->constants.LightDiffuseColor[whichLight] = (value) ? pImpl->LightColor[whichLight] : g_XMZero;
 
     pImpl->dirtyFlags |= EffectDirtyFlags::ConstantBuffer;
 }
@@ -397,7 +397,7 @@ void XM_CALLCONV PBREffect::SetLightDirection(int whichLight, FXMVECTOR value)
 {
     EffectLights::ValidateLightIndex(whichLight);
 
-    pImpl->constants.lightDirection[whichLight] = value;
+    pImpl->constants.LightDirection[whichLight] = value;
 
     pImpl->dirtyFlags |= EffectDirtyFlags::ConstantBuffer;
 }
@@ -407,8 +407,8 @@ void XM_CALLCONV PBREffect::SetLightDiffuseColor(int whichLight, FXMVECTOR value
 {
     EffectLights::ValidateLightIndex(whichLight);
 
-    pImpl->lightColor[whichLight] = value;
-    pImpl->constants.lightDiffuseColor[whichLight] = value;
+    pImpl->LightColor[whichLight] = value;
+    pImpl->constants.LightDiffuseColor[whichLight] = value;
 
     pImpl->dirtyFlags |= EffectDirtyFlags::ConstantBuffer;
 }

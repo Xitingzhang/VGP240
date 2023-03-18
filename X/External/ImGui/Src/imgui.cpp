@@ -858,12 +858,12 @@ CODE
 #endif
 
 // When using CTRL+TAB (or Gamepad Square+L/R) we delay the visual a little in order to reduce visual noise doing a fast switch.
-static const float NAV_WINDOWING_HIGHLIGHT_DELAY            = 0.20f;    // Time before the highlight and screen dimming starts fading in
+static const float NAV_WINDOWING_HIGHLight_DELAY            = 0.20f;    // Time before the highLight and screen dimming starts fading in
 static const float NAV_WINDOWING_LIST_APPEAR_DELAY          = 0.15f;    // Time before the window list starts to appear
 
 // Window resizing from edges (when io.ConfigWindowsResizeFromEdges = true and ImGuiBackendFlags_HasMouseCursors is set in io.BackendFlags by back-end)
 static const float WINDOWS_RESIZE_FROM_EDGES_HALF_THICKNESS = 4.0f;     // Extend outside and inside windows. Affect FindHoveredWindow().
-static const float WINDOWS_RESIZE_FROM_EDGES_FEEDBACK_TIMER = 0.04f;    // Reduce visual noise by only highlighting the border after a certain time.
+static const float WINDOWS_RESIZE_FROM_EDGES_FEEDBACK_TIMER = 0.04f;    // Reduce visual noise by only highLighting the border after a certain time.
 static const float WINDOWS_MOUSE_WHEEL_SCROLL_LOCK_TIMER    = 2.00f;    // Lock scrolled window (so it doesn't pick child windows that are scrolling through) for a certaint time, unless mouse moved.
 
 // Docking
@@ -917,7 +917,7 @@ static void             UpdateMouseWheel();
 static bool             UpdateManualResize(ImGuiWindow* window, const ImVec2& size_auto_fit, int* border_held, int resize_grip_count, ImU32 resize_grip_col[4]);
 static void             UpdateDebugToolItemPicker();
 static void             RenderWindowOuterBorders(ImGuiWindow* window);
-static void             RenderWindowDecorations(ImGuiWindow* window, const ImRect& title_bar_rect, bool title_bar_is_highlight, bool handle_borders_and_resize_grips, int resize_grip_count, const ImU32 resize_grip_col[4], float resize_grip_draw_size);
+static void             RenderWindowDecorations(ImGuiWindow* window, const ImRect& title_bar_rect, bool title_bar_is_highLight, bool handle_borders_and_resize_grips, int resize_grip_count, const ImU32 resize_grip_col[4], float resize_grip_draw_size);
 static void             RenderWindowTitleBarContents(ImGuiWindow* window, const ImRect& title_bar_rect, const char* name, bool* p_open);
 static void             EndFrameDrawDimmedBackgrounds();
 
@@ -2591,21 +2591,21 @@ void ImGui::RenderCheckMark(ImVec2 pos, ImU32 col, float sz)
     window->DrawList->PathStroke(col, false, thickness);
 }
 
-void ImGui::RenderNavHighlight(const ImRect& bb, ImGuiID id, ImGuiNavHighlightFlags flags)
+void ImGui::RenderNavHighLight(const ImRect& bb, ImGuiID id, ImGuiNavHighLightFlags flags)
 {
     ImGuiContext& g = *GImGui;
     if (id != g.NavId)
         return;
-    if (g.NavDisableHighlight && !(flags & ImGuiNavHighlightFlags_AlwaysDraw))
+    if (g.NavDisableHighLight && !(flags & ImGuiNavHighLightFlags_AlwaysDraw))
         return;
     ImGuiWindow* window = g.CurrentWindow;
-    if (window->DC.NavHideHighlightOneFrame)
+    if (window->DC.NavHideHighLightOneFrame)
         return;
 
-    float rounding = (flags & ImGuiNavHighlightFlags_NoRounding) ? 0.0f : g.Style.FrameRounding;
+    float rounding = (flags & ImGuiNavHighLightFlags_NoRounding) ? 0.0f : g.Style.FrameRounding;
     ImRect display_rect = bb;
     display_rect.ClipWith(window->ClipRect);
-    if (flags & ImGuiNavHighlightFlags_TypeDefault)
+    if (flags & ImGuiNavHighLightFlags_TypeDefault)
     {
         const float THICKNESS = 2.0f;
         const float DISTANCE = 3.0f + THICKNESS * 0.5f;
@@ -2613,13 +2613,13 @@ void ImGui::RenderNavHighlight(const ImRect& bb, ImGuiID id, ImGuiNavHighlightFl
         bool fully_visible = window->ClipRect.Contains(display_rect);
         if (!fully_visible)
             window->DrawList->PushClipRect(display_rect.Min, display_rect.Max);
-        window->DrawList->AddRect(display_rect.Min + ImVec2(THICKNESS*0.5f,THICKNESS*0.5f), display_rect.Max - ImVec2(THICKNESS*0.5f,THICKNESS*0.5f), GetColorU32(ImGuiCol_NavHighlight), rounding, ImDrawCornerFlags_All, THICKNESS);
+        window->DrawList->AddRect(display_rect.Min + ImVec2(THICKNESS*0.5f,THICKNESS*0.5f), display_rect.Max - ImVec2(THICKNESS*0.5f,THICKNESS*0.5f), GetColorU32(ImGuiCol_NavHighLight), rounding, ImDrawCornerFlags_All, THICKNESS);
         if (!fully_visible)
             window->DrawList->PopClipRect();
     }
-    if (flags & ImGuiNavHighlightFlags_TypeThin)
+    if (flags & ImGuiNavHighLightFlags_TypeThin)
     {
-        window->DrawList->AddRect(display_rect.Min, display_rect.Max, GetColorU32(ImGuiCol_NavHighlight), rounding, ~0, 1.0f);
+        window->DrawList->AddRect(display_rect.Min, display_rect.Max, GetColorU32(ImGuiCol_NavHighLight), rounding, ~0, 1.0f);
     }
 }
 
@@ -2690,7 +2690,7 @@ ImGuiWindow::ImGuiWindow(ImGuiContext* context, const char* name)
     ParentWindow = NULL;
     RootWindow = NULL;
     RootWindowDockStop = NULL;
-    RootWindowForTitleBarHighlight = NULL;
+    RootWindowForTitleBarHighLight = NULL;
     RootWindowForNav = NULL;
 
     NavLastIds[0] = NavLastIds[1] = 0;
@@ -2820,7 +2820,7 @@ void ImGui::SetNavIDWithRectRel(ImGuiID id, int nav_layer, const ImRect& rect_re
     SetNavID(id, nav_layer);
     g.NavWindow->NavRectRel[nav_layer] = rect_rel;
     g.NavMousePosDirty = true;
-    g.NavDisableHighlight = false;
+    g.NavDisableHighLight = false;
     g.NavDisableMouseHover = true;
 }
 
@@ -2876,7 +2876,7 @@ void ImGui::SetFocusID(ImGuiID id, ImGuiWindow* window)
     if (g.ActiveIdSource == ImGuiInputSource_Nav)
         g.NavDisableMouseHover = true;
     else
-        g.NavDisableHighlight = true;
+        g.NavDisableHighLight = true;
 }
 
 void ImGui::ClearActiveID()
@@ -3049,7 +3049,7 @@ bool ImGui::IsItemHovered(ImGuiHoveredFlags flags)
 {
     ImGuiContext& g = *GImGui;
     ImGuiWindow* window = g.CurrentWindow;
-    if (g.NavDisableMouseHover && !g.NavDisableHighlight)
+    if (g.NavDisableMouseHover && !g.NavDisableHighLight)
         return IsItemFocused();
 
     // Test for bounding box overlap, as updated as ItemAdd()
@@ -3086,7 +3086,7 @@ bool ImGui::IsItemHovered(ImGuiHoveredFlags flags)
     return true;
 }
 
-// Internal facing ItemHoverable() used when submitting widgets. Differs slightly from IsItemHovered().
+// Internal facing ItemHoverable() used when submitting widgets. Differs sLightly from IsItemHovered().
 bool ImGui::ItemHoverable(const ImRect& bb, ImGuiID id)
 {
     ImGuiContext& g = *GImGui;
@@ -3109,7 +3109,7 @@ bool ImGui::ItemHoverable(const ImRect& bb, ImGuiID id)
 
     // [DEBUG] Item Picker tool!
     // We perform the check here because SetHoveredID() is not frequently called (1~ time a frame), making
-    // the cost of this tool near-zero. We can get slightly better call-stack and support picking non-hovered
+    // the cost of this tool near-zero. We can get sLightly better call-stack and support picking non-hovered
     // items if we perform the test in ItemAdd(), but that would incur a small runtime cost.
     // #define IMGUI_DEBUG_TOOL_ITEM_PICKER_EX in imconfig.h if you want this check to also be performed in ItemAdd().
     if (g.DebugItemPickerActive && g.HoveredIdPreviousFrame == id)
@@ -3378,7 +3378,7 @@ void ImGui::StartMouseMovingWindow(ImGuiWindow* window)
     ImGuiContext& g = *GImGui;
     FocusWindow(window);
     SetActiveID(window->MoveId, window);
-    g.NavDisableHighlight = true;
+    g.NavDisableHighLight = true;
     g.ActiveIdClickOffset = g.IO.MousePos - window->RootWindow->Pos;
 
     bool can_move_window = true;
@@ -3975,7 +3975,7 @@ void ImGui::NewFrame()
     UpdateMouseMovingWindowNewFrame();
 
     // Background darkening/whitening
-    if (GetTopMostPopupModal() != NULL || (g.NavWindowingTarget != NULL && g.NavWindowingHighlightAlpha > 0.0f))
+    if (GetTopMostPopupModal() != NULL || (g.NavWindowingTarget != NULL && g.NavWindowingHighLightAlpha > 0.0f))
         g.DimBgRatio = ImMin(g.DimBgRatio + g.IO.DeltaTime * 6.0f, 1.0f);
     else
         g.DimBgRatio = ImMax(g.DimBgRatio - g.IO.DeltaTime * 10.0f, 0.0f);
@@ -4409,12 +4409,12 @@ static void ImGui::EndFrameDrawDimmedBackgrounds()
         float rounding = ImMax(window->WindowRounding, g.Style.WindowRounding);
         ImRect bb = window->Rect();
         bb.Expand(g.FontSize);
-        if (bb.Contains(window->Viewport->GetRect())) // If a window fits the entire viewport, adjust its highlight inward
+        if (bb.Contains(window->Viewport->GetRect())) // If a window fits the entire viewport, adjust its highLight inward
         {
             bb.Expand(-g.FontSize - 1.0f);
             rounding = window->WindowRounding;
         }
-        draw_list->AddRect(bb.Min, bb.Max, GetColorU32(ImGuiCol_NavWindowingHighlight, g.NavWindowingHighlightAlpha), rounding, ~0, 3.0f);
+        draw_list->AddRect(bb.Min, bb.Max, GetColorU32(ImGuiCol_NavWindowingHighLight, g.NavWindowingHighLightAlpha), rounding, ~0, 3.0f);
         draw_list->PopClipRect();
     }
 }
@@ -4933,7 +4933,7 @@ bool ImGui::IsItemFocused()
     ImGuiContext& g = *GImGui;
     ImGuiWindow* window = g.CurrentWindow;
 
-    if (g.NavId == 0 || g.NavDisableHighlight || g.NavId != window->DC.LastItemId)
+    if (g.NavId == 0 || g.NavDisableHighLight || g.NavId != window->DC.LastItemId)
         return false;
 
     // Special handling for the dummy item after Begin() which represent the title bar or tab.
@@ -4976,7 +4976,7 @@ bool ImGui::IsAnyItemActive()
 bool ImGui::IsAnyItemFocused()
 {
     ImGuiContext& g = *GImGui;
-    return g.NavId != 0 && !g.NavDisableHighlight;
+    return g.NavId != 0 && !g.NavDisableHighLight;
 }
 
 bool ImGui::IsItemVisible()
@@ -5110,11 +5110,11 @@ void ImGui::EndChild()
         if ((window->DC.NavLayerActiveMask != 0 || window->DC.NavHasScroll) && !(window->Flags & ImGuiWindowFlags_NavFlattened))
         {
             ItemAdd(bb, window->ChildId);
-            RenderNavHighlight(bb, window->ChildId);
+            RenderNavHighLight(bb, window->ChildId);
 
-            // When browsing a window that has no activable items (scroll only) we keep a highlight on the child
+            // When browsing a window that has no activable items (scroll only) we keep a highLight on the child
             if (window->DC.NavLayerActiveMask == 0 && window == g.NavWindow)
-                RenderNavHighlight(ImRect(bb.Min - ImVec2(2,2), bb.Max + ImVec2(2,2)), g.NavId, ImGuiNavHighlightFlags_TypeThin);
+                RenderNavHighLight(ImRect(bb.Min - ImVec2(2,2), bb.Max + ImVec2(2,2)), g.NavId, ImGuiNavHighLightFlags_TypeThin);
         }
         else
         {
@@ -5576,7 +5576,7 @@ static void ImGui::RenderWindowOuterBorders(ImGuiWindow* window)
 
 // Draw background and borders
 // Draw and handle scrollbars
-void ImGui::RenderWindowDecorations(ImGuiWindow* window, const ImRect& title_bar_rect, bool title_bar_is_highlight, bool handle_borders_and_resize_grips, int resize_grip_count, const ImU32 resize_grip_col[4], float resize_grip_draw_size)
+void ImGui::RenderWindowDecorations(ImGuiWindow* window, const ImRect& title_bar_rect, bool title_bar_is_highLight, bool handle_borders_and_resize_grips, int resize_grip_count, const ImU32 resize_grip_col[4], float resize_grip_draw_size)
 {
     ImGuiContext& g = *GImGui;
     ImGuiStyle& style = g.Style;
@@ -5586,7 +5586,7 @@ void ImGui::RenderWindowDecorations(ImGuiWindow* window, const ImRect& title_bar
     window->SkipItems = false;
 
     // Draw window + handle manual resize
-    // As we highlight the title bar when want_focus is set, multiple reappearing windows will have have their title bar highlighted on their reappearing frame.
+    // As we highLight the title bar when want_focus is set, multiple reappearing windows will have have their title bar highLighted on their reappearing frame.
     const float window_rounding = window->WindowRounding;
     const float window_border_size = window->WindowBorderSize;
     if (window->Collapsed)
@@ -5594,7 +5594,7 @@ void ImGui::RenderWindowDecorations(ImGuiWindow* window, const ImRect& title_bar
         // Title bar only
         float backup_border_size = style.FrameBorderSize;
         g.Style.FrameBorderSize = window->WindowBorderSize;
-        ImU32 title_bar_col = GetColorU32((title_bar_is_highlight && !g.NavDisableHighlight) ? ImGuiCol_TitleBgActive : ImGuiCol_TitleBgCollapsed);
+        ImU32 title_bar_col = GetColorU32((title_bar_is_highLight && !g.NavDisableHighLight) ? ImGuiCol_TitleBgActive : ImGuiCol_TitleBgCollapsed);
         RenderFrame(title_bar_rect.Min, title_bar_rect.Max, title_bar_col, true, window_rounding);
         g.Style.FrameBorderSize = backup_border_size;
     }
@@ -5635,7 +5635,7 @@ void ImGui::RenderWindowDecorations(ImGuiWindow* window, const ImRect& title_bar
         // in order for their pos/size to be matching their undocking state.)
         if (!(flags & ImGuiWindowFlags_NoTitleBar) && !window->DockIsActive)
         {
-            ImU32 title_bar_col = GetColorU32(title_bar_is_highlight ? ImGuiCol_TitleBgActive : ImGuiCol_TitleBg);
+            ImU32 title_bar_col = GetColorU32(title_bar_is_highLight ? ImGuiCol_TitleBgActive : ImGuiCol_TitleBg);
             window->DrawList->AddRectFilled(title_bar_rect.Min, title_bar_rect.Max, title_bar_col, window_rounding, ImDrawCornerFlags_Top);
         }
 
@@ -5783,7 +5783,7 @@ void ImGui::RenderWindowTitleBarContents(ImGuiWindow* window, const ImRect& titl
 void ImGui::UpdateWindowParentAndRootLinks(ImGuiWindow* window, ImGuiWindowFlags flags, ImGuiWindow* parent_window)
 {
     window->ParentWindow = parent_window;
-    window->RootWindow = window->RootWindowDockStop = window->RootWindowForTitleBarHighlight = window->RootWindowForNav = window;
+    window->RootWindow = window->RootWindowDockStop = window->RootWindowForTitleBarHighLight = window->RootWindowForNav = window;
     if (parent_window && (flags & ImGuiWindowFlags_ChildWindow) && !(flags & ImGuiWindowFlags_Tooltip))
     {
         window->RootWindow = parent_window->RootWindow;
@@ -5791,7 +5791,7 @@ void ImGui::UpdateWindowParentAndRootLinks(ImGuiWindow* window, ImGuiWindowFlags
             window->RootWindowDockStop = parent_window->RootWindowDockStop;
     }
     if (parent_window && !(flags & ImGuiWindowFlags_Modal) && (flags & (ImGuiWindowFlags_ChildWindow | ImGuiWindowFlags_Popup)))
-        window->RootWindowForTitleBarHighlight = parent_window->RootWindowForTitleBarHighlight;
+        window->RootWindowForTitleBarHighLight = parent_window->RootWindowForTitleBarHighLight;
     while (window->RootWindowForNav->Flags & ImGuiWindowFlags_NavFlattened)
     {
         IM_ASSERT(window->RootWindowForNav->ParentWindow != NULL);
@@ -6371,7 +6371,7 @@ bool ImGui::Begin(const char* name, bool* p_open, ImGuiWindowFlags flags)
             ImRect bb = window->Rect();
             bb.Expand(g.FontSize);
             if (!bb.Contains(viewport_rect)) // Avoid drawing if the window covers all the viewport anyway
-                window->DrawList->AddRectFilled(bb.Min, bb.Max, GetColorU32(ImGuiCol_NavWindowingHighlight, g.NavWindowingHighlightAlpha * 0.25f), g.Style.WindowRounding);
+                window->DrawList->AddRectFilled(bb.Min, bb.Max, GetColorU32(ImGuiCol_NavWindowingHighLight, g.NavWindowingHighLightAlpha * 0.25f), g.Style.WindowRounding);
         }
 
         const bool is_undocked_or_docked_visible = !window->DockIsActive || window->DockTabIsVisible;
@@ -6391,9 +6391,9 @@ bool ImGui::Begin(const char* name, bool* p_open, ImGuiWindowFlags flags)
                 window->DrawList = parent_window->DrawList;
 
             // Handle title bar, scrollbar, resize grips and resize borders
-            const ImGuiWindow* window_to_highlight = g.NavWindowingTarget ? g.NavWindowingTarget : g.NavWindow;
-            const bool title_bar_is_highlight = want_focus || (window_to_highlight && (window->RootWindowForTitleBarHighlight == window_to_highlight->RootWindowForTitleBarHighlight || (window->DockNode && window->DockNode == window_to_highlight->DockNode)));
-            RenderWindowDecorations(window, title_bar_rect, title_bar_is_highlight, handle_borders_and_resize_grips, resize_grip_count, resize_grip_col, resize_grip_draw_size);
+            const ImGuiWindow* window_to_highLight = g.NavWindowingTarget ? g.NavWindowingTarget : g.NavWindow;
+            const bool title_bar_is_highLight = want_focus || (window_to_highLight && (window->RootWindowForTitleBarHighLight == window_to_highLight->RootWindowForTitleBarHighLight || (window->DockNode && window->DockNode == window_to_highLight->DockNode)));
+            RenderWindowDecorations(window, title_bar_rect, title_bar_is_highLight, handle_borders_and_resize_grips, resize_grip_count, resize_grip_col, resize_grip_draw_size);
 
             if (render_decorations_in_parent)
                 window->DrawList = &window->DrawListInst;
@@ -6405,12 +6405,12 @@ bool ImGui::Begin(const char* name, bool* p_open, ImGuiWindowFlags flags)
             float rounding = ImMax(window->WindowRounding, g.Style.WindowRounding);
             ImRect bb = window->Rect();
             bb.Expand(g.FontSize);
-            if (bb.Contains(viewport_rect)) // If a window fits the entire viewport, adjust its highlight inward
+            if (bb.Contains(viewport_rect)) // If a window fits the entire viewport, adjust its highLight inward
             {
                 bb.Expand(-g.FontSize - 1.0f);
                 rounding = window->WindowRounding;
             }
-            window->DrawList->AddRect(bb.Min, bb.Max, GetColorU32(ImGuiCol_NavWindowingHighlight, g.NavWindowingHighlightAlpha), rounding, ~0, 3.0f);
+            window->DrawList->AddRect(bb.Min, bb.Max, GetColorU32(ImGuiCol_NavWindowingHighLight, g.NavWindowingHighLightAlpha), rounding, ~0, 3.0f);
         }
 
         // UPDATE RECTANGLES (2- THOSE AFFECTED BY SCROLLING)
@@ -6449,7 +6449,7 @@ bool ImGui::Begin(const char* name, bool* p_open, ImGuiWindowFlags flags)
         window->DC.CursorMaxPos = window->DC.CursorStartPos;
         window->DC.CurrLineSize = window->DC.PrevLineSize = ImVec2(0.0f, 0.0f);
         window->DC.CurrLineTextBaseOffset = window->DC.PrevLineTextBaseOffset = 0.0f;
-        window->DC.NavHideHighlightOneFrame = false;
+        window->DC.NavHideHighLightOneFrame = false;
         window->DC.NavHasScroll = (window->ScrollMax.y > 0.0f);
         window->DC.NavLayerActiveMask = window->DC.NavLayerActiveMaskNext;
         window->DC.NavLayerActiveMaskNext = 0x00;
@@ -6940,7 +6940,7 @@ void ImGui::PopTextWrapPos()
     window->DC.TextWrapPos = window->DC.TextWrapPosStack.empty() ? -1.0f : window->DC.TextWrapPosStack.back();
 }
 
-// FIXME: This may incur a round-trip (if the end user got their data from a float4) but eventually we aim to store the in-flight colors as ImU32
+// FIXME: This may incur a round-trip (if the end user got their data from a float4) but eventually we aim to store the in-fLight colors as ImU32
 void ImGui::PushStyleColor(ImGuiCol idx, ImU32 col)
 {
     ImGuiContext& g = *GImGui;
@@ -7110,8 +7110,8 @@ const char* ImGui::GetStyleColorName(ImGuiCol idx)
     case ImGuiCol_PlotHistogramHovered: return "PlotHistogramHovered";
     case ImGuiCol_TextSelectedBg: return "TextSelectedBg";
     case ImGuiCol_DragDropTarget: return "DragDropTarget";
-    case ImGuiCol_NavHighlight: return "NavHighlight";
-    case ImGuiCol_NavWindowingHighlight: return "NavWindowingHighlight";
+    case ImGuiCol_NavHighLight: return "NavHighLight";
+    case ImGuiCol_NavWindowingHighLight: return "NavWindowingHighLight";
     case ImGuiCol_NavWindowingDimBg: return "NavWindowingDimBg";
     case ImGuiCol_ModalWindowDimBg: return "ModalWindowDimBg";
     }
@@ -8318,10 +8318,10 @@ void ImGui::CloseCurrentPopup()
     ClosePopupToLevel(popup_idx, true);
 
     // A common pattern is to close a popup when selecting a menu item/selectable that will open another window.
-    // To improve this usage pattern, we avoid nav highlight for a single frame in the parent window.
-    // Similarly, we could avoid mouse hover highlight in this window but it is less visually problematic.
+    // To improve this usage pattern, we avoid nav highLight for a single frame in the parent window.
+    // Similarly, we could avoid mouse hover highLight in this window but it is less visually problematic.
     if (ImGuiWindow* window = g.NavWindow)
-        window->DC.NavHideHighlightOneFrame = true;
+        window->DC.NavHideHighLightOneFrame = true;
 }
 
 bool ImGui::BeginPopupEx(ImGuiID id, ImGuiWindowFlags flags)
@@ -8568,7 +8568,7 @@ ImVec2 ImGui::FindBestWindowPosForPopup(ImGuiWindow* window)
         ImVec2 ref_pos = NavCalcPreferredRefPos();
         ImRect r_outer = GetWindowAllowedExtentRect(window);
         ImRect r_avoid;
-        if (!g.NavDisableHighlight && g.NavDisableMouseHover && !(g.IO.ConfigFlags & ImGuiConfigFlags_NavEnableSetMousePos))
+        if (!g.NavDisableHighLight && g.NavDisableMouseHover && !(g.IO.ConfigFlags & ImGuiConfigFlags_NavEnableSetMousePos))
             r_avoid = ImRect(ref_pos.x - 16, ref_pos.y - 8, ref_pos.x + 16, ref_pos.y + 8);
         else
             r_avoid = ImRect(ref_pos.x - 16, ref_pos.y - 8, ref_pos.x + 24 * sc, ref_pos.y + 24 * sc); // FIXME: Hard-coded based on mouse cursor shape expectation. Exact dimension not very important.
@@ -8950,7 +8950,7 @@ void ImGui::NavInitWindow(ImGuiWindow* window, bool force_reinit)
 static ImVec2 ImGui::NavCalcPreferredRefPos()
 {
     ImGuiContext& g = *GImGui;
-    if (g.NavDisableHighlight || !g.NavDisableMouseHover || !g.NavWindow)
+    if (g.NavDisableHighLight || !g.NavDisableMouseHover || !g.NavWindow)
     {
         // Mouse (we need a fallback in case the mouse becomes invalid after being used)
         if (IsMousePosValid(&g.IO.MousePos))
@@ -9045,7 +9045,7 @@ static void ImGui::NavUpdate()
 
     // Process navigation init request (select first/default focus)
     // In very rare cases g.NavWindow may be null (e.g. clearing focus after requesting an init request, which does happen when releasing Alt while clicking on void)
-    if (g.NavInitResultId != 0 && (!g.NavDisableHighlight || g.NavInitRequestFromMove) && g.NavWindow)
+    if (g.NavInitResultId != 0 && (!g.NavDisableHighLight || g.NavInitRequestFromMove) && g.NavWindow)
     {
         // Apply result from previous navigation init request (will typically select the first item, unless SetItemDefaultFocus() has been called)
         //IMGUI_DEBUG_LOG("[Nav] Apply NavInitRequest result: 0x%08X Layer %d in \"%s\"\n", g.NavInitResultId, g.NavLayer, g.NavWindow->Name);
@@ -9064,12 +9064,12 @@ static void ImGui::NavUpdate()
     if (g.NavMoveRequest)
         NavUpdateMoveResult();
 
-    // When a forwarded move request failed, we restore the highlight that we disabled during the forward frame
+    // When a forwarded move request failed, we restore the highLight that we disabled during the forward frame
     if (g.NavMoveRequestForward == ImGuiNavForward_ForwardActive)
     {
         IM_ASSERT(g.NavMoveRequest);
         if (g.NavMoveResultLocal.ID == 0 && g.NavMoveResultOther.ID == 0)
-            g.NavDisableHighlight = false;
+            g.NavDisableHighLight = false;
         g.NavMoveRequestForward = ImGuiNavForward_None;
     }
 
@@ -9079,7 +9079,7 @@ static void ImGui::NavUpdate()
         // Set mouse position given our knowledge of the navigated item position from last frame
         if ((g.IO.ConfigFlags & ImGuiConfigFlags_NavEnableSetMousePos) && (g.IO.BackendFlags & ImGuiBackendFlags_HasSetMousePos))
         {
-            if (!g.NavDisableHighlight && g.NavDisableMouseHover && g.NavWindow)
+            if (!g.NavDisableHighLight && g.NavDisableMouseHover && g.NavWindow)
             {
                 g.IO.MousePos = g.IO.MousePosPrev = NavCalcPreferredRefPos();
                 g.IO.WantSetMousePos = true;
@@ -9102,7 +9102,7 @@ static void ImGui::NavUpdate()
 
     // Set output flags for user application
     g.IO.NavActive = (nav_keyboard_active || nav_gamepad_active) && g.NavWindow && !(g.NavWindow->Flags & ImGuiWindowFlags_NoNavInputs);
-    g.IO.NavVisible = (g.IO.NavActive && g.NavId != 0 && !g.NavDisableHighlight) || (g.NavWindowingTarget != NULL);
+    g.IO.NavVisible = (g.IO.NavActive && g.NavId != 0 && !g.NavDisableHighLight) || (g.NavWindowingTarget != NULL);
 
     // Process NavCancel input (to close a popup, get back to parent, clear focus)
     if (IsNavInputTest(ImGuiNavInput_Cancel, ImGuiInputReadMode_Pressed))
@@ -9146,7 +9146,7 @@ static void ImGui::NavUpdate()
 
     // Process manual activation request
     g.NavActivateId = g.NavActivateDownId = g.NavActivatePressedId = g.NavInputId = 0;
-    if (g.NavId != 0 && !g.NavDisableHighlight && !g.NavWindowingTarget && g.NavWindow && !(g.NavWindow->Flags & ImGuiWindowFlags_NoNavInputs))
+    if (g.NavId != 0 && !g.NavDisableHighLight && !g.NavWindowingTarget && g.NavWindow && !(g.NavWindow->Flags & ImGuiWindowFlags_NoNavInputs))
     {
         bool activate_down = IsNavInputDown(ImGuiNavInput_Activate);
         bool activate_pressed = activate_down && IsNavInputTest(ImGuiNavInput_Activate, ImGuiInputReadMode_Pressed);
@@ -9160,7 +9160,7 @@ static void ImGui::NavUpdate()
             g.NavInputId = g.NavId;
     }
     if (g.NavWindow && (g.NavWindow->Flags & ImGuiWindowFlags_NoNavInputs))
-        g.NavDisableHighlight = true;
+        g.NavDisableHighLight = true;
     if (g.NavActivateId != 0)
         IM_ASSERT(g.NavActivateDownId == g.NavActivateId);
     g.NavMoveRequest = false;
@@ -9211,7 +9211,7 @@ static void ImGui::NavUpdate()
         //IMGUI_DEBUG_LOG("[Nav] NavInitRequest from move, window \"%s\", layer=%d\n", g.NavWindow->Name, g.NavLayer);
         g.NavInitRequest = g.NavInitRequestFromMove = true;
         g.NavInitResultId = 0;
-        g.NavDisableHighlight = false;
+        g.NavDisableHighLight = false;
     }
     NavUpdateAnyRequestFlag();
 
@@ -9289,10 +9289,10 @@ static void ImGui::NavUpdateMoveResult()
     ImGuiContext& g = *GImGui;
     if (g.NavMoveResultLocal.ID == 0 && g.NavMoveResultOther.ID == 0)
     {
-        // In a situation when there is no results but NavId != 0, re-enable the Navigation highlight (because g.NavId is not considered as a possible result)
+        // In a situation when there is no results but NavId != 0, re-enable the Navigation highLight (because g.NavId is not considered as a possible result)
         if (g.NavId != 0)
         {
-            g.NavDisableHighlight = false;
+            g.NavDisableHighLight = false;
             g.NavDisableMouseHover = true;
         }
         return;
@@ -9435,7 +9435,7 @@ static ImGuiWindow* FindWindowNavFocusable(int i_start, int i_stop, int dir) // 
     return NULL;
 }
 
-static void NavUpdateWindowingHighlightWindow(int focus_change_dir)
+static void NavUpdateWindowingHighLightWindow(int focus_change_dir)
 {
     ImGuiContext& g = *GImGui;
     IM_ASSERT(g.NavWindowingTarget);
@@ -9470,8 +9470,8 @@ static void ImGui::NavUpdateWindowing()
     // Fade out
     if (g.NavWindowingTargetAnim && g.NavWindowingTarget == NULL)
     {
-        g.NavWindowingHighlightAlpha = ImMax(g.NavWindowingHighlightAlpha - g.IO.DeltaTime * 10.0f, 0.0f);
-        if (g.DimBgRatio <= 0.0f && g.NavWindowingHighlightAlpha <= 0.0f)
+        g.NavWindowingHighLightAlpha = ImMax(g.NavWindowingHighLightAlpha - g.IO.DeltaTime * 10.0f, 0.0f);
+        if (g.DimBgRatio <= 0.0f && g.NavWindowingHighLightAlpha <= 0.0f)
             g.NavWindowingTargetAnim = NULL;
     }
 
@@ -9482,7 +9482,7 @@ static void ImGui::NavUpdateWindowing()
         if (ImGuiWindow* window = g.NavWindow ? g.NavWindow : FindWindowNavFocusable(g.WindowsFocusOrder.Size - 1, -INT_MAX, -1))
         {
             g.NavWindowingTarget = g.NavWindowingTargetAnim = window;
-            g.NavWindowingTimer = g.NavWindowingHighlightAlpha = 0.0f;
+            g.NavWindowingTimer = g.NavWindowingHighLightAlpha = 0.0f;
             g.NavWindowingToggleLayer = start_windowing_with_keyboard ? false : true;
             g.NavInputSource = start_windowing_with_keyboard ? ImGuiInputSource_NavKeyboard : ImGuiInputSource_NavGamepad;
         }
@@ -9491,21 +9491,21 @@ static void ImGui::NavUpdateWindowing()
     g.NavWindowingTimer += g.IO.DeltaTime;
     if (g.NavWindowingTarget && g.NavInputSource == ImGuiInputSource_NavGamepad)
     {
-        // Highlight only appears after a brief time holding the button, so that a fast tap on PadMenu (to toggle NavLayer) doesn't add visual noise
-        g.NavWindowingHighlightAlpha = ImMax(g.NavWindowingHighlightAlpha, ImSaturate((g.NavWindowingTimer - NAV_WINDOWING_HIGHLIGHT_DELAY) / 0.05f));
+        // HighLight only appears after a brief time holding the button, so that a fast tap on PadMenu (to toggle NavLayer) doesn't add visual noise
+        g.NavWindowingHighLightAlpha = ImMax(g.NavWindowingHighLightAlpha, ImSaturate((g.NavWindowingTimer - NAV_WINDOWING_HIGHLight_DELAY) / 0.05f));
 
         // Select window to focus
         const int focus_change_dir = (int)IsNavInputTest(ImGuiNavInput_FocusPrev, ImGuiInputReadMode_RepeatSlow) - (int)IsNavInputTest(ImGuiNavInput_FocusNext, ImGuiInputReadMode_RepeatSlow);
         if (focus_change_dir != 0)
         {
-            NavUpdateWindowingHighlightWindow(focus_change_dir);
-            g.NavWindowingHighlightAlpha = 1.0f;
+            NavUpdateWindowingHighLightWindow(focus_change_dir);
+            g.NavWindowingHighLightAlpha = 1.0f;
         }
 
         // Single press toggles NavLayer, long press with L/R apply actual focus on release (until then the window was merely rendered top-most)
         if (!IsNavInputDown(ImGuiNavInput_Menu))
         {
-            g.NavWindowingToggleLayer &= (g.NavWindowingHighlightAlpha < 1.0f); // Once button was held long enough we don't consider it a tap-to-toggle-layer press anymore.
+            g.NavWindowingToggleLayer &= (g.NavWindowingHighLightAlpha < 1.0f); // Once button was held long enough we don't consider it a tap-to-toggle-layer press anymore.
             if (g.NavWindowingToggleLayer && g.NavWindow)
                 apply_toggle_layer = true;
             else if (!g.NavWindowingToggleLayer)
@@ -9518,9 +9518,9 @@ static void ImGui::NavUpdateWindowing()
     if (g.NavWindowingTarget && g.NavInputSource == ImGuiInputSource_NavKeyboard)
     {
         // Visuals only appears after a brief time after pressing TAB the first time, so that a fast CTRL+TAB doesn't add visual noise
-        g.NavWindowingHighlightAlpha = ImMax(g.NavWindowingHighlightAlpha, ImSaturate((g.NavWindowingTimer - NAV_WINDOWING_HIGHLIGHT_DELAY) / 0.05f)); // 1.0f
+        g.NavWindowingHighLightAlpha = ImMax(g.NavWindowingHighLightAlpha, ImSaturate((g.NavWindowingTimer - NAV_WINDOWING_HIGHLight_DELAY) / 0.05f)); // 1.0f
         if (IsKeyPressedMap(ImGuiKey_Tab, true))
-            NavUpdateWindowingHighlightWindow(g.IO.KeyShift ? +1 : -1);
+            NavUpdateWindowingHighLightWindow(g.IO.KeyShift ? +1 : -1);
         if (!g.IO.KeyCtrl)
             apply_focus_window = g.NavWindowingTarget;
     }
@@ -9556,7 +9556,7 @@ static void ImGui::NavUpdateWindowing()
     {
         ImGuiViewport* previous_viewport = g.NavWindow ? g.NavWindow->Viewport : NULL;
         ClearActiveID();
-        g.NavDisableHighlight = false;
+        g.NavDisableHighLight = false;
         g.NavDisableMouseHover = true;
         apply_focus_window = NavRestoreLastChildNavWindow(apply_focus_window);
         ClosePopupsOverWindow(apply_focus_window, false);
@@ -9591,7 +9591,7 @@ static void ImGui::NavUpdateWindowing()
             FocusWindow(new_nav_window);
             new_nav_window->NavLastChildNavWindow = old_nav_window;
         }
-        g.NavDisableHighlight = false;
+        g.NavDisableHighLight = false;
         g.NavDisableMouseHover = true;
 
         // When entering a regular menu bar with the Alt key, we always reinitialize the navigation ID. It however persist on docking tab tabs.
@@ -10702,7 +10702,7 @@ static void ImGui::UpdateViewportsNewFrame()
 
             // Scale our window moving pivot so that the window will rescale roughly around the mouse position.
             // FIXME-VIEWPORT: This currently creates a resizing feedback loop when a window is straddling a DPI transition border.
-            // (Minor: since our sizes do not perfectly linearly scale, deferring the click offset scale until we know the actual window scale ratio may get us slightly more precise mouse positioning.)
+            // (Minor: since our sizes do not perfectly linearly scale, deferring the click offset scale until we know the actual window scale ratio may get us sLightly more precise mouse positioning.)
             //if (g.MovingWindow != NULL && g.MovingWindow->Viewport == viewport)
             //    g.ActiveIdClickOffset = ImFloor(g.ActiveIdClickOffset * scale_factor);
         }
@@ -10929,7 +10929,7 @@ static void ImGui::UpdateSelectWindowViewport(ImGuiWindow* window)
             // We need to take account of the possibility that mouse may become invalid.
             // Popups/Tooltip always set ViewportAllowPlatformMonitorExtend so GetWindowAllowedExtentRect() will return full monitor bounds.
             ImVec2 mouse_ref = (flags & ImGuiWindowFlags_Tooltip) ? g.IO.MousePos : g.BeginPopupStack.back().OpenMousePos;
-            bool use_mouse_ref = (g.NavDisableHighlight || !g.NavDisableMouseHover || !g.NavWindow);
+            bool use_mouse_ref = (g.NavDisableHighLight || !g.NavDisableMouseHover || !g.NavWindow);
             bool mouse_valid = IsMousePosValid(&mouse_ref);
             if ((window->Appearing || (flags & ImGuiWindowFlags_Tooltip)) && (!use_mouse_ref || mouse_valid))
                 window->ViewportAllowPlatformMonitorExtend = FindPlatformMonitorForPos((use_mouse_ref && mouse_valid) ? mouse_ref : NavCalcPreferredRefPos());
@@ -11284,7 +11284,7 @@ struct ImGuiDockPreviewData
     ImGuiDockNode*  SplitNode;
     ImGuiDir        SplitDir;
     float           SplitRatio;
-    ImRect          DropRectsDraw[ImGuiDir_COUNT + 1];  // May be slightly different from hit-testing drop rects used in DockNodeCalcDropRects()
+    ImRect          DropRectsDraw[ImGuiDir_COUNT + 1];  // May be sLightly different from hit-testing drop rects used in DockNodeCalcDropRects()
 
     ImGuiDockPreviewData() : FutureNode(0) { IsDropAllowed = IsCenterAvailable = IsSidesAvailable = IsSplitDirExplicit = false; SplitNode = NULL; SplitDir = ImGuiDir_None; SplitRatio = 0.f; }
 };
@@ -11690,7 +11690,7 @@ static void ImGui::DockContextBuildNodesFromSettings(ImGuiContext* ctx, ImGuiDoc
         node->LocalFlags |= (settings->Flags & ImGuiDockNodeFlags_SavedFlagsMask_);
 
         // Bind host window immediately if it already exist (in case of a rebuild)
-        // This is useful as the RootWindowForTitleBarHighlight links necessary to highlight the currently focused node requires node->HostWindow to be set.
+        // This is useful as the RootWindowForTitleBarHighLight links necessary to highLight the currently focused node requires node->HostWindow to be set.
         char host_window_title[20];
         ImGuiDockNode* root_node = DockNodeGetRootNode(node);
         node->HostWindow = FindWindowByName(DockNodeGetHostWindowTitle(root_node, host_window_title, IM_ARRAYSIZE(host_window_title)));
@@ -12563,7 +12563,7 @@ static void ImGui::DockNodeUpdate(ImGuiDockNode* node)
             DockNodeStartMouseMovingWindow(node, node->HostWindow);
     }
 
-    // Update focused node (the one whose title bar is highlight) within a node tree
+    // Update focused node (the one whose title bar is highLight) within a node tree
     if (node->IsSplitNode())
         IM_ASSERT(node->TabBar == NULL);
     if (node->IsRootNode())
@@ -12725,7 +12725,7 @@ static void ImGui::DockNodeUpdateTabBar(ImGuiDockNode* node, ImGuiWindow* host_w
     ImGuiDockNode* root_node = DockNodeGetRootNode(node);
     if (g.NavWindowingTarget)
         is_focused = (g.NavWindowingTarget->DockNode == node);
-    else if (g.NavWindow && g.NavWindow->RootWindowForTitleBarHighlight == host_window->RootWindow && root_node->LastFocusedNodeID == node->ID)
+    else if (g.NavWindow && g.NavWindow->RootWindowForTitleBarHighLight == host_window->RootWindow && root_node->LastFocusedNodeID == node->ID)
         is_focused = true;
 
     // Hidden tab bar will show a triangle on the upper-left (in Begin)
@@ -13019,7 +13019,7 @@ static void ImGui::DockNodeCalcTabBarLayout(const ImGuiDockNode* node, ImRect* o
     }
     if (node->HasWindowMenuButton && g.Style.WindowMenuButtonPosition == ImGuiDir_Left)
     {
-        r.Min.x += g.FontSize; // + g.Style.ItemInnerSpacing.x; // <-- Adding ItemInnerSpacing makes the title text moves slightly when in a docking tab bar. Instead we adjusted RenderArrowDockMenu()
+        r.Min.x += g.FontSize; // + g.Style.ItemInnerSpacing.x; // <-- Adding ItemInnerSpacing makes the title text moves sLightly when in a docking tab bar. Instead we adjusted RenderArrowDockMenu()
     }
     else if (node->HasWindowMenuButton && g.Style.WindowMenuButtonPosition == ImGuiDir_Right)
     {
@@ -13217,7 +13217,7 @@ static void ImGui::DockNodePreviewDockRender(ImGuiWindow* host_window, ImGuiDock
     const ImU32 overlay_col_main = GetColorU32(ImGuiCol_DockingPreview, is_transparent_payload ? 0.60f : 0.40f);
     const ImU32 overlay_col_drop = GetColorU32(ImGuiCol_DockingPreview, is_transparent_payload ? 0.90f : 0.70f);
     const ImU32 overlay_col_drop_hovered = GetColorU32(ImGuiCol_DockingPreview, is_transparent_payload ? 1.20f : 1.00f);
-    const ImU32 overlay_col_lines = GetColorU32(ImGuiCol_NavWindowingHighlight, is_transparent_payload ? 0.80f : 0.60f);
+    const ImU32 overlay_col_lines = GetColorU32(ImGuiCol_NavWindowingHighLight, is_transparent_payload ? 0.80f : 0.60f);
 
     // Display area preview
     const bool can_preview_tabs = (root_payload->DockNodeAsHost == NULL || root_payload->DockNodeAsHost->Windows.Size > 0);
@@ -13247,7 +13247,7 @@ static void ImGui::DockNodePreviewDockRender(ImGuiWindow* host_window, ImGuiDock
         }
         else if (!(host_window->Flags & ImGuiWindowFlags_DockNodeHost))
         {
-            tab_pos.x += g.Style.ItemInnerSpacing.x + TabItemCalcSize(host_window->Name, host_window->HasCloseButton).x; // Account for slight offset which will be added when changing from title bar to tab bar
+            tab_pos.x += g.Style.ItemInnerSpacing.x + TabItemCalcSize(host_window->Name, host_window->HasCloseButton).x; // Account for sLight offset which will be added when changing from title bar to tab bar
         }
 
         // Draw tab shape/label preview (payload may be a loose window or a host window carrying multiple tabbed windows)
@@ -13521,7 +13521,7 @@ void ImGui::DockNodeTreeUpdateSplitter(ImGuiDockNode* node)
         }
         else
         {
-            //bb.Min[axis] += 1; // Display a little inward so highlight doesn't connect with nearby tabs on the neighbor node.
+            //bb.Min[axis] += 1; // Display a little inward so highLight doesn't connect with nearby tabs on the neighbor node.
             //bb.Max[axis] -= 1;
             PushID(node->ID);
 
@@ -13554,7 +13554,7 @@ void ImGui::DockNodeTreeUpdateSplitter(ImGuiDockNode* node)
                 */
             }
 
-            // Use a short delay before highlighting the splitter (and changing the mouse cursor) in order for regular mouse movement to not highlight many splitters
+            // Use a short delay before highLighting the splitter (and changing the mouse cursor) in order for regular mouse movement to not highLight many splitters
             float cur_size_0 = child_0->Size[axis];
             float cur_size_1 = child_1->Size[axis];
             float min_size_0 = resize_limits[0] - child_0->Pos[axis];
@@ -14863,7 +14863,7 @@ static void RenderViewportThumbnail(ImDrawList* draw_list, ImGuiViewportP* viewp
         ImRect title_r_scaled = ImRect(ImFloor(off + title_r.Min * scale), ImFloor(off +  ImVec2(title_r.Max.x, title_r.Min.y) * scale) + ImVec2(0,5)); // Exaggerate title bar height
         thumb_r_scaled.ClipWithFull(bb);
         title_r_scaled.ClipWithFull(bb);
-        const bool window_is_focused = (g.NavWindow && thumb_window->RootWindowForTitleBarHighlight == g.NavWindow->RootWindowForTitleBarHighlight);
+        const bool window_is_focused = (g.NavWindow && thumb_window->RootWindowForTitleBarHighLight == g.NavWindow->RootWindowForTitleBarHighLight);
         window->DrawList->AddRectFilled(thumb_r_scaled.Min, thumb_r_scaled.Max, ImGui::GetColorU32(ImGuiCol_WindowBg, alpha_mul));
         window->DrawList->AddRectFilled(title_r_scaled.Min, title_r_scaled.Max, ImGui::GetColorU32(window_is_focused ? ImGuiCol_TitleBgActive : ImGuiCol_TitleBg, alpha_mul));
         window->DrawList->AddRect(thumb_r_scaled.Min, thumb_r_scaled.Max, ImGui::GetColorU32(ImGuiCol_Border, alpha_mul));
@@ -15051,7 +15051,7 @@ void ImGui::ShowMetricsWindow(bool* p_open)
                     fg_draw_list->Flags = backup_flags;
                 }
 
-                // Display individual triangles/vertices. Hover on to get the corresponding triangle highlighted.
+                // Display individual triangles/vertices. Hover on to get the corresponding triangle highLighted.
                 ImGuiListClipper clipper(pcmd->ElemCount/3); // Manually coarse clip our print out of individual vertices to save CPU, only items that may be visible.
                 while (clipper.Step())
                     for (int prim = clipper.DisplayStart, idx_i = elem_offset + clipper.DisplayStart*3; prim < clipper.DisplayEnd; prim++)
@@ -15366,7 +15366,7 @@ void ImGui::ShowMetricsWindow(bool* p_open)
         ImGui::Text("HoveredWindow: '%s'", g.HoveredWindow ? g.HoveredWindow->Name : "NULL");
         ImGui::Text("HoveredRootWindow: '%s'", g.HoveredRootWindow ? g.HoveredRootWindow->Name : "NULL");
         ImGui::Text("HoveredWindowUnderMovingWindow: '%s'", g.HoveredWindowUnderMovingWindow ? g.HoveredWindowUnderMovingWindow->Name : "NULL");
-        ImGui::Text("HoveredId: 0x%08X/0x%08X (%.2f sec), AllowOverlap: %d", g.HoveredId, g.HoveredIdPreviousFrame, g.HoveredIdTimer, g.HoveredIdAllowOverlap); // Data is "in-flight" so depending on when the Metrics window is called we may see current frame information or not
+        ImGui::Text("HoveredId: 0x%08X/0x%08X (%.2f sec), AllowOverlap: %d", g.HoveredId, g.HoveredIdPreviousFrame, g.HoveredIdTimer, g.HoveredIdAllowOverlap); // Data is "in-fLight" so depending on when the Metrics window is called we may see current frame information or not
         ImGui::Text("ActiveId: 0x%08X/0x%08X (%.2f sec), AllowOverlap: %d, Source: %s", g.ActiveId, g.ActiveIdPreviousFrame, g.ActiveIdTimer, g.ActiveIdAllowOverlap, input_source_names[g.ActiveIdSource]);
         ImGui::Text("ActiveIdWindow: '%s'", g.ActiveIdWindow ? g.ActiveIdWindow->Name : "NULL");
         ImGui::Text("MovingWindow: '%s'", g.MovingWindow ? g.MovingWindow->Name : "NULL");
@@ -15375,7 +15375,7 @@ void ImGui::ShowMetricsWindow(bool* p_open)
         ImGui::Text("NavInputSource: %s", input_source_names[g.NavInputSource]);
         ImGui::Text("NavActive: %d, NavVisible: %d", g.IO.NavActive, g.IO.NavVisible);
         ImGui::Text("NavActivateId: 0x%08X, NavInputId: 0x%08X", g.NavActivateId, g.NavInputId);
-        ImGui::Text("NavDisableHighlight: %d, NavDisableMouseHover: %d", g.NavDisableHighlight, g.NavDisableMouseHover);
+        ImGui::Text("NavDisableHighLight: %d, NavDisableMouseHover: %d", g.NavDisableHighLight, g.NavDisableMouseHover);
         ImGui::Text("NavWindowingTarget: '%s'", g.NavWindowingTarget ? g.NavWindowingTarget->Name : "NULL");
         ImGui::Text("DragDrop: %d, SourceId = 0x%08X, Payload \"%s\" (%d bytes)", g.DragDropActive, g.DragDropPayload.SourceId, g.DragDropPayload.DataType, g.DragDropPayload.DataSize);
         ImGui::Text("MouseViewport: 0x%08X (UserHovered 0x%08X, LastHovered 0x%08X)", g.MouseViewport->ID, g.IO.MouseHoveredViewport, g.MouseLastHoveredViewport ? g.MouseLastHoveredViewport->ID : 0);

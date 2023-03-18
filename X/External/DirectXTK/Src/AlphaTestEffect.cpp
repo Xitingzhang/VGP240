@@ -355,12 +355,12 @@ void XM_CALLCONV AlphaTestEffect::SetMatrices(FXMMATRIX world, CXMMATRIX view, C
 }
 
 
-// Material settings
+// Light settings
 void XM_CALLCONV AlphaTestEffect::SetDiffuseColor(FXMVECTOR value)
 {
     pImpl->color.diffuseColor = value;
 
-    pImpl->dirtyFlags |= EffectDirtyFlags::MaterialColor;
+    pImpl->dirtyFlags |= EffectDirtyFlags::LightColor;
 }
 
 
@@ -368,7 +368,7 @@ void AlphaTestEffect::SetAlpha(float value)
 {
     pImpl->color.alpha = value;
 
-    pImpl->dirtyFlags |= EffectDirtyFlags::MaterialColor;
+    pImpl->dirtyFlags |= EffectDirtyFlags::LightColor;
 }
 
 
@@ -377,7 +377,7 @@ void XM_CALLCONV AlphaTestEffect::SetColorAndAlpha(FXMVECTOR value)
     pImpl->color.diffuseColor = value;
     pImpl->color.alpha = XMVectorGetW(value);
 
-    pImpl->dirtyFlags |= EffectDirtyFlags::MaterialColor;
+    pImpl->dirtyFlags |= EffectDirtyFlags::LightColor;
 }
 
 

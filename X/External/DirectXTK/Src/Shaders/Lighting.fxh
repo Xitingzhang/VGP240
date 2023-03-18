@@ -16,22 +16,22 @@ struct ColorPair
 
 ColorPair ComputeLights(float3 eyeVector, float3 worldNormal, uniform int numLights)
 {
-    float3x3 lightDirections = 0;
-    float3x3 lightDiffuse = 0;
-    float3x3 lightSpecular = 0;
+    float3x3 LightDirections = 0;
+    float3x3 LightDiffuse = 0;
+    float3x3 LightSpecular = 0;
     float3x3 halfVectors = 0;
     
     [unroll]
     for (int i = 0; i < numLights; i++)
     {
-        lightDirections[i] = LightDirection[i];
-        lightDiffuse[i]    = LightDiffuseColor[i];
-        lightSpecular[i]   = LightSpecularColor[i];
+        LightDirections[i] = LightDirection[i];
+        LightDiffuse[i]    = LightDiffuseColor[i];
+        LightSpecular[i]   = LightSpecularColor[i];
         
-        halfVectors[i] = normalize(eyeVector - lightDirections[i]);
+        halfVectors[i] = normalize(eyeVector - LightDirections[i]);
     }
 
-    float3 dotL = mul(-lightDirections, worldNormal);
+    float3 dotL = mul(-LightDirections, worldNormal);
     float3 dotH = mul(halfVectors, worldNormal);
     
     float3 zeroL = step(0, dotL);
@@ -41,8 +41,8 @@ ColorPair ComputeLights(float3 eyeVector, float3 worldNormal, uniform int numLig
 
     ColorPair result;
     
-    result.Diffuse  = mul(diffuse,  lightDiffuse)  * DiffuseColor.rgb + EmissiveColor;
-    result.Specular = mul(specular, lightSpecular) * SpecularColor;
+    result.Diffuse  = mul(diffuse,  LightDiffuse)  * DiffuseColor.rgb + EmissiveColor;
+    result.Specular = mul(specular, LightSpecular) * SpecularColor;
 
     return result;
 }
@@ -56,11 +56,11 @@ CommonVSOutput ComputeCommonVSOutputWithLighting(float4 position, float3 normal,
     float3 eyeVector = normalize(EyePosition - pos_ws.xyz);
     float3 worldNormal = normalize(mul(normal, WorldInverseTranspose));
 
-    ColorPair lightResult = ComputeLights(eyeVector, worldNormal, numLights);
+    ColorPair LightResult = ComputeLights(eyeVector, worldNormal, numLights);
     
     vout.Pos_ps = mul(position, WorldViewProj);
-    vout.Diffuse = float4(lightResult.Diffuse, DiffuseColor.a);
-    vout.Specular = lightResult.Specular;
+    vout.Diffuse = float4(LightResult.Diffuse, DiffuseColor.a);
+    vout.Specular = LightResult.Specular;
     vout.FogFactor = ComputeFogFactor(position);
     
     return vout;

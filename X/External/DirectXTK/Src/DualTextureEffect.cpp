@@ -255,12 +255,12 @@ void XM_CALLCONV DualTextureEffect::SetMatrices(FXMMATRIX world, CXMMATRIX view,
 }
 
 
-// Material settings.
+// Light settings.
 void XM_CALLCONV DualTextureEffect::SetDiffuseColor(FXMVECTOR value)
 {
     pImpl->color.diffuseColor = value;
 
-    pImpl->dirtyFlags |= EffectDirtyFlags::MaterialColor;
+    pImpl->dirtyFlags |= EffectDirtyFlags::LightColor;
 }
 
 
@@ -268,7 +268,7 @@ void DualTextureEffect::SetAlpha(float value)
 {
     pImpl->color.alpha = value;
 
-    pImpl->dirtyFlags |= EffectDirtyFlags::MaterialColor;
+    pImpl->dirtyFlags |= EffectDirtyFlags::LightColor;
 }
 
 
@@ -277,7 +277,7 @@ void XM_CALLCONV DualTextureEffect::SetColorAndAlpha(FXMVECTOR value)
     pImpl->color.diffuseColor = value;
     pImpl->color.alpha = XMVectorGetW(value);
 
-    pImpl->dirtyFlags |= EffectDirtyFlags::MaterialColor;
+    pImpl->dirtyFlags |= EffectDirtyFlags::LightColor;
 }
 
 

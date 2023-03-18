@@ -25,7 +25,7 @@ cbuffer Constants : register(b0)
     float4x4 PrevWorldViewProj      : packoffset(c12);
 
     float3 LightDirection[3]        : packoffset(c16);
-    float3 LightColor[3]            : packoffset(c19);   // "Specular and diffuse light" in PBR
+    float3 LightColor[3]            : packoffset(c19);   // "Specular and diffuse Light" in PBR
  
     float3 ConstantAlbedo           : packoffset(c22);   // Constant values if not a textured effect
     float  Alpha                    : packoffset(c22.w);
@@ -120,7 +120,7 @@ VSOut_Velocity VSConstantVelocityBn(VSInputNmTx vin)
 }
 
 
-// Pixel shader: pbr (constants) + image-based lighting
+// Pixel shader: pbr (constants) + image-based Lighting
 float4 PSConstant(PSInputPixelLightingTx pin) : SV_Target0
 {
     // vectors
@@ -136,13 +136,13 @@ float4 PSConstant(PSInputPixelLightingTx pin) : SV_Target0
 }
 
 
-// Pixel shader: pbr (textures) + image-based lighting
+// Pixel shader: pbr (textures) + image-based Lighting
 float4 PSTextured(PSInputPixelLightingTx pin) : SV_Target0
 {
     const float3 V = normalize(EyePosition - pin.PositionWS.xyz); // view vector
-    const float3 L = normalize(-LightDirection[0]);               // light vector ("to light" opposite of light's direction)
+    const float3 L = normalize(-LightDirection[0]);               // Light vector ("to Light" opposite of Light's direction)
 
-    // Before lighting, peturb the surface's normal by the one given in normal map.
+    // Before Lighting, peturb the surface's normal by the one given in normal map.
     float3 localNormal = TwoChannelNormalX2(NormalTexture.Sample(SurfaceSampler, pin.TexCoord).xy);
     float3 N = PeturbNormal(localNormal, pin.PositionWS.xyz, pin.NormalWS, pin.TexCoord);
 
@@ -161,13 +161,13 @@ float4 PSTextured(PSInputPixelLightingTx pin) : SV_Target0
 }
 
 
-// Pixel shader: pbr (textures) + emissive + image-based lighting
+// Pixel shader: pbr (textures) + emissive + image-based Lighting
 float4 PSTexturedEmissive(PSInputPixelLightingTx pin) : SV_Target0
 {
     const float3 V = normalize(EyePosition - pin.PositionWS.xyz); // view vector
-    const float3 L = normalize(-LightDirection[0]);               // light vector ("to light" opposite of light's direction)
+    const float3 L = normalize(-LightDirection[0]);               // Light vector ("to Light" opposite of Light's direction)
 
-    // Before lighting, peturb the surface's normal by the one given in normal map.
+    // Before Lighting, peturb the surface's normal by the one given in normal map.
     float3 localNormal = TwoChannelNormalX2(NormalTexture.Sample(SurfaceSampler, pin.TexCoord).xy);
     float3 N = PeturbNormal(localNormal, pin.PositionWS.xyz, pin.NormalWS, pin.TexCoord);
 
@@ -188,7 +188,7 @@ float4 PSTexturedEmissive(PSInputPixelLightingTx pin) : SV_Target0
 }
 
 
-// Pixel shader: pbr (textures) + image-based lighting + velocity
+// Pixel shader: pbr (textures) + image-based Lighting + velocity
 #include "PixelPacking_Velocity.hlsli"
 
 struct PSOut_Velocity
@@ -202,9 +202,9 @@ PSOut_Velocity PSTexturedVelocity(VSOut_Velocity pin)
     PSOut_Velocity output;
 
     const float3 V = normalize(EyePosition - pin.current.PositionWS.xyz); // view vector
-    const float3 L = normalize(-LightDirection[0]);                       // light vector ("to light" opposite of light's direction)
+    const float3 L = normalize(-LightDirection[0]);                       // Light vector ("to Light" opposite of Light's direction)
 
-    // Before lighting, peturb the surface's normal by the one given in normal map.
+    // Before Lighting, peturb the surface's normal by the one given in normal map.
     float3 localNormal = TwoChannelNormalX2(NormalTexture.Sample(SurfaceSampler, pin.current.TexCoord).xy);
     float3 N = PeturbNormal(localNormal, pin.current.PositionWS.xyz, pin.current.NormalWS, pin.current.TexCoord);
 
@@ -238,9 +238,9 @@ PSOut_Velocity PSTexturedEmissiveVelocity(VSOut_Velocity pin)
     PSOut_Velocity output;
 
     const float3 V = normalize(EyePosition - pin.current.PositionWS.xyz); // view vector
-    const float3 L = normalize(-LightDirection[0]);                       // light vector ("to light" opposite of light's direction)
+    const float3 L = normalize(-LightDirection[0]);                       // Light vector ("to Light" opposite of Light's direction)
 
-    // Before lighting, peturb the surface's normal by the one given in normal map.
+    // Before Lighting, peturb the surface's normal by the one given in normal map.
     float3 localNormal = TwoChannelNormalX2(NormalTexture.Sample(SurfaceSampler, pin.current.TexCoord).xy);
     float3 N = PeturbNormal(localNormal, pin.current.PositionWS.xyz, pin.current.NormalWS, pin.current.TexCoord);
 

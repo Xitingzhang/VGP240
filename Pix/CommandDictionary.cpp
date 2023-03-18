@@ -7,6 +7,8 @@
 #include "CmdBeginDraw.h"
 #include "CmdEndDraw.h"
 #include "CmdEnableDepth.h"
+#include "CmdLights.h"
+#include "CmdMaterial.h"
 #include "CmdVertex.h"
 #include "CmdSetFillMode.h"
 #include "CmdSetCullMode.h"
@@ -59,6 +61,19 @@ CommandDictionary::CommandDictionary()
 	RegisterCommand<CmdSetCameraNear>();
 	RegisterCommand<CmdSetCameraFar>();
 	RegisterCommand<CmdSetCameraFov>();
+
+	//Light Commands
+	RegisterCommand<CmdSetLightAmbient>();
+	RegisterCommand<CmdSetLightDiffuse>();
+	RegisterCommand<CmdSetLightSpecular>();
+	RegisterCommand<CmdAddDirectionalLight>();
+	RegisterCommand<CmdAddPointLight>();
+	RegisterCommand<CmdAddSpotLight>();
+
+	//Material Commands
+	RegisterCommand<CmdSetMaterialAmbient>();
+	RegisterCommand<CmdSetMaterialDiffuse>();
+	RegisterCommand<CmdSetMaterialSpecular>();
 
 	// Rasterization commands
 	RegisterCommand<CmdDrawPixel>();

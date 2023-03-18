@@ -576,7 +576,7 @@ namespace DirectX
 
             static Matrix CreateFromYawPitchRoll(float yaw, float pitch, float roll) noexcept;
 
-            static Matrix CreateShadow(const Vector3& lightDir, const Plane& plane) noexcept;
+            static Matrix CreateShadow(const Vector3& LightDir, const Plane& plane) noexcept;
 
             static Matrix CreateReflection(const Plane& plane) noexcept;
 

@@ -31,15 +31,15 @@ namespace
         USES_OBSOLETE_DEC3N     = 0x20,
     };
 
-    struct MaterialRecordSDKMESH
+    struct LightRecordSDKMESH
     {
         std::shared_ptr<IEffect> effect;
         bool alpha;
 
-        MaterialRecordSDKMESH() noexcept : alpha(false) {}
+        LightRecordSDKMESH() noexcept : alpha(false) {}
     };
 
-    inline XMFLOAT3 GetMaterialColor(float r, float g, float b, bool srgb)
+    inline XMFLOAT3 GetLightColor(float r, float g, float b, bool srgb)
     {
         if (srgb)
         {
@@ -67,13 +67,13 @@ namespace
 #endif
     }
 
-    void LoadMaterial(const DXUT::SDKMESH_MATERIAL& mh,
+    void LoadLight(const DXUT::SDKMESH_Light& mh,
         unsigned int flags,
         IEffectFactory& fxFactory,
-        MaterialRecordSDKMESH& m,
+        LightRecordSDKMESH& m,
         bool srgb)
     {
-        wchar_t matName[DXUT::MAX_MATERIAL_NAME] = {};
+        wchar_t matName[DXUT::MAX_Light_NAME] = {};
         ASCIIToWChar(matName, mh.Name);
 
         wchar_t diffuseName[DXUT::MAX_TEXTURE_NAME] = {};
@@ -87,7 +87,7 @@ namespace
 
         if (flags & DUAL_TEXTURE && !mh.SpecularTexture[0])
         {
-            DebugTrace("WARNING: Material '%s' has multiple texture coords but not multiple textures\n", mh.Name);
+            DebugTrace("WARNING: Light '%s' has multiple texture coords but not multiple textures\n", mh.Name);
             flags &= ~static_cast<unsigned int>(DUAL_TEXTURE);
         }
 
@@ -101,7 +101,7 @@ namespace
         }
         else if (mh.NormalTexture[0])
         {
-            DebugTrace("WARNING: Material '%s' has a normal map, but vertex buffer is missing tangents\n", mh.Name);
+            DebugTrace("WARNING: Light '%s' has a normal map, but vertex buffer is missing tangents\n", mh.Name);
             *normalName = 0;
         }
 
@@ -116,15 +116,15 @@ namespace
         if (mh.Ambient.x == 0 && mh.Ambient.y == 0 && mh.Ambient.z == 0 && mh.Ambient.w == 0
             && mh.Diffuse.x == 0 && mh.Diffuse.y == 0 && mh.Diffuse.z == 0 && mh.Diffuse.w == 0)
         {
-            // SDKMESH material color block is uninitalized; assume defaults
+            // SDKMESH Light color block is uninitalized; assume defaults
             info.diffuseColor = XMFLOAT3(1.f, 1.f, 1.f);
             info.alpha = 1.f;
         }
         else
         {
-            info.ambientColor = GetMaterialColor(mh.Ambient.x, mh.Ambient.y, mh.Ambient.z, srgb);
-            info.diffuseColor = GetMaterialColor(mh.Diffuse.x, mh.Diffuse.y, mh.Diffuse.z, srgb);
-            info.emissiveColor = GetMaterialColor(mh.Emissive.x, mh.Emissive.y, mh.Emissive.z, srgb);
+            info.ambientColor = GetLightColor(mh.Ambient.x, mh.Ambient.y, mh.Ambient.z, srgb);
+            info.diffuseColor = GetLightColor(mh.Diffuse.x, mh.Diffuse.y, mh.Diffuse.z, srgb);
+            info.emissiveColor = GetLightColor(mh.Emissive.x, mh.Emissive.y, mh.Emissive.z, srgb);
 
             if (mh.Diffuse.w != 1.f && mh.Diffuse.w != 0.f)
             {
@@ -148,12 +148,12 @@ namespace
         m.alpha = (info.alpha < 1.f);
     }
 
-    void LoadMaterial(const DXUT::SDKMESH_MATERIAL_V2& mh,
+    void LoadLight(const DXUT::SDKMESH_Light_V2& mh,
         unsigned int flags,
         IEffectFactory& fxFactory,
-        MaterialRecordSDKMESH& m)
+        LightRecordSDKMESH& m)
     {
-        wchar_t matName[DXUT::MAX_MATERIAL_NAME] = {};
+        wchar_t matName[DXUT::MAX_Light_NAME] = {};
         ASCIIToWChar(matName, mh.Name);
 
         wchar_t albetoTexture[DXUT::MAX_TEXTURE_NAME] = {};
@@ -424,8 +424,8 @@ std::unique_ptr<Model> DirectX::Model::CreateFromSDKMESH(
     if (!header->NumTotalSubsets)
         throw std::runtime_error("No subsets found");
 
-    if (!header->NumMaterials)
-        throw std::runtime_error("No materials found");
+    if (!header->NumLights)
+        throw std::runtime_error("No Lights found");
 
     // Sub-headers
     if (dataSize < header->VertexStreamHeadersOffset
@@ -453,19 +453,19 @@ std::unique_ptr<Model> DirectX::Model::CreateFromSDKMESH(
         throw std::runtime_error("End of file");
     // TODO - auto frameArray = reinterpret_cast<const DXUT::SDKMESH_FRAME*>( meshData + header->FrameDataOffset );
 
-    if (dataSize < header->MaterialDataOffset
-        || (dataSize < (header->MaterialDataOffset + uint64_t(header->NumMaterials) * sizeof(DXUT::SDKMESH_MATERIAL))))
+    if (dataSize < header->LightDataOffset
+        || (dataSize < (header->LightDataOffset + uint64_t(header->NumLights) * sizeof(DXUT::SDKMESH_Light))))
         throw std::runtime_error("End of file");
 
-    const DXUT::SDKMESH_MATERIAL* materialArray = nullptr;
-    const DXUT::SDKMESH_MATERIAL_V2* materialArray_v2 = nullptr;
+    const DXUT::SDKMESH_Light* LightArray = nullptr;
+    const DXUT::SDKMESH_Light_V2* LightArray_v2 = nullptr;
     if (header->Version == DXUT::SDKMESH_FILE_VERSION_V2)
     {
-        materialArray_v2 = reinterpret_cast<const DXUT::SDKMESH_MATERIAL_V2*>(meshData + header->MaterialDataOffset);
+        LightArray_v2 = reinterpret_cast<const DXUT::SDKMESH_Light_V2*>(meshData + header->LightDataOffset);
     }
     else
     {
-        materialArray = reinterpret_cast<const DXUT::SDKMESH_MATERIAL*>(meshData + header->MaterialDataOffset);
+        LightArray = reinterpret_cast<const DXUT::SDKMESH_Light*>(meshData + header->LightDataOffset);
     }
 
     // Buffer data
@@ -482,8 +482,8 @@ std::unique_ptr<Model> DirectX::Model::CreateFromSDKMESH(
     std::vector<std::shared_ptr<std::vector<D3D11_INPUT_ELEMENT_DESC>>> vbDecls;
     vbDecls.resize(header->NumVertexBuffers);
 
-    std::vector<unsigned int> materialFlags;
-    materialFlags.resize(header->NumVertexBuffers);
+    std::vector<unsigned int> LightFlags;
+    LightFlags.resize(header->NumVertexBuffers);
 
     bool dec3nwarning = false;
     for (UINT j = 0; j < header->NumVertexBuffers; ++j)
@@ -520,7 +520,7 @@ std::unique_ptr<Model> DirectX::Model::CreateFromSDKMESH(
             dec3nwarning = true;
         }
 
-        materialFlags[j] = ilflags;
+        LightFlags[j] = ilflags;
 
         auto verts = bufferData + (vh.DataOffset - bufferDataOffset);
 
@@ -585,8 +585,8 @@ std::unique_ptr<Model> DirectX::Model::CreateFromSDKMESH(
     }
 
     // Create meshes
-    std::vector<MaterialRecordSDKMESH> materials;
-    materials.resize(header->NumMaterials);
+    std::vector<LightRecordSDKMESH> Lights;
+    Lights.resize(header->NumLights);
 
     auto model = std::make_unique<Model>();
     model->meshes.reserve(header->NumMeshes);
@@ -661,31 +661,31 @@ std::unique_ptr<Model> DirectX::Model::CreateFromSDKMESH(
                     throw std::runtime_error("Unknown primitive type");
             }
 
-            if (subset.MaterialID >= header->NumMaterials)
+            if (subset.LightID >= header->NumLights)
                 throw std::out_of_range("Invalid mesh found");
 
-            auto& mat = materials[subset.MaterialID];
+            auto& mat = Lights[subset.LightID];
 
             if (!mat.effect)
             {
                 size_t vi = mh.VertexBuffers[0];
 
-                if (materialArray_v2)
+                if (LightArray_v2)
                 {
-                    LoadMaterial(
-                        materialArray_v2[subset.MaterialID],
-                        materialFlags[vi],
+                    LoadLight(
+                        LightArray_v2[subset.LightID],
+                        LightFlags[vi],
                         fxFactory,
                         mat);
                 }
                 else
                 {
-                    LoadMaterial(
-                        materialArray[subset.MaterialID],
-                        materialFlags[vi],
+                    LoadLight(
+                        LightArray[subset.LightID],
+                        LightFlags[vi],
                         fxFactory,
                         mat,
-                        (flags & ModelLoader_MaterialColorsSRGB) != 0);
+                        (flags & ModelLoader_LightColorsSRGB) != 0);
                 }
             }
 

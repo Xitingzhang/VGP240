@@ -76,7 +76,7 @@ float G_Shlick_Smith_Hable(float alpha, float LdotH)
 // NdotV, NdotL, LdotH, NdotH: vector relationships between,
 //      N - surface normal
 //      V - eye normal
-//      L - light normal
+//      L - Light normal
 //      H - half vector between L & V.
 float3 Specular_BRDF(in float alpha, in float3 specularColor, in float NdotV, in float NdotL, in float LdotH, in float NdotH)
 {
@@ -98,7 +98,7 @@ float3 Diffuse_IBL(in float3 N)
     return IrradianceTexture.Sample(IBLSampler, N);
 }
 
-// Approximate specular image based lighting by sampling radiance map at lower mips 
+// Approximate specular image based Lighting by sampling radiance map at lower mips 
 // according to roughness, then modulating by Fresnel term. 
 float3 Specular_IBL(in float3 N, in float3 V, in float lodBias)
 {
@@ -111,14 +111,14 @@ float3 Specular_IBL(in float3 N, in float3 V, in float lodBias)
 //
 // V, N:             Eye and surface normals
 //
-// numLights:        Number of directional lights.
+// numLights:        Number of directional Lights.
 //
-// lightColor[]:     Color and intensity of directional light.
+// LightColor[]:     Color and intensity of directional Light.
 //
-// lightDirection[]: Light direction.
+// LightDirection[]: Light direction.
 float3 LightSurface(
     in float3 V, in float3 N,
-    in int numLights, in float3 lightColor[3], in float3 lightDirection[3],
+    in int numLights, in float3 LightColor[3], in float3 LightDirection[3],
     in float3 albedo, in float roughness, in float metallic, in float ambientOcclusion)
 {
     // Specular coefficiant - fixed reflectance value for non-metals
@@ -136,11 +136,11 @@ float3 LightSurface(
     // Output color
     float3 acc_color = 0;                         
 
-    // Accumulate light values
+    // Accumulate Light values
     for (int i = 0; i < numLights; i++)
     {
-        // light vector (to light)
-        const float3 L = normalize(-lightDirection[i]);
+        // Light vector (to Light)
+        const float3 L = normalize(-LightDirection[i]);
 
         // Half vector
         const float3 H = normalize(L + V);
@@ -154,8 +154,8 @@ float3 LightSurface(
         float diffuse_factor = Diffuse_Burley(NdotL, NdotV, LdotH, roughness);
         float3 specular      = Specular_BRDF(alpha, c_spec, NdotV, NdotL, LdotH, NdotH);
 
-        // Directional light
-        acc_color += NdotL * lightColor[i] * (((c_diff * diffuse_factor) + specular));
+        // Directional Light
+        acc_color += NdotL * LightColor[i] * (((c_diff * diffuse_factor) + specular));
     }
 
     // Add diffuse irradiance

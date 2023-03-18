@@ -3,6 +3,7 @@
 #include "Clipper.h"
 #include "MatrixStack.h"
 #include "Camera.h"
+#include "LightManager.h"
 
 
 extern float gResolutionX; 
@@ -26,7 +27,7 @@ namespace
 	{
 		if (mode == CullMode::None)
 		{
-			return false;
+			
 
 			Vector3 abDir = triangleInNDC[1].pos - triangleInNDC[0].pos;
 			Vector3 acDir = triangleInNDC[2].pos - triangleInNDC[0].pos;
@@ -86,19 +87,21 @@ bool PrimitivesManager::EndDraw()
 	Matrix4 matView = Camera::Get()->GetViewMatrix();
 	Matrix4 matProj = Camera::Get()->GetProjectionMatrix();
 	Matrix4 matScreen = GetScreenTransform();
-	Matrix4 matNDC = matWorld * matView * matProj;
+	Matrix4 matNDC = matView * matProj;
 
 	if (mApplyTransform)
 	{
-		Matrix4 matFinal = matNDC;
+		Matrix4 matFinal = matWorld;
 		if (mTopology != Topology::Triangle)
 		{
-			matFinal = matFinal * matScreen;
+			matFinal = matFinal * matView * matProj * matScreen;
 		}
 		for (size_t i = 0; i < mVertexBuffer.size(); ++i)
 		{
 			mVertexBuffer[i].pos = MathHelper::TransformCoord(mVertexBuffer[i].pos, matFinal);
+
 		}
+		
 	}
 	switch (mTopology)
 	{
@@ -130,14 +133,30 @@ bool PrimitivesManager::EndDraw()
 			std::vector<Vertex> triangle = { mVertexBuffer[i - 2], mVertexBuffer[i - 1], mVertexBuffer[i] };
 			if (mApplyTransform)
 			{
+				Vector3 abDir = triangle[1].pos - triangle[0].pos;
+				Vector3 acDir = triangle[2].pos - triangle[0].pos;
+				Vector3 faceNorm = MathHelper::Normalize(MathHelper::Cross(abDir, acDir));
+				//apply lighting in world space
+				for (size_t v = 0; v < triangle.size(); ++v)
+				{
+					triangle[v].color *= LightManager::Get()->ComputeLightColor(triangle[v].pos, faceNorm);
+				}
+				// convert world space to NDC space
+				for (size_t v = 0; v < triangle.size(); ++v)
+				{
+					triangle[v].pos = MathHelper::TransformCoord(triangle[v].pos, matNDC);
+				}
+				// check if culled in ndc space
 				if (CullTriangle(mCullMode, triangle))
 				{
 					continue;
 				}
+				// convert ndc space to screen space
 				for (size_t v = 0; v < triangle.size(); ++v)
 				{
 					triangle[v].pos = MathHelper::TransformCoord(triangle[v].pos, matScreen);
 				}
+				
 			}
 			if (!Clipper::Get()->ClipTriangle(triangle))
 			{

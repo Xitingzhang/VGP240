@@ -125,58 +125,58 @@ namespace
 {
 #if defined(_XBOX_ONE) && defined(_TITLE)
     // VS
-    #include "Shaders/Compiled/XboxOneDGSLEffect_main.inc"
-    #include "Shaders/Compiled/XboxOneDGSLEffect_mainVc.inc"
-    #include "Shaders/Compiled/XboxOneDGSLEffect_main1Bones.inc"
-    #include "Shaders/Compiled/XboxOneDGSLEffect_main1BonesVc.inc"
-    #include "Shaders/Compiled/XboxOneDGSLEffect_main2Bones.inc"
-    #include "Shaders/Compiled/XboxOneDGSLEffect_main2BonesVc.inc"
-    #include "Shaders/Compiled/XboxOneDGSLEffect_main4Bones.inc"
-    #include "Shaders/Compiled/XboxOneDGSLEffect_main4BonesVc.inc"
+#include "Shaders/Compiled/XboxOneDGSLEffect_main.inc"
+#include "Shaders/Compiled/XboxOneDGSLEffect_mainVc.inc"
+#include "Shaders/Compiled/XboxOneDGSLEffect_main1Bones.inc"
+#include "Shaders/Compiled/XboxOneDGSLEffect_main1BonesVc.inc"
+#include "Shaders/Compiled/XboxOneDGSLEffect_main2Bones.inc"
+#include "Shaders/Compiled/XboxOneDGSLEffect_main2BonesVc.inc"
+#include "Shaders/Compiled/XboxOneDGSLEffect_main4Bones.inc"
+#include "Shaders/Compiled/XboxOneDGSLEffect_main4BonesVc.inc"
 
-    // PS
-    #include "Shaders/Compiled/XboxOneDGSLUnlit_main.inc"
-    #include "Shaders/Compiled/XboxOneDGSLLambert_main.inc"
-    #include "Shaders/Compiled/XboxOneDGSLPhong_main.inc"
+// PS
+#include "Shaders/Compiled/XboxOneDGSLUnlit_main.inc"
+#include "Shaders/Compiled/XboxOneDGSLLambert_main.inc"
+#include "Shaders/Compiled/XboxOneDGSLPhong_main.inc"
 
-    #include "Shaders/Compiled/XboxOneDGSLUnlit_mainTk.inc"
-    #include "Shaders/Compiled/XboxOneDGSLLambert_mainTk.inc"
-    #include "Shaders/Compiled/XboxOneDGSLPhong_mainTk.inc"
+#include "Shaders/Compiled/XboxOneDGSLUnlit_mainTk.inc"
+#include "Shaders/Compiled/XboxOneDGSLLambert_mainTk.inc"
+#include "Shaders/Compiled/XboxOneDGSLPhong_mainTk.inc"
 
-    #include "Shaders/Compiled/XboxOneDGSLUnlit_mainTx.inc"
-    #include "Shaders/Compiled/XboxOneDGSLLambert_mainTx.inc"
-    #include "Shaders/Compiled/XboxOneDGSLPhong_mainTx.inc"
+#include "Shaders/Compiled/XboxOneDGSLUnlit_mainTx.inc"
+#include "Shaders/Compiled/XboxOneDGSLLambert_mainTx.inc"
+#include "Shaders/Compiled/XboxOneDGSLPhong_mainTx.inc"
 
-    #include "Shaders/Compiled/XboxOneDGSLUnlit_mainTxTk.inc"
-    #include "Shaders/Compiled/XboxOneDGSLLambert_mainTxTk.inc"
-    #include "Shaders/Compiled/XboxOneDGSLPhong_mainTxTk.inc"
+#include "Shaders/Compiled/XboxOneDGSLUnlit_mainTxTk.inc"
+#include "Shaders/Compiled/XboxOneDGSLLambert_mainTxTk.inc"
+#include "Shaders/Compiled/XboxOneDGSLPhong_mainTxTk.inc"
 #else
     // VS
-    #include "Shaders/Compiled/DGSLEffect_main.inc"
-    #include "Shaders/Compiled/DGSLEffect_mainVc.inc"
-    #include "Shaders/Compiled/DGSLEffect_main1Bones.inc"
-    #include "Shaders/Compiled/DGSLEffect_main1BonesVc.inc"
-    #include "Shaders/Compiled/DGSLEffect_main2Bones.inc"
-    #include "Shaders/Compiled/DGSLEffect_main2BonesVc.inc"
-    #include "Shaders/Compiled/DGSLEffect_main4Bones.inc"
-    #include "Shaders/Compiled/DGSLEffect_main4BonesVc.inc"
+#include "Shaders/Compiled/DGSLEffect_main.inc"
+#include "Shaders/Compiled/DGSLEffect_mainVc.inc"
+#include "Shaders/Compiled/DGSLEffect_main1Bones.inc"
+#include "Shaders/Compiled/DGSLEffect_main1BonesVc.inc"
+#include "Shaders/Compiled/DGSLEffect_main2Bones.inc"
+#include "Shaders/Compiled/DGSLEffect_main2BonesVc.inc"
+#include "Shaders/Compiled/DGSLEffect_main4Bones.inc"
+#include "Shaders/Compiled/DGSLEffect_main4BonesVc.inc"
 
-    // PS
-    #include "Shaders/Compiled/DGSLUnlit_main.inc"
-    #include "Shaders/Compiled/DGSLLambert_main.inc"
-    #include "Shaders/Compiled/DGSLPhong_main.inc"
+// PS
+#include "Shaders/Compiled/DGSLUnlit_main.inc"
+#include "Shaders/Compiled/DGSLLambert_main.inc"
+#include "Shaders/Compiled/DGSLPhong_main.inc"
 
-    #include "Shaders/Compiled/DGSLUnlit_mainTk.inc"
-    #include "Shaders/Compiled/DGSLLambert_mainTk.inc"
-    #include "Shaders/Compiled/DGSLPhong_mainTk.inc"
+#include "Shaders/Compiled/DGSLUnlit_mainTk.inc"
+#include "Shaders/Compiled/DGSLLambert_mainTk.inc"
+#include "Shaders/Compiled/DGSLPhong_mainTk.inc"
 
-    #include "Shaders/Compiled/DGSLUnlit_mainTx.inc"
-    #include "Shaders/Compiled/DGSLLambert_mainTx.inc"
-    #include "Shaders/Compiled/DGSLPhong_mainTx.inc"
+#include "Shaders/Compiled/DGSLUnlit_mainTx.inc"
+#include "Shaders/Compiled/DGSLLambert_mainTx.inc"
+#include "Shaders/Compiled/DGSLPhong_mainTx.inc"
 
-    #include "Shaders/Compiled/DGSLUnlit_mainTxTk.inc"
-    #include "Shaders/Compiled/DGSLLambert_mainTxTk.inc"
-    #include "Shaders/Compiled/DGSLPhong_mainTxTk.inc"
+#include "Shaders/Compiled/DGSLUnlit_mainTxTk.inc"
+#include "Shaders/Compiled/DGSLLambert_mainTxTk.inc"
+#include "Shaders/Compiled/DGSLPhong_mainTxTk.inc"
 #endif
 }
 
@@ -407,7 +407,7 @@ void DGSLEffect::Impl::Apply(_In_ ID3D11DeviceContext* deviceContext)
     void* grfxMemoryObject;
     mCBObject.SetData(deviceContext, constants.object, &grfxMemoryObject);
 
-    void *grfxMemoryMisc;
+    void* grfxMemoryMisc;
     mCBMisc.SetData(deviceContext, constants.misc, &grfxMemoryMisc);
 
     ComPtr<ID3D11DeviceContextX> deviceContextX;

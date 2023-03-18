@@ -25,8 +25,8 @@ struct EnvironmentMapEffectConstants
     XMVECTOR diffuseColor;
     XMVECTOR emissiveColor;
     
-    XMVECTOR lightDirection[IEffectLights::MaxDirectionalLights];
-    XMVECTOR lightDiffuseColor[IEffectLights::MaxDirectionalLights];
+    XMVECTOR LightDirection[IEffectLights::MaxDirectionalLights];
+    XMVECTOR LightDiffuseColor[IEffectLights::MaxDirectionalLights];
 
     XMVECTOR eyePosition;
 
@@ -66,7 +66,7 @@ public:
     bool biasedVertexNormals;
     EnvironmentMapEffect::Mapping mapping;
 
-    EffectLights lights;
+    EffectLights Lights;
 
     ComPtr<ID3D11ShaderResourceView> environmentMap;
 
@@ -184,19 +184,19 @@ const int EffectBase<EnvironmentMapEffectTraits>::VertexShaderIndices[] =
     1,      // fresnel + specular
     1,      // fresnel + specular, no fog
 
-    2,      // one light
-    2,      // one light, no fog
-    3,      // one light, fresnel
-    3,      // one light, fresnel, no fog
-    2,      // one light, specular
-    2,      // one light, specular, no fog
-    3,      // one light, fresnel + specular
-    3,      // one light, fresnel + specular, no fog
+    2,      // one Light
+    2,      // one Light, no fog
+    3,      // one Light, fresnel
+    3,      // one Light, fresnel, no fog
+    2,      // one Light, specular
+    2,      // one Light, specular, no fog
+    3,      // one Light, fresnel + specular
+    3,      // one Light, fresnel + specular, no fog
 
-    4,      // pixel lighting
-    4,      // pixel lighting, no fog
-    4,      // pixel lighting, fresnel
-    4,      // pixel lighting, fresnel, no fog
+    4,      // pixel Lighting
+    4,      // pixel Lighting, no fog
+    4,      // pixel Lighting, fresnel
+    4,      // pixel Lighting, fresnel, no fog
 
     5,      // basic (biased vertex normals)
     5,      // basic (biased vertex normals), no fog
@@ -207,39 +207,39 @@ const int EffectBase<EnvironmentMapEffectTraits>::VertexShaderIndices[] =
     6,      // fresnel + specular (biased vertex normals)
     6,      // fresnel + specular (biased vertex normals), no fog
 
-    7,      // one light (biased vertex normals)
-    7,      // one light (biased vertex normals), no fog
-    8,      // one light (biased vertex normals), fresnel
-    8,      // one light (biased vertex normals), fresnel, no fog
-    7,      // one light (biased vertex normals), specular
-    7,      // one light (biased vertex normals), specular, no fog
-    8,      // one light (biased vertex normals), fresnel + specular
-    8,      // one light (biased vertex normals), fresnel + specular, no fog
+    7,      // one Light (biased vertex normals)
+    7,      // one Light (biased vertex normals), no fog
+    8,      // one Light (biased vertex normals), fresnel
+    8,      // one Light (biased vertex normals), fresnel, no fog
+    7,      // one Light (biased vertex normals), specular
+    7,      // one Light (biased vertex normals), specular, no fog
+    8,      // one Light (biased vertex normals), fresnel + specular
+    8,      // one Light (biased vertex normals), fresnel + specular, no fog
 
-    9,      // pixel lighting (biased vertex normals)
-    9,      // pixel lighting (biased vertex normals), no fog
-    9,      // pixel lighting (biased vertex normals), fresnel
-    9,      // pixel lighting (biased vertex normals), fresnel, no fog
+    9,      // pixel Lighting (biased vertex normals)
+    9,      // pixel Lighting (biased vertex normals), no fog
+    9,      // pixel Lighting (biased vertex normals), fresnel
+    9,      // pixel Lighting (biased vertex normals), fresnel, no fog
 
-    4,      // spheremap pixel lighting
-    4,      // spheremap pixel lighting, no fog
-    4,      // spheremap pixel lighting, fresnel
-    4,      // spheremap pixel lighting, fresnel, no fog
+    4,      // spheremap pixel Lighting
+    4,      // spheremap pixel Lighting, no fog
+    4,      // spheremap pixel Lighting, fresnel
+    4,      // spheremap pixel Lighting, fresnel, no fog
 
-    9,      // spheremap pixel lighting (biased vertex normals)
-    9,      // spheremap pixel lighting (biased vertex normals), no fog
-    9,      // spheremap pixel lighting (biased vertex normals), fresnel
-    9,      // spheremap pixel lighting (biased vertex normals), fresnel, no fog
+    9,      // spheremap pixel Lighting (biased vertex normals)
+    9,      // spheremap pixel Lighting (biased vertex normals), no fog
+    9,      // spheremap pixel Lighting (biased vertex normals), fresnel
+    9,      // spheremap pixel Lighting (biased vertex normals), fresnel, no fog
 
-    10,     // dual-parabola pixel lighting
-    10,     // dual-parabola pixel lighting, no fog
-    10,     // dual-parabola pixel lighting, fresnel
-    10,     // dual-parabola pixel lighting, fresnel, no fog
+    10,     // dual-parabola pixel Lighting
+    10,     // dual-parabola pixel Lighting, no fog
+    10,     // dual-parabola pixel Lighting, fresnel
+    10,     // dual-parabola pixel Lighting, fresnel, no fog
 
-    11,     // dual-parabola pixel lighting (biased vertex normals)
-    11,     // dual-parabola pixel lighting (biased vertex normals), no fog
-    11,     // dual-parabola pixel lighting (biased vertex normals), fresnel
-    11,     // dual-parabola pixel lighting (biased vertex normals), fresnel, no fog
+    11,     // dual-parabola pixel Lighting (biased vertex normals)
+    11,     // dual-parabola pixel Lighting (biased vertex normals), no fog
+    11,     // dual-parabola pixel Lighting (biased vertex normals), fresnel
+    11,     // dual-parabola pixel Lighting (biased vertex normals), fresnel, no fog
 };
 
 
@@ -279,19 +279,19 @@ const int EffectBase<EnvironmentMapEffectTraits>::PixelShaderIndices[] =
     2,      // fresnel + specular
     3,      // fresnel + specular, no fog
 
-    0,      // one light
-    1,      // one light, no fog
-    0,      // one light, fresnel
-    1,      // one light, fresnel, no fog
-    2,      // one light, specular
-    3,      // one light, specular, no fog
-    2,      // one light, fresnel + specular
-    3,      // one light, fresnel + specular, no fog
+    0,      // one Light
+    1,      // one Light, no fog
+    0,      // one Light, fresnel
+    1,      // one Light, fresnel, no fog
+    2,      // one Light, specular
+    3,      // one Light, specular, no fog
+    2,      // one Light, fresnel + specular
+    3,      // one Light, fresnel + specular, no fog
 
-    4,      // per pixel lighting
-    5,      // per pixel lighting, no fog
-    6,      // per pixel lighting, fresnel
-    7,      // per pixel lighting, fresnel, no fog
+    4,      // per pixel Lighting
+    5,      // per pixel Lighting, no fog
+    6,      // per pixel Lighting, fresnel
+    7,      // per pixel Lighting, fresnel, no fog
 
     0,      // basic (biased vertex normals)
     1,      // basic (biased vertex normals), no fog
@@ -302,39 +302,39 @@ const int EffectBase<EnvironmentMapEffectTraits>::PixelShaderIndices[] =
     2,      // fresnel + specular (biased vertex normals)
     3,      // fresnel + specular (biased vertex normals), no fog
 
-    0,      // one light (biased vertex normals)
-    1,      // one light (biased vertex normals), no fog
-    0,      // one light (biased vertex normals), fresnel
-    1,      // one light (biased vertex normals), fresnel, no fog
-    2,      // one light (biased vertex normals), specular
-    3,      // one light (biased vertex normals), specular, no fog
-    2,      // one light (biased vertex normals), fresnel + specular
-    3,      // one light (biased vertex normals), fresnel + specular, no fog
+    0,      // one Light (biased vertex normals)
+    1,      // one Light (biased vertex normals), no fog
+    0,      // one Light (biased vertex normals), fresnel
+    1,      // one Light (biased vertex normals), fresnel, no fog
+    2,      // one Light (biased vertex normals), specular
+    3,      // one Light (biased vertex normals), specular, no fog
+    2,      // one Light (biased vertex normals), fresnel + specular
+    3,      // one Light (biased vertex normals), fresnel + specular, no fog
 
-    4,      // per pixel lighting (biased vertex normals)
-    5,      // per pixel lighting (biased vertex normals), no fog
-    6,      // per pixel lighting (biased vertex normals), fresnel
-    7,      // per pixel lighting (biased vertex normals), fresnel, no fog
+    4,      // per pixel Lighting (biased vertex normals)
+    5,      // per pixel Lighting (biased vertex normals), no fog
+    6,      // per pixel Lighting (biased vertex normals), fresnel
+    7,      // per pixel Lighting (biased vertex normals), fresnel, no fog
 
-    8,      // spheremap pixel lighting
-    9,      // spheremap pixel lighting, no fog
-    10,     // spheremap pixel lighting, fresnel
-    11,     // spheremap pixel lighting, fresnel, no fog
+    8,      // spheremap pixel Lighting
+    9,      // spheremap pixel Lighting, no fog
+    10,     // spheremap pixel Lighting, fresnel
+    11,     // spheremap pixel Lighting, fresnel, no fog
 
-    8,      // spheremap pixel lighting (biased vertex normals)
-    9,      // spheremap pixel lighting (biased vertex normals), no fog
-    10,     // spheremap pixel lighting (biased vertex normals), fresnel
-    11,     // spheremap pixel lighting (biased vertex normals), fresnel, no fog
+    8,      // spheremap pixel Lighting (biased vertex normals)
+    9,      // spheremap pixel Lighting (biased vertex normals), no fog
+    10,     // spheremap pixel Lighting (biased vertex normals), fresnel
+    11,     // spheremap pixel Lighting (biased vertex normals), fresnel, no fog
 
-    12,     // dual-parabola pixel lighting
-    13,     // dual-parabola pixel lighting, no fog
-    14,     // dual-parabola pixel lighting, fresnel
-    15,     // dual-parabola pixel lighting, fresnel, no fog
+    12,     // dual-parabola pixel Lighting
+    13,     // dual-parabola pixel Lighting, no fog
+    14,     // dual-parabola pixel Lighting, fresnel
+    15,     // dual-parabola pixel Lighting, fresnel, no fog
 
-    12,     // dual-parabola pixel lighting (biased vertex normals)
-    13,     // dual-parabola pixel lighting (biased vertex normals), no fog
-    14,     // dual-parabola pixel lighting (biased vertex normals), fresnel
-    15,     // dual-parabola pixel lighting (biased vertex normals), fresnel, no fog
+    12,     // dual-parabola pixel Lighting (biased vertex normals)
+    13,     // dual-parabola pixel Lighting (biased vertex normals), no fog
+    14,     // dual-parabola pixel Lighting (biased vertex normals), fresnel
+    15,     // dual-parabola pixel Lighting (biased vertex normals), fresnel, no fog
 };
 
 
@@ -362,7 +362,7 @@ EnvironmentMapEffect::Impl::Impl(_In_ ID3D11Device* device)
 
     XMVECTOR unwantedOutput[MaxDirectionalLights];
 
-    lights.InitializeConstants(unwantedOutput[0], constants.lightDirection, constants.lightDiffuseColor, unwantedOutput);
+    Lights.InitializeConstants(unwantedOutput[0], constants.LightDirection, constants.LightDiffuseColor, unwantedOutput);
 }
 
 
@@ -414,8 +414,8 @@ int EnvironmentMapEffect::Impl::GetCurrentShaderPermutation() const noexcept
                 permutation += 4;
             }
 
-            // Use the only-bother-with-the-first-light shader optimization?
-            if (!lights.lightEnabled[1] && !lights.lightEnabled[2])
+            // Use the only-bother-with-the-first-Light shader optimization?
+            if (!Lights.LightEnabled[1] && !Lights.LightEnabled[2])
             {
                 permutation += 8;
             }
@@ -440,7 +440,7 @@ void EnvironmentMapEffect::Impl::Apply(_In_ ID3D11DeviceContext* deviceContext)
 
     fog.SetConstants(dirtyFlags, matrices.worldView, constants.fogVector);
             
-    lights.SetConstants(dirtyFlags, matrices, constants.world, constants.worldInverseTranspose, constants.eyePosition, constants.diffuseColor, constants.emissiveColor, true);
+    Lights.SetConstants(dirtyFlags, matrices, constants.world, constants.worldInverseTranspose, constants.eyePosition, constants.diffuseColor, constants.emissiveColor, true);
 
     // Set the textures.
     ID3D11ShaderResourceView* textures[2] =
@@ -532,37 +532,37 @@ void XM_CALLCONV EnvironmentMapEffect::SetMatrices(FXMMATRIX world, CXMMATRIX vi
 }
 
 
-// Material settings.
+// Light settings.
 void XM_CALLCONV EnvironmentMapEffect::SetDiffuseColor(FXMVECTOR value)
 {
-    pImpl->lights.diffuseColor = value;
+    pImpl->Lights.diffuseColor = value;
 
-    pImpl->dirtyFlags |= EffectDirtyFlags::MaterialColor;
+    pImpl->dirtyFlags |= EffectDirtyFlags::LightColor;
 }
 
 
 void XM_CALLCONV EnvironmentMapEffect::SetEmissiveColor(FXMVECTOR value)
 {
-    pImpl->lights.emissiveColor = value;
+    pImpl->Lights.emissiveColor = value;
 
-    pImpl->dirtyFlags |= EffectDirtyFlags::MaterialColor;
+    pImpl->dirtyFlags |= EffectDirtyFlags::LightColor;
 }
 
 
 void EnvironmentMapEffect::SetAlpha(float value)
 {
-    pImpl->lights.alpha = value;
+    pImpl->Lights.alpha = value;
 
-    pImpl->dirtyFlags |= EffectDirtyFlags::MaterialColor;
+    pImpl->dirtyFlags |= EffectDirtyFlags::LightColor;
 }
 
 
 void XM_CALLCONV EnvironmentMapEffect::SetColorAndAlpha(FXMVECTOR value)
 {
-    pImpl->lights.diffuseColor = value;
-    pImpl->lights.alpha = XMVectorGetW(value);
+    pImpl->Lights.diffuseColor = value;
+    pImpl->Lights.alpha = XMVectorGetW(value);
 
-    pImpl->dirtyFlags |= EffectDirtyFlags::MaterialColor;
+    pImpl->dirtyFlags |= EffectDirtyFlags::LightColor;
 }
 
 
@@ -571,7 +571,7 @@ void EnvironmentMapEffect::SetLightingEnabled(bool value)
 {
     if (!value)
     {
-        throw std::invalid_argument("EnvironmentMapEffect does not support turning off lighting");
+        throw std::invalid_argument("EnvironmentMapEffect does not support turning off Lighting");
     }
 }
 
@@ -584,9 +584,9 @@ void EnvironmentMapEffect::SetPerPixelLighting(bool value)
 
 void XM_CALLCONV EnvironmentMapEffect::SetAmbientLightColor(FXMVECTOR value)
 {
-    pImpl->lights.ambientLightColor = value;
+    pImpl->Lights.ambientLightColor = value;
 
-    pImpl->dirtyFlags |= EffectDirtyFlags::MaterialColor;
+    pImpl->dirtyFlags |= EffectDirtyFlags::LightColor;
 }
 
 
@@ -594,7 +594,7 @@ void EnvironmentMapEffect::SetLightEnabled(int whichLight, bool value)
 {
     XMVECTOR unwantedOutput[MaxDirectionalLights] = {};
 
-    pImpl->dirtyFlags |= pImpl->lights.SetLightEnabled(whichLight, value, pImpl->constants.lightDiffuseColor, unwantedOutput);
+    pImpl->dirtyFlags |= pImpl->Lights.SetLightEnabled(whichLight, value, pImpl->constants.LightDiffuseColor, unwantedOutput);
 }
 
 
@@ -602,7 +602,7 @@ void XM_CALLCONV EnvironmentMapEffect::SetLightDirection(int whichLight, FXMVECT
 {
     EffectLights::ValidateLightIndex(whichLight);
 
-    pImpl->constants.lightDirection[whichLight] = value;
+    pImpl->constants.LightDirection[whichLight] = value;
 
     pImpl->dirtyFlags |= EffectDirtyFlags::ConstantBuffer;
 }
@@ -610,7 +610,7 @@ void XM_CALLCONV EnvironmentMapEffect::SetLightDirection(int whichLight, FXMVECT
 
 void XM_CALLCONV EnvironmentMapEffect::SetLightDiffuseColor(int whichLight, FXMVECTOR value)
 {
-    pImpl->dirtyFlags |= pImpl->lights.SetLightDiffuseColor(whichLight, value, pImpl->constants.lightDiffuseColor);
+    pImpl->dirtyFlags |= pImpl->Lights.SetLightDiffuseColor(whichLight, value, pImpl->constants.LightDiffuseColor);
 }
 
 

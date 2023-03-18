@@ -184,7 +184,7 @@ std::shared_ptr<IEffect> DGSLEffectFactory::Impl::CreateDGSLEffect(DGSLEffectFac
 
     std::shared_ptr<DGSLEffect> effect;
 
-    bool lighting = true;
+    bool Lighting = true;
     bool allowSpecular = true;
 
     if (!info.pixelShader || !*info.pixelShader)
@@ -219,7 +219,7 @@ std::shared_ptr<IEffect> DGSLEffectFactory::Impl::CreateDGSLEffect(DGSLEffectFac
         }
         else if (!_wcsicmp(root, L"unlit"))
         {
-            lighting = false;
+            Lighting = false;
             effect = std::make_shared<DGSLEffect>(mDevice.Get(), nullptr, info.enableSkinning);
         }
         else if (mDevice->GetFeatureLevel() < D3D_FEATURE_LEVEL_10_0)
@@ -242,7 +242,7 @@ std::shared_ptr<IEffect> DGSLEffectFactory::Impl::CreateDGSLEffect(DGSLEffectFac
         }
     }
 
-    if (lighting)
+    if (Lighting)
     {
         effect->EnableDefaultLighting();
         effect->SetLightingEnabled(true);

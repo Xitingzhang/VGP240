@@ -67,7 +67,7 @@ namespace DirectX
     };
 
 
-    // Abstract interface for effects which support directional lighting.
+    // Abstract interface for effects which support directional Lighting.
     class IEffectLights
     {
     public:
@@ -142,7 +142,7 @@ namespace DirectX
     };
 
     //----------------------------------------------------------------------------------
-    // Built-in shader supports optional texture mapping, vertex coloring, directional lighting, and fog.
+    // Built-in shader supports optional texture mapping, vertex coloring, directional Lighting, and fog.
     class BasicEffect : public IEffect, public IEffectMatrices, public IEffectLights, public IEffectFog
     {
     public:
@@ -166,7 +166,7 @@ namespace DirectX
         void XM_CALLCONV SetProjection(FXMMATRIX value) override;
         void XM_CALLCONV SetMatrices(FXMMATRIX world, CXMMATRIX view, CXMMATRIX projection) override;
 
-        // Material settings.
+        // Light settings.
         void XM_CALLCONV SetDiffuseColor(FXMVECTOR value);
         void XM_CALLCONV SetEmissiveColor(FXMVECTOR value);
         void XM_CALLCONV SetSpecularColor(FXMVECTOR value);
@@ -236,7 +236,7 @@ namespace DirectX
         void XM_CALLCONV SetProjection(FXMMATRIX value) override;
         void XM_CALLCONV SetMatrices(FXMMATRIX world, CXMMATRIX view, CXMMATRIX projection) override;
 
-        // Material settings.
+        // Light settings.
         void XM_CALLCONV SetDiffuseColor(FXMVECTOR value);
         void __cdecl SetAlpha(float value);
         void XM_CALLCONV SetColorAndAlpha(FXMVECTOR value);
@@ -266,7 +266,7 @@ namespace DirectX
 
 
 
-    // Built-in shader supports two layer multitexturing (eg. for lightmaps or detail textures).
+    // Built-in shader supports two layer multitexturing (eg. for Lightmaps or detail textures).
     class DualTextureEffect : public IEffect, public IEffectMatrices, public IEffectFog
     {
     public:
@@ -290,7 +290,7 @@ namespace DirectX
         void XM_CALLCONV SetProjection(FXMMATRIX value) override;
         void XM_CALLCONV SetMatrices(FXMMATRIX world, CXMMATRIX view, CXMMATRIX projection) override;
 
-        // Material settings.
+        // Light settings.
         void XM_CALLCONV SetDiffuseColor(FXMVECTOR value);
         void __cdecl SetAlpha(float value);
         void XM_CALLCONV SetColorAndAlpha(FXMVECTOR value);
@@ -348,7 +348,7 @@ namespace DirectX
         void XM_CALLCONV SetProjection(FXMMATRIX value) override;
         void XM_CALLCONV SetMatrices(FXMMATRIX world, CXMMATRIX view, CXMMATRIX projection) override;
 
-        // Material settings.
+        // Light settings.
         void XM_CALLCONV SetDiffuseColor(FXMVECTOR value);
         void XM_CALLCONV SetEmissiveColor(FXMVECTOR value);
         void __cdecl SetAlpha(float value);
@@ -420,7 +420,7 @@ namespace DirectX
         void XM_CALLCONV SetProjection(FXMMATRIX value) override;
         void XM_CALLCONV SetMatrices(FXMMATRIX world, CXMMATRIX view, CXMMATRIX projection) override;
 
-        // Material settings.
+        // Light settings.
         void XM_CALLCONV SetDiffuseColor(FXMVECTOR value);
         void XM_CALLCONV SetEmissiveColor(FXMVECTOR value);
         void XM_CALLCONV SetSpecularColor(FXMVECTOR value);
@@ -493,7 +493,7 @@ namespace DirectX
         void XM_CALLCONV SetProjection(FXMMATRIX value) override;
         void XM_CALLCONV SetMatrices(FXMMATRIX world, CXMMATRIX view, CXMMATRIX projection) override;
 
-        // Material settings.
+        // Light settings.
         void XM_CALLCONV SetAmbientColor(FXMVECTOR value);
         void XM_CALLCONV SetDiffuseColor(FXMVECTOR value);
         void XM_CALLCONV SetEmissiveColor(FXMVECTOR value);
@@ -572,7 +572,7 @@ namespace DirectX
         void XM_CALLCONV SetProjection(FXMMATRIX value) override;
         void XM_CALLCONV SetMatrices(FXMMATRIX world, CXMMATRIX view, CXMMATRIX projection) override;
 
-        // Material settings.
+        // Light settings.
         void XM_CALLCONV SetDiffuseColor(FXMVECTOR value);
         void XM_CALLCONV SetEmissiveColor(FXMVECTOR value);
         void XM_CALLCONV SetSpecularColor(FXMVECTOR value);
@@ -620,7 +620,7 @@ namespace DirectX
     };
 
     //----------------------------------------------------------------------------------
-    // Built-in shader for Physically-Based Rendering (Roughness/Metalness) with Image-based lighting
+    // Built-in shader for Physically-Based Rendering (Roughness/Metalness) with Image-based Lighting
     class PBREffect : public IEffect, public IEffectMatrices, public IEffectLights
     {
     public:
@@ -703,7 +703,7 @@ namespace DirectX
     public:
         enum Mode
         {
-            Mode_Default = 0,   // Hemispherical ambient lighting
+            Mode_Default = 0,   // Hemispherical ambient Lighting
             Mode_Normals,       // RGB normals
             Mode_Tangents,      // RGB tangents
             Mode_BiTangents,    // RGB bi-tangents

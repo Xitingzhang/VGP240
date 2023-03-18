@@ -20,7 +20,7 @@
 
 
 // BasicEffect, SkinnedEffect, et al, have many things in common, but also significant
-// differences (for instance, not all the effects support lighting). This header breaks
+// differences (for instance, not all the effects support Lighting). This header breaks
 // out common functionality into a set of helpers which can be assembled in different
 // combinations to build up whatever subset is needed by each effect.
 
@@ -34,7 +34,7 @@ namespace DirectX
         constexpr int WorldViewProj         = 0x02;
         constexpr int WorldInverseTranspose = 0x04;
         constexpr int EyePosition           = 0x08;
-        constexpr int MaterialColor         = 0x10;
+        constexpr int LightColor         = 0x10;
         constexpr int FogVector             = 0x20;
         constexpr int FogEnable             = 0x40;
         constexpr int AlphaTest             = 0x80;
@@ -68,7 +68,7 @@ namespace DirectX
     };
 
 
-    // Helper stores material color settings, and computes derived parameters for shaders that do not support realtime lighting.
+    // Helper stores Light color settings, and computes derived parameters for shaders that do not support realtime Lighting.
     struct EffectColor
     {
         EffectColor() noexcept;
@@ -80,7 +80,7 @@ namespace DirectX
     };
 
 
-    // Helper stores the current light settings, and computes derived shader parameters.
+    // Helper stores the current Light settings, and computes derived shader parameters.
     struct EffectLights : public EffectColor
     {
         EffectLights() noexcept;
@@ -92,18 +92,18 @@ namespace DirectX
         XMVECTOR emissiveColor;
         XMVECTOR ambientLightColor;
 
-        bool lightEnabled[MaxDirectionalLights];
-        XMVECTOR lightDiffuseColor[MaxDirectionalLights];
-        XMVECTOR lightSpecularColor[MaxDirectionalLights];
+        bool LightEnabled[MaxDirectionalLights];
+        XMVECTOR LightDiffuseColor[MaxDirectionalLights];
+        XMVECTOR LightSpecularColor[MaxDirectionalLights];
 
 
         // Methods.
-        void InitializeConstants(_Out_ XMVECTOR& specularColorAndPowerConstant, _Out_writes_all_(MaxDirectionalLights) XMVECTOR* lightDirectionConstant, _Out_writes_all_(MaxDirectionalLights) XMVECTOR* lightDiffuseConstant, _Out_writes_all_(MaxDirectionalLights) XMVECTOR* lightSpecularConstant) const;
-        void SetConstants(_Inout_ int& dirtyFlags, _In_ EffectMatrices const& matrices, _Inout_ XMMATRIX& worldConstant, _Inout_updates_(3) XMVECTOR worldInverseTransposeConstant[3], _Inout_ XMVECTOR& eyePositionConstant, _Inout_ XMVECTOR& diffuseColorConstant, _Inout_ XMVECTOR& emissiveColorConstant, bool lightingEnabled);
+        void InitializeConstants(_Out_ XMVECTOR& specularColorAndPowerConstant, _Out_writes_all_(MaxDirectionalLights) XMVECTOR* LightDirectionConstant, _Out_writes_all_(MaxDirectionalLights) XMVECTOR* LightDiffuseConstant, _Out_writes_all_(MaxDirectionalLights) XMVECTOR* LightSpecularConstant) const;
+        void SetConstants(_Inout_ int& dirtyFlags, _In_ EffectMatrices const& matrices, _Inout_ XMMATRIX& worldConstant, _Inout_updates_(3) XMVECTOR worldInverseTransposeConstant[3], _Inout_ XMVECTOR& eyePositionConstant, _Inout_ XMVECTOR& diffuseColorConstant, _Inout_ XMVECTOR& emissiveColorConstant, bool LightingEnabled);
 
-        int SetLightEnabled(int whichLight, bool value, _Inout_updates_(MaxDirectionalLights) XMVECTOR* lightDiffuseConstant, _Inout_updates_(MaxDirectionalLights) XMVECTOR* lightSpecularConstant);
-        int XM_CALLCONV SetLightDiffuseColor(int whichLight, FXMVECTOR value, _Inout_updates_(MaxDirectionalLights) XMVECTOR* lightDiffuseConstant);
-        int XM_CALLCONV SetLightSpecularColor(int whichLight, FXMVECTOR value, _Inout_updates_(MaxDirectionalLights) XMVECTOR* lightSpecularConstant);
+        int SetLightEnabled(int whichLight, bool value, _Inout_updates_(MaxDirectionalLights) XMVECTOR* LightDiffuseConstant, _Inout_updates_(MaxDirectionalLights) XMVECTOR* LightSpecularConstant);
+        int XM_CALLCONV SetLightDiffuseColor(int whichLight, FXMVECTOR value, _Inout_updates_(MaxDirectionalLights) XMVECTOR* LightDiffuseConstant);
+        int XM_CALLCONV SetLightSpecularColor(int whichLight, FXMVECTOR value, _Inout_updates_(MaxDirectionalLights) XMVECTOR* LightSpecularConstant);
 
         static void ValidateLightIndex(int whichLight);
         static void EnableDefaultLighting(_In_ IEffectLights* effect);

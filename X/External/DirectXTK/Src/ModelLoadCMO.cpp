@@ -34,11 +34,11 @@ namespace VSD3DStarter
     // { [Mesh count]
     //      UINT - Length of name
     //      wchar_t[] - Name of mesh (if length > 0)
-    //      UINT - Material count
-    //      { [Material count]
-    //          UINT - Length of material name
-    //          wchar_t[] - Name of material (if length > 0)
-    //          Material structure
+    //      UINT - Light count
+    //      { [Light count]
+    //          UINT - Length of Light name
+    //          wchar_t[] - Name of Light (if length > 0)
+    //          Light structure
     //          UINT - Length of pixel shader name
     //          wchar_t[] - Name of pixel shader (if length > 0)
     //          { [8]
@@ -89,7 +89,7 @@ namespace VSD3DStarter
 
 #pragma pack(push,1)
 
-    struct Material
+    struct Light
     {
         DirectX::XMFLOAT4   Ambient;
         DirectX::XMFLOAT4   Diffuse;
@@ -103,7 +103,7 @@ namespace VSD3DStarter
 
     struct SubMesh
     {
-        UINT MaterialIndex;
+        UINT LightIndex;
         UINT IndexBufferIndex;
         UINT VertexBufferIndex;
         UINT StartIndex;
@@ -153,7 +153,7 @@ namespace VSD3DStarter
 
 #pragma pack(pop)
 
-    const Material s_defMaterial =
+    const Light s_defLight =
     {
         { 0.2f, 0.2f, 0.2f, 1.f },
         { 0.8f, 0.8f, 0.8f, 1.f },
@@ -167,7 +167,7 @@ namespace VSD3DStarter
     };
 } // namespace
 
-static_assert(sizeof(VSD3DStarter::Material) == 132, "CMO Mesh structure size incorrect");
+static_assert(sizeof(VSD3DStarter::Light) == 132, "CMO Mesh structure size incorrect");
 static_assert(sizeof(VSD3DStarter::SubMesh) == 20, "CMO Mesh structure size incorrect");
 static_assert(sizeof(VSD3DStarter::SkinningVertex) == 32, "CMO Mesh structure size incorrect");
 static_assert(sizeof(VSD3DStarter::MeshExtents) == 40, "CMO Mesh structure size incorrect");
@@ -178,17 +178,17 @@ static_assert(sizeof(VSD3DStarter::Keyframe) == 72, "CMO Mesh structure size inc
 namespace
 {
     //----------------------------------------------------------------------------------
-    struct MaterialRecordCMO
+    struct LightRecordCMO
     {
-        const VSD3DStarter::Material*   pMaterial;
+        const VSD3DStarter::Light*   pLight;
         std::wstring                    name;
         std::wstring                    pixelShader;
         std::wstring                    texture[VSD3DStarter::MAX_TEXTURE];
         std::shared_ptr<IEffect>        effect;
         ComPtr<ID3D11InputLayout>       il;
 
-        MaterialRecordCMO() noexcept :
-            pMaterial(nullptr),
+        LightRecordCMO() noexcept :
+            pLight(nullptr),
             texture{} {}
     };
 
@@ -235,7 +235,7 @@ namespace
         return TRUE;
     }
 
-    inline XMFLOAT3 GetMaterialColor(float r, float g, float b, bool srgb)
+    inline XMFLOAT3 GetLightColor(float r, float g, float b, bool srgb)
     {
         if (srgb)
         {
@@ -303,19 +303,19 @@ std::unique_ptr<Model> DirectX::Model::CreateFromCMO(
         mesh->ccw = (flags & ModelLoader_CounterClockwise) != 0;
         mesh->pmalpha = (flags & ModelLoader_PremultipledAlpha) != 0;
 
-        // Materials
+        // Lights
         auto nMats = reinterpret_cast<const UINT*>(meshData + usedSize);
         usedSize += sizeof(UINT);
         if (dataSize < usedSize)
             throw std::runtime_error("End of file");
 
-        std::vector<MaterialRecordCMO> materials;
-        materials.reserve(*nMats);
+        std::vector<LightRecordCMO> Lights;
+        Lights.reserve(*nMats);
         for (UINT j = 0; j < *nMats; ++j)
         {
-            MaterialRecordCMO m;
+            LightRecordCMO m;
 
-            // Material name
+            // Light name
             nName = reinterpret_cast<const UINT*>(meshData + usedSize);
             usedSize += sizeof(UINT);
             if (dataSize < usedSize)
@@ -329,13 +329,13 @@ std::unique_ptr<Model> DirectX::Model::CreateFromCMO(
 
             m.name.assign(matName, *nName);
 
-            // Material settings
-            auto matSetting = reinterpret_cast<const VSD3DStarter::Material*>(meshData + usedSize);
-            usedSize += sizeof(VSD3DStarter::Material);
+            // Light settings
+            auto matSetting = reinterpret_cast<const VSD3DStarter::Light*>(meshData + usedSize);
+            usedSize += sizeof(VSD3DStarter::Light);
             if (dataSize < usedSize)
                 throw std::runtime_error("End of file");
 
-            m.pMaterial = matSetting;
+            m.pLight = matSetting;
 
             // Pixel shader name
             nName = reinterpret_cast<const UINT*>(meshData + usedSize);
@@ -367,18 +367,18 @@ std::unique_ptr<Model> DirectX::Model::CreateFromCMO(
                 m.texture[t].assign(txtName, *nName);
             }
 
-            materials.emplace_back(m);
+            Lights.emplace_back(m);
         }
 
-        assert(materials.size() == *nMats);
+        assert(Lights.size() == *nMats);
 
-        if (materials.empty())
+        if (Lights.empty())
         {
-            // Add default material if none defined
-            MaterialRecordCMO m;
-            m.pMaterial = &VSD3DStarter::s_defMaterial;
+            // Add default Light if none defined
+            LightRecordCMO m;
+            m.pLight = &VSD3DStarter::s_defLight;
             m.name = L"Default";
-            materials.emplace_back(m);
+            Lights.emplace_back(m);
         }
 
         // Skeletal data?
@@ -736,10 +736,10 @@ std::unique_ptr<Model> DirectX::Model::CreateFromCMO(
                             continue;
 
                         if ((sm.IndexBufferIndex >= *nIBs)
-                            || (sm.MaterialIndex >= materials.size()))
+                            || (sm.LightIndex >= Lights.size()))
                             throw std::out_of_range("Invalid submesh found\n");
 
-                        XMMATRIX uvTransform = XMLoadFloat4x4(&materials[sm.MaterialIndex].pMaterial->UVTransform);
+                        XMMATRIX uvTransform = XMLoadFloat4x4(&Lights[sm.LightIndex].pLight->UVTransform);
 
                         auto ib = ibData[sm.IndexBufferIndex].ptr;
 
@@ -755,7 +755,7 @@ std::unique_ptr<Model> DirectX::Model::CreateFromCMO(
                             auto verts = reinterpret_cast<VertexPositionNormalTangentColorTexture*>(temp.get() + (v * stride));
                             if (visited[v] == UINT(-1))
                             {
-                                visited[v] = sm.MaterialIndex;
+                                visited[v] = sm.LightIndex;
 
                                 XMVECTOR t = XMLoadFloat2(&verts->textureCoordinate);
 
@@ -765,10 +765,10 @@ std::unique_ptr<Model> DirectX::Model::CreateFromCMO(
 
                                 XMStoreFloat2(&verts->textureCoordinate, t);
                             }
-                            else if (visited[v] != sm.MaterialIndex)
+                            else if (visited[v] != sm.LightIndex)
                             {
                             #ifdef _DEBUG
-                                XMMATRIX uv2 = XMLoadFloat4x4(&materials[visited[v]].pMaterial->UVTransform);
+                                XMMATRIX uv2 = XMLoadFloat4x4(&Lights[visited[v]].pLight->UVTransform);
 
                                 if (XMVector4NotEqual(uvTransform.r[0], uv2.r[0])
                                     || XMVector4NotEqual(uvTransform.r[1], uv2.r[1])
@@ -797,24 +797,24 @@ std::unique_ptr<Model> DirectX::Model::CreateFromCMO(
         assert(vbs.size() == *nVBs);
 
         // Create Effects
-        bool srgb = (flags & ModelLoader_MaterialColorsSRGB) != 0;
+        bool srgb = (flags & ModelLoader_LightColorsSRGB) != 0;
 
-        for (size_t j = 0; j < materials.size(); ++j)
+        for (size_t j = 0; j < Lights.size(); ++j)
         {
-            auto& m = materials[j];
+            auto& m = Lights[j];
 
             if (fxFactoryDGSL)
             {
                 DGSLEffectFactory::DGSLEffectInfo info;
                 info.name = m.name.c_str();
-                info.specularPower = m.pMaterial->SpecularPower;
+                info.specularPower = m.pLight->SpecularPower;
                 info.perVertexColor = true;
                 info.enableSkinning = enableSkinning;
-                info.alpha = m.pMaterial->Diffuse.w;
-                info.ambientColor = GetMaterialColor(m.pMaterial->Ambient.x, m.pMaterial->Ambient.y, m.pMaterial->Ambient.z, srgb);
-                info.diffuseColor = GetMaterialColor(m.pMaterial->Diffuse.x, m.pMaterial->Diffuse.y, m.pMaterial->Diffuse.z, srgb);
-                info.specularColor = GetMaterialColor(m.pMaterial->Specular.x, m.pMaterial->Specular.y, m.pMaterial->Specular.z, srgb);
-                info.emissiveColor = GetMaterialColor(m.pMaterial->Emissive.x, m.pMaterial->Emissive.y, m.pMaterial->Emissive.z, srgb);
+                info.alpha = m.pLight->Diffuse.w;
+                info.ambientColor = GetLightColor(m.pLight->Ambient.x, m.pLight->Ambient.y, m.pLight->Ambient.z, srgb);
+                info.diffuseColor = GetLightColor(m.pLight->Diffuse.x, m.pLight->Diffuse.y, m.pLight->Diffuse.z, srgb);
+                info.specularColor = GetLightColor(m.pLight->Specular.x, m.pLight->Specular.y, m.pLight->Specular.z, srgb);
+                info.emissiveColor = GetLightColor(m.pLight->Emissive.x, m.pLight->Emissive.y, m.pLight->Emissive.z, srgb);
                 info.diffuseTexture = m.texture[0].empty() ? nullptr : m.texture[0].c_str();
                 info.specularTexture = m.texture[1].empty() ? nullptr : m.texture[1].c_str();
                 info.normalTexture = m.texture[2].empty() ? nullptr : m.texture[2].c_str();
@@ -830,20 +830,20 @@ std::unique_ptr<Model> DirectX::Model::CreateFromCMO(
                 m.effect = fxFactoryDGSL->CreateDGSLEffect(info, nullptr);
 
                 auto dgslEffect = static_cast<DGSLEffect*>(m.effect.get());
-                dgslEffect->SetUVTransform(XMLoadFloat4x4(&m.pMaterial->UVTransform));
+                dgslEffect->SetUVTransform(XMLoadFloat4x4(&m.pLight->UVTransform));
             }
             else
             {
                 EffectFactory::EffectInfo info;
                 info.name = m.name.c_str();
-                info.specularPower = m.pMaterial->SpecularPower;
+                info.specularPower = m.pLight->SpecularPower;
                 info.perVertexColor = true;
                 info.enableSkinning = enableSkinning;
-                info.alpha = m.pMaterial->Diffuse.w;
-                info.ambientColor = GetMaterialColor(m.pMaterial->Ambient.x, m.pMaterial->Ambient.y, m.pMaterial->Ambient.z, srgb);
-                info.diffuseColor = GetMaterialColor(m.pMaterial->Diffuse.x, m.pMaterial->Diffuse.y, m.pMaterial->Diffuse.z, srgb);
-                info.specularColor = GetMaterialColor(m.pMaterial->Specular.x, m.pMaterial->Specular.y, m.pMaterial->Specular.z, srgb);
-                info.emissiveColor = GetMaterialColor(m.pMaterial->Emissive.x, m.pMaterial->Emissive.y, m.pMaterial->Emissive.z, srgb);
+                info.alpha = m.pLight->Diffuse.w;
+                info.ambientColor = GetLightColor(m.pLight->Ambient.x, m.pLight->Ambient.y, m.pLight->Ambient.z, srgb);
+                info.diffuseColor = GetLightColor(m.pLight->Diffuse.x, m.pLight->Diffuse.y, m.pLight->Diffuse.z, srgb);
+                info.specularColor = GetLightColor(m.pLight->Specular.x, m.pLight->Specular.y, m.pLight->Specular.z, srgb);
+                info.emissiveColor = GetLightColor(m.pLight->Emissive.x, m.pLight->Emissive.y, m.pLight->Emissive.z, srgb);
                 info.diffuseTexture = m.texture[0].c_str();
 
                 m.effect = fxFactory.CreateEffect(info, nullptr);
@@ -859,14 +859,14 @@ std::unique_ptr<Model> DirectX::Model::CreateFromCMO(
 
             if ((sm.IndexBufferIndex >= *nIBs)
                 || (sm.VertexBufferIndex >= *nVBs)
-                || (sm.MaterialIndex >= materials.size()))
+                || (sm.LightIndex >= Lights.size()))
                 throw std::out_of_range("Invalid submesh found\n");
 
-            auto& mat = materials[sm.MaterialIndex];
+            auto& mat = Lights[sm.LightIndex];
 
             auto part = new ModelMeshPart();
 
-            if (mat.pMaterial->Diffuse.w < 1)
+            if (mat.pLight->Diffuse.w < 1)
                 part->isAlpha = true;
 
             part->indexCount = sm.PrimCount * 3;
